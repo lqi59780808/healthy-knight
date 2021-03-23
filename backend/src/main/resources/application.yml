@@ -5,12 +5,12 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 spring:
   application:
-    name: bes-exam-service
+    name: healthy-knight
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://118.31.175.230:3306/db_exam_center?serverTimezone=Asia/Shanghai&useSSL=false
-    username: dms
-    password: BOSSteam05@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/healthy?serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   mvc:

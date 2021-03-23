@@ -13,7 +13,7 @@
             <property name="mappers" value="${path.baseMapper}"/>
         </plugin>
         <!--数据源配置-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="${db.url}"
                         userId="${db.username}"
                         password="${db.password}">
@@ -34,7 +34,7 @@
 <!--            <table tableName="t_exam_publish_record" domainObjectName="ExamPublishRecord">-->
 <!--              <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
 <!--            </table>-->
-            <table tableName="t_exam_publish_record_user" domainObjectName="ExamPublishRecordUser">
+            <table tableName="h_user" domainObjectName="User">
               <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>
             </table>
 <!--            <table tableName="t_exam_record" domainObjectName="ExamRecord">-->
