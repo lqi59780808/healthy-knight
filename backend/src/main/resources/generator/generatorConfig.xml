@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <properties resource="generator/generatorConfig.properties"/>
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <!--处理sql中的`符号-->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <!--添加自定义的继承接口-->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="${path.baseMapper}"/>
+        </plugin>
+        <!--数据源配置-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="${db.url}"
+                        userId="${db.username}"
+                        password="${db.password}">
+        </jdbcConnection>
+        <!-- model 包路径-->
+        <javaModelGenerator targetPackage="${path.model}" targetProject="${targetSrcProject}">
+            <property name="rootClass" value="${path.baseEntity}"/>
+        </javaModelGenerator>
+        <!-- mapper.xml 包路径-->
+        <sqlMapGenerator targetPackage="mapper" targetProject="${targetResourceProject}"/>
+        <!-- mapper 包路径-->
+        <javaClientGenerator targetPackage="${path.mapper}" targetProject="${targetSrcProject}" type="XMLMAPPER"/>
+        <!-- 表配置，tableName支持%，表示全部生成 -->
+        <!-- 注意不要覆盖已经生成的表，避免手写 mapper 被覆盖 -->
+<!--            <table tableName="t_answer_record" domainObjectName="AnswerRecord">-->
+<!--              <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
+<!--            </table>-->
+<!--            <table tableName="t_exam_publish_record" domainObjectName="ExamPublishRecord">-->
+<!--              <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
+<!--            </table>-->
+            <table tableName="t_exam_publish_record_user" domainObjectName="ExamPublishRecordUser">
+              <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>
+            </table>
+<!--            <table tableName="t_exam_record" domainObjectName="ExamRecord">-->
+<!--                <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
+<!--            </table>-->
+<!--            <table tableName="t_examiner" domainObjectName="Examiner">-->
+<!--                <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
+<!--            </table>-->
+<!--            <table tableName="t_paper" domainObjectName="Paper">-->
+<!--                <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
+<!--            </table>-->
+<!--            <table tableName="t_paper_subject" domainObjectName="PaperSubject">-->
+<!--                <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
+<!--            </table>-->
+<!--            <table tableName="t_user" domainObjectName="User">-->
+<!--                <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
+<!--            </table>-->
+    </context>
+</generatorConfiguration>
