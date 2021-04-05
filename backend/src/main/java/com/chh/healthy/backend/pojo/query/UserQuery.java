@@ -19,4 +19,6 @@ public class UserQuery extends BaseQuery {
      */
     private Byte sex;
 
+    private String email;
+
 }

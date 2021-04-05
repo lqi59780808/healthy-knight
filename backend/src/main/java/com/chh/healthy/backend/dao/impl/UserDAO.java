@@ -9,6 +9,7 @@ import com.chh.healthy.backend.pojo.query.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 public class UserDAO extends AbstractBaseDao<User, UserMapper, UserQuery> {
     public UserDAO(@Autowired UserMapper userMapper) {
@@ -19,5 +20,27 @@ public class UserDAO extends AbstractBaseDao<User, UserMapper, UserQuery> {
     @EntityFieldStuffer(methodType = MethodTypeEnum.ADD)
     public int save(User entity) {
         return super.save(entity);
+    }
+
+    @EntityFieldStuffer(methodType = MethodTypeEnum.ADD)
+    public User saveAndReturn(User entity) {
+        myMapper.insert(entity);
+        return entity;
+    }
+
+    @Override
+    @EntityFieldStuffer(methodType = MethodTypeEnum.UPDATE)
+    public int update(User user) {
+        return super.update(user);
+    }
+
+    @EntityFieldStuffer(methodType = MethodTypeEnum.UPDATE)
+    public User updateAndReturn(User user) {
+        myMapper.updateByPrimaryKeySelective(user);
+        return user;
+    }
+
+    public User queryByUsername(User user) {
+        return myMapper.selectOne(user);
     }
 }

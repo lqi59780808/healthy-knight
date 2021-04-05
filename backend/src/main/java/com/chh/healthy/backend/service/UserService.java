@@ -11,7 +11,7 @@ public interface UserService {
      * @see
      * @since
      */
-    CommonResponse<Integer> doLogin(UserDTO userDTO);
+    CommonResponse<UserDTO> doLogin(UserDTO userDTO);
 
     /**
      * @param: [userDTO]
@@ -21,4 +21,13 @@ public interface UserService {
      * @since
      */
     CommonResponse<Integer> doRegister(UserDTO userDTO);
+
+    /**
+     * @param: [userDTO]
+     * @return: java.lang.Integer
+     * @desc: 初始化
+     * @see
+     * @since
+     */
+    CommonResponse<UserDTO> doInit(UserDTO userDTO);
 }

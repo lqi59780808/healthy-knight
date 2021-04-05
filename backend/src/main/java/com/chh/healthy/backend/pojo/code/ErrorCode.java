@@ -20,11 +20,23 @@ public enum ErrorCode implements IErrorCode {
     /**
      * 200001考试发布记录新增失败
      */
-    REGISTER_EXCEPTION(200001,"注册失败，检查注册信息是否规范"),
+    REGISTER_EXCEPTION(200001,"注册失败，用户名已经被占用"),
     /**
      * 200002考试发布记录新增失败
      */
     REGISTER_REPEAT_EXCEPTION(200002,"注册失败，用户名重复"),
+    /**
+     * 200003考试发布记录新增失败
+     */
+    LOGIN_MISS_EXCEPTION(200003,"登录失败，请输入用户名和密码"),
+    /**
+     * 200004考试发布记录新增失败
+     */
+    LOGIN_EXCEPTION(200004,"登录失败"),
+    /**
+     * 200004考试发布记录新增失败
+     */
+    INIT_EXCEPTION(200005,"初始化失败"),
     /**
      * 在以上增加其它错误码
      */

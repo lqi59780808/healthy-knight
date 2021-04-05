@@ -1,15 +1,20 @@
 package com.chh.healthy.backend.pojo.entity;
 
 import com.boss.xtrain.core.common.pojo.entity.BaseEntity;
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Table(name = "h_user")
+@Data
 public class User extends BaseEntity {
     private String username;
 
     private String password;
 
     private String nickname;
+
+    private String email;
 
     /**
      * 0男1女

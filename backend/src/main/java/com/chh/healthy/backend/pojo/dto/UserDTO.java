@@ -18,4 +18,6 @@ public class UserDTO extends BaseDTO {
      * 0男1女
      */
     private Byte sex;
+
+    private String email;
 }

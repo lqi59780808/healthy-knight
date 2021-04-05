@@ -16,5 +16,6 @@
     <result column="updated_by" jdbcType="BIGINT" property="updatedBy" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
     <result column="version" jdbcType="BIGINT" property="version" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
   </resultMap>
 </mapper>

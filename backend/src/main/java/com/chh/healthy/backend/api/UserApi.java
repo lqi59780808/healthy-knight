@@ -21,10 +21,10 @@ public interface UserApi extends CommonCRUDApi<UserDTO,UserQuery,UserVO> {
      * @see
      * @since
      */
-    CommonResponse<Integer> login(CommonRequest<UserDTO> request);
+    CommonResponse<UserDTO> login(CommonRequest<UserDTO> request);
 
     @PostMapping("/register")
-    @ApiOperation(value = "用户登录")
+    @ApiOperation(value = "用户注册")
     /**
      * @param: [request]
      * @return: com.boss.xtrain.core.common.api.CommonResponse<java.lang.Integer>
@@ -33,4 +33,15 @@ public interface UserApi extends CommonCRUDApi<UserDTO,UserQuery,UserVO> {
      * @since
      */
     CommonResponse<Integer> register(CommonRequest<UserDTO> request);
+
+    @PostMapping("/init")
+    @ApiOperation(value = "用户初始化")
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.chh.healthy.backend.pojo.dto.UserDTO>
+     * @desc:
+     * @see
+     * @since
+     */
+    CommonResponse<UserDTO> init(CommonRequest<UserDTO> request);
 }

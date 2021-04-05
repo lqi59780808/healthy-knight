@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2019 xuexiangjys(xuexiangjys@163.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/ic_register_alien" />
+
+
+    <TextView
+        style="@style/TextStyle.Title"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:text="注 册"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:tint="?attr/colorAccent"
+                app:srcCompat="@drawable/ic_phone" />
+
+            <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:hint="@string/tip_please_input_username"
+                android:textSize="15sp"
+                android:inputType="text"
+                app:met_clearButton="true"
+                app:met_errorMessage="@string/tip_username_error"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/title_username"
+                app:met_regexp="@string/regex_password"/>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/fl_verify_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:tint="?attr/colorAccent"
+                app:srcCompat="@drawable/ic_password" />
+
+            <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:hint="@string/hint_please_input_password"
+                android:inputType="textPassword"
+                android:textSize="15sp"
+                app:met_errorMessage="@string/tip_password_error"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/title_password"
+                app:met_regexp="@string/regex_password"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_verify_code2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:tint="?attr/colorAccent"
+                app:srcCompat="@drawable/ic_password" />
+
+            <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+                android:id="@+id/et_password2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:hint="请再输入一次密码"
+                android:inputType="textPassword"
+                android:textSize="15sp"
+                app:met_errorMessage="@string/tip_password_error"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/title_password"
+                app:met_regexp="@string/regex_password"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start|center_vertical"
+                android:tint="?attr/colorAccent"
+                app:srcCompat="@drawable/ic_email" />
+
+            <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:hint="请输入邮箱地址"
+                android:inputType="text"
+                android:textSize="15sp"
+                app:met_errorMessage="邮箱格式必须正确"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="邮箱"
+                app:met_regexp="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"/>
+
+        </FrameLayout>
+
+<!--        <FrameLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="12dp">-->
+
+<!--            <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp"-->
+<!--                android:layout_gravity="start|center_vertical"-->
+<!--                android:tint="?attr/colorAccent"-->
+<!--                app:srcCompat="@drawable/ic_phone" />-->
+
+<!--            <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText-->
+<!--                android:id="@+id/et_sex"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="36dp"-->
+<!--                android:hint="请输入昵称"-->
+<!--                android:inputType="text"-->
+<!--                android:textSize="15sp"-->
+<!--                android:text=""-->
+<!--                app:met_errorMessage="昵称必须在2-20个字符间"-->
+<!--                app:met_floatingLabel="normal"-->
+<!--                app:met_floatingLabelText="昵称" />-->
+
+<!--        </FrameLayout>-->
+
+<!--        <FrameLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="12dp">-->
+
+<!--            <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_gravity="start|center_vertical"-->
+<!--                android:tint="?attr/colorAccent"-->
+<!--                app:srcCompat="@drawable/ic_sex" />-->
+
+<!--            <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText-->
+<!--                android:id="@+id/et_nickname"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="36dp"-->
+<!--                android:hint="请输入昵称"-->
+<!--                android:inputType="text"-->
+<!--                android:textSize="15sp"-->
+<!--                app:met_errorMessage="昵称必须在2-20个字符间"-->
+<!--                app:met_floatingLabel="normal"-->
+<!--                app:met_floatingLabelText="昵称" />-->
+
+<!--        </FrameLayout>-->
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.xuexiang.xui.widget.textview.supertextview.SuperButton
+            android:id="@+id/btn_register"
+            style="@style/SuperButton.Primary.Login"
+            android:layout_marginTop="16dp"
+            android:text="@string/title_register" />
+
+    </FrameLayout>
+
+
+</LinearLayout>

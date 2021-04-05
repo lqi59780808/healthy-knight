@@ -18,4 +18,6 @@ public class UserVO extends BaseVO {
      * 0男1女
      */
     private Byte sex;
+
+    private String email;
 }

@@ -10,6 +10,7 @@ import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.pojo.vo.UserVO;
 import com.chh.healthy.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,12 +26,17 @@ public class UserController extends BaseCRUDController<UserDTO, User, UserQuery,
     }
 
     @Override
-    public CommonResponse<Integer> login(CommonRequest<UserDTO> request) {
-        return null;
+    public CommonResponse<UserDTO> login(@RequestBody CommonRequest<UserDTO> request) {
+        return userService.doLogin(request.getBody());
     }
 
     @Override
-    public CommonResponse<Integer> register(CommonRequest<UserDTO> request) {
-        return null;
+    public CommonResponse<Integer> register(@RequestBody CommonRequest<UserDTO> request) {
+        return userService.doRegister(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<UserDTO> init(@RequestBody CommonRequest<UserDTO> request) {
+        return userService.doInit(request.getBody());
     }
 }
