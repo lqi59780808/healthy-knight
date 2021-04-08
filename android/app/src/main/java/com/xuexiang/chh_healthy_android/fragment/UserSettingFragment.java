@@ -27,30 +27,23 @@ import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.activity.MainActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
-import com.xuexiang.chh_healthy_android.core.http.callback.TipCallBack;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
-import com.xuexiang.chh_healthy_android.core.http.pojo.UserDTO;
-import com.xuexiang.chh_healthy_android.utils.SettingUtils;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
-import com.xuexiang.chh_healthy_android.utils.Utils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.callback.CallBackProxy;
 import com.xuexiang.xpage.annotation.Page;
-import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xpage.enums.CoreAnim;
-import com.xuexiang.xui.utils.ResUtils;
-import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.net.JsonUtil;
 
 import butterknife.BindView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 

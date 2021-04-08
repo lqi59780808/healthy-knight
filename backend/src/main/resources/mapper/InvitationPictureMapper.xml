@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chh.healthy.backend.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="com.chh.healthy.backend.pojo.entity.User">
+<mapper namespace="com.chh.healthy.backend.dao.InvitationPictureMapper">
+  <resultMap id="BaseResultMap" type="com.chh.healthy.backend.pojo.entity.InvitationPicture">
     <!--
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
-    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="invitation_id" jdbcType="BIGINT" property="invitationId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="created_by" jdbcType="BIGINT" property="createdBy" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_by" jdbcType="BIGINT" property="updatedBy" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
     <result column="version" jdbcType="BIGINT" property="version" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="icon" jdbcType="VARCHAR" property="icon" />
   </resultMap>
 </mapper>

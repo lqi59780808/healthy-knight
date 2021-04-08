@@ -21,4 +21,5 @@ public class UserQuery extends BaseQuery {
 
     private String email;
 
+    private String icon;
 }

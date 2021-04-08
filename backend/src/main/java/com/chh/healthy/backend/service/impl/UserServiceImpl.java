@@ -5,6 +5,7 @@ import com.boss.xtrain.core.common.api.CommonResponse;
 import com.boss.xtrain.core.common.api.CommonResponseUtils;
 import com.boss.xtrain.core.common.exception.ServiceException;
 import com.boss.xtrain.core.common.service.BaseCURDService;
+import com.boss.xtrain.core.context.BaseContextHolder;
 import com.boss.xtrain.util.BeanUtil;
 import com.chh.healthy.backend.dao.impl.UserDAO;
 import com.chh.healthy.backend.dao.mapper.UserMapper;
@@ -26,7 +27,7 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
     @Autowired
     UserDAO userDAO;
 
-    public UserServiceImpl(UserDAO userDAO) {
+    public UserServiceImpl(@Autowired UserDAO userDAO) {
         this.myDao = userDAO;
     }
 
@@ -53,6 +54,7 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
                     UserDTO response = BeanUtil.copy(user,UserDTO.class);
                     //不返回密码的哈希码
                     response.setPassword(null);
+                    BaseContextHolder.set("userInfo",userDTO);
                     return CommonResponseUtils.success(response);
                 }
             } else {
@@ -96,6 +98,7 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
             if (userDTO != null && 1 < userDTO.getNickname().length() && userDTO.getNickname().length() < 21) {
                 userDTO.setStatus((byte)2);
                 User response = userDAO.updateAndReturn(BeanUtil.copy(userDTO,User.class));
+                BaseContextHolder.set("userInfo",BeanUtil.copy(response,UserDTO.class));
                 return CommonResponseUtils.success(BeanUtil.copy(response,UserDTO.class));
             } else {
                 return CommonResponseUtils.failed("昵称应该在2-20个字符之间");

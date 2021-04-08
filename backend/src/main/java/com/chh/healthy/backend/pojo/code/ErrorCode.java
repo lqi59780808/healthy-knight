@@ -37,6 +37,15 @@ public enum ErrorCode implements IErrorCode {
      * 200004考试发布记录新增失败
      */
     INIT_EXCEPTION(200005,"初始化失败"),
+
+    /**
+     * 200004考试发布记录新增失败
+     */
+    PUBLISH_EXCEPTION(200006,"发布失败"),
+    /**
+     * 200004考试发布记录新增失败
+     */
+    QUERY_INVITATION_EXCEPTION(200007,"查询帖子失败"),
     /**
      * 在以上增加其它错误码
      */

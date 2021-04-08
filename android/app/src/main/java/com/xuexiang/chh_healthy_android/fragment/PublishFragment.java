@@ -18,26 +18,32 @@
 package com.xuexiang.chh_healthy_android.fragment;
 
 import android.graphics.Color;
-import android.view.KeyEvent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.activity.MainActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
+import com.xuexiang.chh_healthy_android.utils.SettingUtils;
+import com.xuexiang.chh_healthy_android.utils.TokenUtils;
+import com.xuexiang.chh_healthy_android.utils.Utils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.callback.CallBackProxy;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
+import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.net.JsonUtil;
 
 import butterknife.BindView;
@@ -45,34 +51,22 @@ import butterknife.OnClick;
 
 
 /**
- * @class RegisterFragment
- * @classdesc
- * @author chh
- * @date 2021/3/30  21:01
- * @version 1.0.0
- * @see
- * @since
+ * 登录页面
+ *
+ * @author xuexiang
+ * @since 2019-11-17 22:15
  */
 @Page(anim = CoreAnim.none)
-public class RegisterFragment extends BaseFragment {
+public class PublishFragment extends BaseFragment {
 
     @BindView(R.id.et_username)
     MaterialEditText etUsername;
     @BindView(R.id.et_password)
     MaterialEditText etPassword;
-    @BindView(R.id.et_password2)
-    MaterialEditText etPassword2;
-    @BindView(R.id.et_email)
-    MaterialEditText etEmail;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_register;
-    }
-
-    @Override
-    protected void initViews() {
-
+        return R.layout.fragment_login;
     }
 
     @Override
@@ -83,54 +77,97 @@ public class RegisterFragment extends BaseFragment {
         titleBar.setTitle("");
         titleBar.setLeftImageDrawable(ResUtils.getVectorDrawable(getContext(), R.drawable.ic_login_close));
         titleBar.setActionTextColor(ThemeUtils.resolveColor(getContext(), R.attr.colorAccent));
+        titleBar.addAction(new TitleBar.TextAction(R.string.title_jump_login) {
+            @Override
+            public void performAction(View view) {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setUsername("0");
+                onLoginSuccess(userDTO);
+            }
+        });
         return titleBar;
     }
 
+    @Override
+    protected void initViews() {
+
+        //隐私政策弹窗
+        if (!SettingUtils.isAgreePrivacy()) {
+            Utils.showPrivacyDialog(getContext(), (dialog, which) -> {
+                dialog.dismiss();
+                SettingUtils.setIsAgreePrivacy(true);
+            });
+        }
+    }
+
     @SingleClick
-    @OnClick({R.id.btn_register})
+    @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_password, R.id.tv_user_protocol, R.id.tv_privacy_protocol})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_register:
-                if (!etPassword.getEditValue().equals(etPassword2.getEditValue())) {
-                    XToastUtils.error("两次输入的密码不一致！");
-                    break;
-                }
-                if (etUsername.validate() && etPassword.validate() && etEmail.validate()) {
+            case R.id.btn_login:
+                if (etPassword.validate() && etUsername.validate()) {
                     UserDTO userDTO = new UserDTO();
                     userDTO.setUsername(etUsername.getEditValue());
                     userDTO.setPassword(etPassword.getEditValue());
-                    userDTO.setEmail(etEmail.getEditValue());
                     CommonRequest<UserDTO> commonRequest = new CommonRequest<>();
                     commonRequest.setBody(userDTO);
                     String body = JsonUtil.toJson(commonRequest);
-                    XHttp.post(FinalEnum.frontUrl + "/healthy/user/register")
+                    XHttp.post(FinalEnum.frontUrl + "/healthy/user/login")
                             .upJson(body)
                             .syncRequest(false)
                             .onMainThread(true)
-                            .execute(new CallBackProxy<CommonResponse<Integer>, Integer>(new TipProgressLoadingCallBack<Integer>(this) {
+                            .execute(new CallBackProxy<CommonResponse<UserDTO>, UserDTO>(new TipProgressLoadingCallBack<UserDTO>(this) {
                                 @Override
-                                public void onSuccess(Integer response) throws Throwable {
-                                    if (response == 1) {
-                                        XToastUtils.success("注册成功");
-                                        popToBack();
-                                    }
+                                public void onSuccess(UserDTO response) throws Throwable {
+                                    XToastUtils.success("登陆成功");
+                                    onLoginSuccess(response);
                                 }
                             }){});
                 } else {
-                    XToastUtils.error("请规范填写注册信息");
+                    XToastUtils.error("请规范输入用户名和密码");
                 }
+                break;
+            case R.id.tv_register:
+                PageOption.to(RegisterFragment.class)
+                        .setRequestCode(100)
+                        .setAddToBackStack(true)
+                        .setAnim(CoreAnim.slide)
+                        .open(this);
+                break;
+            case R.id.tv_forget_password:
+                XToastUtils.info("忘记密码");
+                break;
+            case R.id.tv_user_protocol:
+                
+                XToastUtils.info("用户协议");
+                break;
+            case R.id.tv_privacy_protocol:
+                XToastUtils.info("隐私政策");
                 break;
             default:
                 break;
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            popToBack();
+    /**
+     * 登录成功的处理
+     */
+    private void onLoginSuccess(UserDTO userDTO) {
+        if (userDTO.getStatus().intValue() == 1) {
+            Bundle bundle = new Bundle();
+            bundle.putString("userInfo", JsonUtil.toJson(userDTO));
+            PageOption.to(UserSettingFragment.class)
+                    .setBundle(bundle)
+                    .setRequestCode(100)
+                    .setAddToBackStack(true)
+                    .setAnim(CoreAnim.zoom)
+                    .open(this);
+        } else {
+            if (TokenUtils.handleLoginSuccess(userDTO.getUsername())) {
+                TokenUtils.putUserInfo(userDTO);
+                ActivityUtils.startActivity(MainActivity.class);
+            }
         }
-        return true;
     }
 }
 

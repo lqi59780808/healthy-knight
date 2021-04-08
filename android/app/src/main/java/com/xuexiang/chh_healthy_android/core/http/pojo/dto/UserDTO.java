@@ -15,7 +15,7 @@
  *
  */
 
-package com.xuexiang.chh_healthy_android.core.http.pojo;
+package com.xuexiang.chh_healthy_android.core.http.pojo.dto;
 
 
 import com.xuexiang.chh_healthy_android.core.BaseDTO;
@@ -29,6 +29,8 @@ public class UserDTO extends BaseDTO {
     private String nickname;
 
     private String email;
+
+    private String icon;
 
     public String getEmail() {
         return email;

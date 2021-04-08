@@ -20,6 +20,7 @@ package com.xuexiang.chh_healthy_android.activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -97,6 +98,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initListeners();
     }
 
+
     @Override
     protected boolean isSupportSlideBack() {
         return false;
@@ -107,7 +109,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         toolbar.setTitle(mTitles[0]);
         toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(this);
-
         initHeader();
 
         //主页内容填充
@@ -130,7 +131,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         RadiusImageView ivAvatar = headerView.findViewById(R.id.iv_avatar);
         TextView tvAvatar = headerView.findViewById(R.id.tv_avatar);
         TextView tvSign = headerView.findViewById(R.id.tv_sign);
-
         if (Utils.isColorDark(ThemeUtils.resolveColor(this, R.attr.colorAccent))) {
             tvAvatar.setTextColor(Colors.WHITE);
             tvSign.setTextColor(Colors.WHITE);
@@ -155,8 +155,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void initListeners() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
+        //初始化状态
         toggle.syncState();
-
         //侧边栏点击事件
         navView.setNavigationItemSelectedListener(menuItem -> {
             if (menuItem.isCheckable()) {
@@ -202,7 +202,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_privacy:
+            case R.id.action_publish:
                 Utils.showPrivacyDialog(this, null);
                 break;
             default:
@@ -258,7 +258,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (index != -1) {
             toolbar.setTitle(menuItem.getTitle());
             viewPager.setCurrentItem(index, false);
-
             updateSideNavStatus(menuItem);
             return true;
         }

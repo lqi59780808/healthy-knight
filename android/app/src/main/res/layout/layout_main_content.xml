@@ -30,9 +30,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/xui_config_color_titlebar"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:titleTextColor="@color/xui_config_color_white" />
+            app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

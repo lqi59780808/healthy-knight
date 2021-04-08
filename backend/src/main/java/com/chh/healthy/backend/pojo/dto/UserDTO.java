@@ -20,4 +20,6 @@ public class UserDTO extends BaseDTO {
     private Byte sex;
 
     private String email;
+
+    private String icon;
 }

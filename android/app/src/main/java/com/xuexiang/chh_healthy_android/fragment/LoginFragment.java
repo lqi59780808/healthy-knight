@@ -19,20 +19,16 @@ package com.xuexiang.chh_healthy_android.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.activity.MainActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
-import com.xuexiang.chh_healthy_android.core.http.callback.TipCallBack;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
-import com.xuexiang.chh_healthy_android.core.http.pojo.UserDTO;
-import com.xuexiang.chh_healthy_android.utils.MMKVUtils;
-import com.xuexiang.chh_healthy_android.utils.RandomUtils;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.utils.SettingUtils;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.Utils;
@@ -48,7 +44,6 @@ import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xutil.app.ActivityUtils;
-import com.xuexiang.xutil.net.JSONUtils;
 import com.xuexiang.xutil.net.JsonUtil;
 
 import butterknife.BindView;
@@ -87,6 +82,7 @@ public class LoginFragment extends BaseFragment {
             public void performAction(View view) {
                 UserDTO userDTO = new UserDTO();
                 userDTO.setUsername("0");
+                userDTO.setStatus((byte)2);
                 onLoginSuccess(userDTO);
             }
         });

@@ -17,6 +17,11 @@
 
 package com.xuexiang.chh_healthy_android.fragment.news;
 
+import android.graphics.Color;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +65,9 @@ public class NewsFragment extends BaseFragment {
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
 
+    int pageMax;
+    int pageNow;
+
     private SimpleDelegateAdapter<NewInfo> mNewsAdapter;
 
     /**
@@ -90,7 +98,8 @@ public class NewsFragment extends BaseFragment {
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
         recyclerView.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0, 10);
-
+        pageMax = 10;
+        pageNow = 1;
         //轮播条
         SingleDelegateAdapter bannerAdapter = new SingleDelegateAdapter(R.layout.include_head_view_banner) {
             @Override
@@ -165,8 +174,6 @@ public class NewsFragment extends BaseFragment {
         };
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
-        delegateAdapter.addAdapter(bannerAdapter);
-        delegateAdapter.addAdapter(commonAdapter);
         delegateAdapter.addAdapter(titleAdapter);
         delegateAdapter.addAdapter(mNewsAdapter);
 

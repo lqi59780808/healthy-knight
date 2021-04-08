@@ -19,10 +19,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_privacy"
-        android:icon="@drawable/ic_menu_privacy"
+        android:id="@+id/action_publish"
+        android:icon="@drawable/ic_invitation"
         android:orderInCategory="100"
-        android:title="隐私政策"
-        app:showAsAction="always" />
+        android:title="发帖"
+        app:showAsAction="always"/>
 
 </menu>

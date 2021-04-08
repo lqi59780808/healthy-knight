@@ -17,6 +17,11 @@
 
 package com.xuexiang.chh_healthy_android.fragment.profile;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+
+import androidx.annotation.NonNull;
+
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;

@@ -21,7 +21,7 @@ import android.content.Context;
 
 import com.umeng.analytics.MobclickAgent;
 import com.xuexiang.chh_healthy_android.activity.LoginActivity;
-import com.xuexiang.chh_healthy_android.core.http.pojo.UserDTO;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.StringUtils;
 

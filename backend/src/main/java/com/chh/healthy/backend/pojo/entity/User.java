@@ -16,6 +16,8 @@ public class User extends BaseEntity {
 
     private String email;
 
+    private String icon;
+
     /**
      * 0男1女
      */
