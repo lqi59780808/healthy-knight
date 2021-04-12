@@ -12,7 +12,10 @@ import com.chh.healthy.backend.pojo.vo.InvitationVO;
 import com.chh.healthy.backend.pojo.vo.UserVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/healthy/invitation")
 public interface InvitationApi extends CommonCRUDApi<InvitationDTO, InvitationQuery, InvitationVO> {
@@ -25,7 +28,18 @@ public interface InvitationApi extends CommonCRUDApi<InvitationDTO, InvitationQu
      * @see
      * @since
      */
-    CommonResponse<InvitationDTO> publish(CommonRequest<InvitationDTO> request);
+    CommonResponse<InvitationDTO> publish(String title, String content, MultipartFile[] picture,long userId);
+
+    @PostMapping("/publish2")
+    @ApiOperation(value = "用户发帖2")
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.chh.healthy.backend.pojo.dto.InvitationDTO>
+     * @desc: 用户发帖2
+     * @see
+     * @since
+     */
+    CommonResponse<InvitationDTO> publish2(String title, String content,long userId);
 
     @PostMapping("/query")
     @ApiOperation(value = "查询")
@@ -37,4 +51,5 @@ public interface InvitationApi extends CommonCRUDApi<InvitationDTO, InvitationQu
      * @since
      */
     CommonResponse<CommonPage<InvitationVO>> queryInvitation(CommonRequest<InvitationQuery> request);
+
 }

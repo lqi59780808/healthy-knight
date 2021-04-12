@@ -24,6 +24,7 @@ import com.xuexiang.chh_healthy_android.activity.LoginActivity;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.StringUtils;
+import com.xuexiang.xutil.net.JsonUtil;
 
 /**
  * Token管理工具
@@ -31,7 +32,7 @@ import com.xuexiang.xutil.common.StringUtils;
  * @author xuexiang
  * @since 2019-11-17 22:37
  */
-public final class TokenUtils {
+public final class  TokenUtils {
 
     private static String sToken;
 
@@ -94,7 +95,8 @@ public final class TokenUtils {
 
     public static boolean putUserInfo(UserDTO userDTO) {
         if (userDTO != null) {
-            MMKVUtils.put(KEY_USER_INFO,userDTO);
+            String json = JsonUtil.toJson(userDTO);
+            MMKVUtils.put(KEY_USER_INFO,json);
             return true;
         } else {
             return false;
@@ -102,7 +104,9 @@ public final class TokenUtils {
     }
 
     public static UserDTO getUserInfo() {
-        return (UserDTO) MMKVUtils.get(KEY_USER_INFO,new UserDTO());
+        String json = MMKVUtils.getString(KEY_USER_INFO,"");
+        UserDTO userDTO = JsonUtil.fromJson(json,UserDTO.class);
+        return userDTO;
     }
 
 

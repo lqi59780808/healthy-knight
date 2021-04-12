@@ -6,33 +6,31 @@ import com.xuexiang.chh_healthy_android.core.BaseDTO;
 public class InvitationPictureDTO extends BaseDTO {
     private Long invitationId;
 
-    private String url;
+    private byte[] pic;
 
-    /**
-     * @return invitation_id
-     */
+    private byte[] smallPic;
+
     public Long getInvitationId() {
         return invitationId;
     }
 
-    /**
-     * @param invitationId
-     */
     public void setInvitationId(Long invitationId) {
         this.invitationId = invitationId;
     }
 
-    /**
-     * @return url
-     */
-    public String getUrl() {
-        return url;
+    public byte[] getPic() {
+        return pic;
     }
 
-    /**
-     * @param url
-     */
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPic(byte[] pic) {
+        this.pic = pic;
+    }
+
+    public byte[] getSmallPic() {
+        return smallPic;
+    }
+
+    public void setSmallPic(byte[] smallPic) {
+        this.smallPic = smallPic;
     }
 }

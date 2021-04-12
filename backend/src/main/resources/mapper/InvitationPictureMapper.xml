@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chh.healthy.backend.dao.InvitationPictureMapper">
+<mapper namespace="com.chh.healthy.backend.dao.mapper.InvitationPictureMapper">
   <resultMap id="BaseResultMap" type="com.chh.healthy.backend.pojo.entity.InvitationPicture">
     <!--
       WARNING - @mbg.generated

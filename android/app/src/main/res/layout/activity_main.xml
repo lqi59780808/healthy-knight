@@ -31,6 +31,10 @@
 
     <!-- 侧边栏   -->
     <com.google.android.material.navigation.NavigationView
+        app:itemBackground="@color/xui_config_color_gray_2"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        android:background="@color/xui_config_color_gray_2"
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

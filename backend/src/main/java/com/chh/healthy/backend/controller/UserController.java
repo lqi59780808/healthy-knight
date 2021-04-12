@@ -12,7 +12,9 @@ import com.chh.healthy.backend.pojo.vo.UserVO;
 import com.chh.healthy.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -39,5 +41,10 @@ public class UserController extends BaseCRUDController<UserDTO, User, UserQuery,
     @Override
     public CommonResponse<UserDTO> init(@RequestBody CommonRequest<UserDTO> request) {
         return userService.doInit(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<UserDTO> updateIcon(@RequestParam long id, @RequestParam long version,@RequestParam MultipartFile multipartFile) {
+        return userService.doUpdateIcon(id,version,multipartFile);
     }
 }

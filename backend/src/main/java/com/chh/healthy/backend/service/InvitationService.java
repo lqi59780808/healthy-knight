@@ -8,6 +8,7 @@ import com.chh.healthy.backend.pojo.dto.UserDTO;
 import com.chh.healthy.backend.pojo.entity.Invitation;
 import com.chh.healthy.backend.pojo.query.InvitationQuery;
 import com.chh.healthy.backend.pojo.vo.InvitationVO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface InvitationService {
     /**
@@ -17,7 +18,7 @@ public interface InvitationService {
      * @see
      * @since
      */
-    CommonResponse<InvitationDTO> doPublish(InvitationDTO request);
+    CommonResponse<InvitationDTO> doPublish(String title, String content, MultipartFile[] picture);
 
     /**
      * @param: [request]

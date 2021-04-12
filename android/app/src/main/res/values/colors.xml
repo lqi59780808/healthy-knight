@@ -3,6 +3,8 @@
     <color name="colorPrimary">#299EE3</color>
     <color name="colorPrimaryDark">#299EE3</color>
     <color name="colorAccent">#299EE3</color>
+    <color name="colorTitleBar">#17191c</color>
+    <color name="color_f4">#F4F4F4</color>
 
     <color name="config_color_select_bg">#FFF1F1F1</color>
 

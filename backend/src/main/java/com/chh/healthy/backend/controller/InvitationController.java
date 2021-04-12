@@ -3,7 +3,9 @@ package com.chh.healthy.backend.controller;
 import com.boss.xtrain.core.common.api.CommonPage;
 import com.boss.xtrain.core.common.api.CommonRequest;
 import com.boss.xtrain.core.common.api.CommonResponse;
+import com.boss.xtrain.core.common.api.CommonResponseUtils;
 import com.boss.xtrain.core.common.controller.BaseCRUDController;
+import com.boss.xtrain.core.context.BaseContextHolder;
 import com.boss.xtrain.util.BeanUtil;
 import com.chh.healthy.backend.api.InvitationApi;
 import com.chh.healthy.backend.dao.mapper.InvitationMapper;
@@ -15,7 +17,10 @@ import com.chh.healthy.backend.pojo.vo.InvitationVO;
 import com.chh.healthy.backend.service.InvitationService;
 import com.chh.healthy.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,12 +35,19 @@ public class InvitationController extends BaseCRUDController<InvitationDTO, Invi
     }
 
     @Override
-    public CommonResponse<InvitationDTO> publish(CommonRequest<InvitationDTO> request) {
-        return invitationService.doPublish(request.getBody());
+    public CommonResponse<InvitationDTO> publish(@RequestParam String title,@RequestParam String content, @RequestParam MultipartFile[] picture,@RequestParam long id) {
+        BaseContextHolder.setUserId(id);
+        return invitationService.doPublish(title,content,picture);
     }
 
     @Override
-    public CommonResponse<CommonPage<InvitationVO>> queryInvitation(CommonRequest<InvitationQuery> request) {
+    public CommonResponse<InvitationDTO> publish2(@RequestParam String title, @RequestParam String content,@RequestParam long id) {
+        BaseContextHolder.setUserId(id);
+        return invitationService.doPublish(title,content,null);
+    }
+
+    @Override
+    public CommonResponse<CommonPage<InvitationVO>> queryInvitation(@RequestBody CommonRequest<InvitationQuery> request) {
         InvitationQuery query = request.getBody();
         this.doBeforePagination(query.getPageNum(),query.getPageSize());
         List<InvitationQuery> response;

@@ -17,21 +17,48 @@
 
 package com.xuexiang.chh_healthy_android.fragment.profile;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuInflater;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.activity.MainActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
+import com.xuexiang.chh_healthy_android.core.FinalEnum;
+import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.InvitationDTO;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;
+import com.xuexiang.chh_healthy_android.fragment.PublishFragment;
 import com.xuexiang.chh_healthy_android.fragment.SettingsFragment;
+import com.xuexiang.chh_healthy_android.utils.TokenUtils;
+import com.xuexiang.chh_healthy_android.utils.Utils;
+import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
+import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.callback.CallBackProxy;
+import com.xuexiang.xhttp2.callback.impl.IProgressResponseCallBack;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
+import com.xuexiang.xutil.app.ActivityUtils;
+import com.xuexiang.xutil.file.FileUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -47,7 +74,10 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     SuperTextView menuSettings;
     @BindView(R.id.menu_about)
     SuperTextView menuAbout;
+    @BindView(R.id.icon_set)
+    SuperTextView iconSet;
 
+    private List<LocalMedia> mSelectList = new ArrayList<>();
     /**
      * @return 返回为 null意为不需要导航栏
      */
@@ -71,14 +101,56 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
      */
     @Override
     protected void initViews() {
-
+        if (TokenUtils.getUserInfo().getIcon() != null) {
+            Glide.with(ProfileFragment.this).load(FinalEnum.frontUrl + TokenUtils.getUserInfo().getIcon()).into(rivHeadPic);
+        }
     }
 
     @Override
     protected void initListeners() {
         menuSettings.setOnSuperTextViewClickListener(this);
         menuAbout.setOnSuperTextViewClickListener(this);
+        iconSet.setOnSuperTextViewClickListener(this);
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    // 图片选择
+                    mSelectList = PictureSelector.obtainMultipleResult(data);
+                    //请求post
+                    XHttp.post(FinalEnum.frontUrl + "/healthy/user/icon")
+                            .params("id", TokenUtils.getUserInfo().getId())
+                            .params("version",TokenUtils.getUserInfo().getVersion())
+                            .uploadFile("multipartFile",FileUtils.getFileByPath(mSelectList.get(0).getCutPath()), new IProgressResponseCallBack() {
+                                @Override
+                                public void onResponseProgress(long bytesWritten, long contentLength, boolean done) {
+                                }
+                            })
+                            .syncRequest(false)
+                            .onMainThread(true)
+                            .execute(new CallBackProxy<CommonResponse<UserDTO>, UserDTO>(new TipProgressLoadingCallBack<UserDTO>(ProfileFragment.this) {
+                                @Override
+                                public void onSuccess(UserDTO response) throws Throwable {
+                                    UserDTO userDTO = TokenUtils.getUserInfo();
+                                    userDTO.setVersion(userDTO.getVersion() + 1);
+                                    userDTO.setIcon(response.getIcon());
+                                    TokenUtils.putUserInfo(userDTO);
+                                    Glide.with(ProfileFragment.this).load(FinalEnum.frontUrl + response.getIcon()).into(rivHeadPic);
+                                    NavigationView nav = getActivity().findViewById(R.id.nav_view);
+                                    RadiusImageView avatar = nav.getHeaderView(0).findViewById(R.id.iv_avatar);
+                                    Glide.with(ProfileFragment.this).load(FinalEnum.frontUrl + response.getIcon()).into(avatar);
+                                    XToastUtils.success("头像更改成功");
+                                }
+                            }){});
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @SingleClick
@@ -90,6 +162,18 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                 break;
             case R.id.menu_about:
                 openNewPage(AboutFragment.class);
+                break;
+            case R.id.icon_set:
+                PictureSelector.create(ProfileFragment.this)
+                        .openGallery(PictureMimeType.ofImage())
+                        .selectionMode(PictureConfig.SINGLE)
+                        .enableCrop(true)
+                        .freeStyleCropEnabled(true)
+                        .isDragFrame(true)
+                        .withAspectRatio(1,1)
+                        .previewImage(true)
+                        .selectionMedia(mSelectList)
+                        .forResult(PictureConfig.CHOOSE_REQUEST);
                 break;
             default:
                 break;

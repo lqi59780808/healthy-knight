@@ -17,40 +17,57 @@
 
 package com.xuexiang.chh_healthy_android.activity;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.core.BaseActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
+import com.xuexiang.chh_healthy_android.core.FinalEnum;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;
 import com.xuexiang.chh_healthy_android.fragment.SettingsFragment;
 import com.xuexiang.chh_healthy_android.fragment.news.NewsFragment;
 import com.xuexiang.chh_healthy_android.fragment.profile.ProfileFragment;
 import com.xuexiang.chh_healthy_android.fragment.trending.TrendingFragment;
+import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.Utils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.chh_healthy_android.widget.GuideTipsDialog;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
+import com.xuexiang.xui.utils.StatusBarUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
@@ -81,6 +98,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     NavigationView navView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar_avatar)
+    RadiusImageView toolbarAvatar;
 
     private String[] mTitles;
 
@@ -105,8 +124,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initViews() {
+//        View view = navView.inflateHeaderView(R.layout.include_navigation_header);
+//        RadiusImageView avatar = view.findViewById(R.id.iv_avatar);
         mTitles = ResUtils.getStringArray(R.array.home_titles);
-        toolbar.setTitle(mTitles[0]);
         toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(this);
         initHeader();
@@ -145,18 +165,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
 
-        // TODO: 2019-10-09 初始化数据
-        ivAvatar.setImageResource(R.drawable.ic_default_head);
-        tvAvatar.setText(R.string.app_name);
-        tvSign.setText("这个家伙很懒，什么也没有留下～～");
+        UserDTO userInfo = TokenUtils.getUserInfo();
+        if (userInfo.getIcon() != null) {
+            Glide.with(this).load(FinalEnum.frontUrl + userInfo.getIcon()).into(ivAvatar);
+            Glide.with(this).load(FinalEnum.frontUrl + userInfo.getIcon()).into(toolbarAvatar);
+        }
+        tvAvatar.setText(userInfo.getNickname() == null ? "虚无骑士" : userInfo.getNickname());
+        tvSign.setText("降临~~~~~~~~~~");
         navHeader.setOnClickListener(this);
     }
 
     protected void initListeners() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        //初始化状态
-        toggle.syncState();
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawerLayout.addDrawerListener(toggle);
+//        //初始化状态
+//        toggle.syncState();
         //侧边栏点击事件
         navView.setNavigationItemSelectedListener(menuItem -> {
             if (menuItem.isCheckable()) {
@@ -180,6 +203,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         //主页事件监听
         viewPager.addOnPageChangeListener(this);
+        toolbarAvatar.setOnClickListener(this);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
     }
 
@@ -192,7 +216,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private boolean handleNavigationItemSelected(@NonNull MenuItem menuItem) {
         int index = CollectionUtils.arrayIndexOf(mTitles, menuItem.getTitle());
         if (index != -1) {
-            toolbar.setTitle(menuItem.getTitle());
             viewPager.setCurrentItem(index, false);
             return true;
         }
@@ -203,7 +226,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_publish:
-                Utils.showPrivacyDialog(this, null);
+                ActivityUtils.startActivity(PublishActivity.class);
                 break;
             default:
                 break;
@@ -217,6 +240,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.nav_header:
                 XToastUtils.toast("点击头部！");
+                break;
+            case R.id.toolbar_avatar:
+                drawerLayout.openDrawer(GravityCompat.START);
                 break;
             default:
                 break;
@@ -233,7 +259,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onPageSelected(int position) {
         MenuItem item = bottomNavigation.getMenu().getItem(position);
-        toolbar.setTitle(item.getTitle());
         item.setChecked(true);
 
         updateSideNavStatus(item);
@@ -256,7 +281,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int index = CollectionUtils.arrayIndexOf(mTitles, menuItem.getTitle());
         if (index != -1) {
-            toolbar.setTitle(menuItem.getTitle());
             viewPager.setCurrentItem(index, false);
             updateSideNavStatus(menuItem);
             return true;
@@ -285,6 +309,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             ClickUtils.exitBy2Click(2000, this);
         }
         return true;
+    }
+
+    @Override
+    protected void initStatusBarStyle() {
+        Window window = this.getWindow();
+        //取消状态栏透明
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //添加Flag把状态栏设为可绘制模式
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //设置状态栏颜色
+        window.setStatusBarColor(getResources().getColor(R.color.colorTitleBar));
+        //设置系统状态栏处于可见状态
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        //让view不根据系统窗口来调整自己的布局
+        ViewGroup mContentView = (ViewGroup) window.findViewById(Window.ID_ANDROID_CONTENT);
+        View mChildView = mContentView.getChildAt(0);
+        if (mChildView != null) {
+            ViewCompat.setFitsSystemWindows(mChildView, false);
+            ViewCompat.requestApplyInsets(mChildView);
+        }
     }
 
     @Override

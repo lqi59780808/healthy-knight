@@ -2,6 +2,7 @@ package com.chh.healthy.backend.service;
 
 import com.boss.xtrain.core.common.api.CommonResponse;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     /**
@@ -30,4 +31,13 @@ public interface UserService {
      * @since
      */
     CommonResponse<UserDTO> doInit(UserDTO userDTO);
+
+    /**
+     * @param: [id, multipartFile]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.chh.healthy.backend.pojo.dto.UserDTO>
+     * @desc: 上传头像
+     * @see
+     * @since
+     */
+    CommonResponse<UserDTO> doUpdateIcon(long id,long version, MultipartFile multipartFile);
 }

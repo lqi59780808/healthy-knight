@@ -1,5 +1,6 @@
 package com.chh.healthy.backend.service.impl;
 
+import com.boss.xtrain.core.annotation.stuffer.IdGenerator;
 import com.boss.xtrain.core.common.api.CommonRequest;
 import com.boss.xtrain.core.common.api.CommonResponse;
 import com.boss.xtrain.core.common.api.CommonResponseUtils;
@@ -14,10 +15,12 @@ import com.chh.healthy.backend.pojo.dto.UserDTO;
 import com.chh.healthy.backend.pojo.entity.User;
 import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.service.UserService;
+import com.chh.healthy.backend.utils.MyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
 
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    IdGenerator idGenerator;
 
     public UserServiceImpl(@Autowired UserDAO userDAO) {
         this.myDao = userDAO;
@@ -54,7 +60,6 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
                     UserDTO response = BeanUtil.copy(user,UserDTO.class);
                     //不返回密码的哈希码
                     response.setPassword(null);
-                    BaseContextHolder.set("userInfo",userDTO);
                     return CommonResponseUtils.success(response);
                 }
             } else {
@@ -106,6 +111,22 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
         } catch (Exception e) {
             throw new ServiceException(ErrorCode.INIT_EXCEPTION,e);
         }
+    }
+
+    @Override
+    public CommonResponse<UserDTO> doUpdateIcon(long id, long version,MultipartFile multipartFile) {
+        try {
+            User user = new User();
+            user.setId(id);
+            user.setVersion(version);
+            String url = MyUtil.saveImage(multipartFile,idGenerator);
+            user.setIcon(url);
+            User res = userDAO.updateAndReturn(user);
+            return CommonResponseUtils.success(BeanUtil.copy(res,UserDTO.class));
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.ICON_EXCEPTION,e);
+        }
+
     }
 
     public Boolean checkRegister(UserDTO userDTO) {

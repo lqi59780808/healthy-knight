@@ -44,6 +44,12 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name="com.xuexiang.chh_healthy_android.activity.PublishActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation|keyboard"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <!--通用浏览器-->
         <activity
