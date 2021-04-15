@@ -10,7 +10,7 @@ android {
     buildToolsVersion build_versions.build_tools
 
     defaultConfig {
-        applicationId "com.xuexiang.templateproject"
+        applicationId "com.xuexiang.chh_healthy_android"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1

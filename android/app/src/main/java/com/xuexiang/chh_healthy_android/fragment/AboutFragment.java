@@ -23,6 +23,7 @@ import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.webview.AgentWebActivity;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.grouplist.XUIGroupListView;
 import com.xuexiang.xutil.app.AppUtils;
 
@@ -36,7 +37,7 @@ import butterknife.BindView;
  * @author xuexiang
  * @since 2019-10-30 00:02
  */
-@Page(name = "关于")
+@Page(anim = CoreAnim.none)
 public class AboutFragment extends BaseFragment {
 
     @BindView(R.id.tv_version)

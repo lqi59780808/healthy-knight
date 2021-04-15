@@ -57,4 +57,7 @@ public interface UserApi extends CommonCRUDApi<UserDTO,UserQuery,UserVO> {
      * @since
      */
     CommonResponse<UserDTO> updateIcon(long id, long version,MultipartFile multipartFile);
+
+    @PostMapping("/update2")
+    CommonResponse<UserDTO> update2(@RequestBody CommonRequest<UserDTO> request);
 }

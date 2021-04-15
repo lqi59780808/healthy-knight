@@ -1,6 +1,7 @@
 package com.chh.healthy.backend.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import com.alibaba.fastjson.JSON;
 import com.boss.xtrain.core.annotation.stuffer.IdGenerator;
 import com.boss.xtrain.core.common.api.CommonPage;
 import com.boss.xtrain.core.common.api.CommonRequest;
@@ -35,6 +36,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -70,6 +72,7 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
             invitation.setClick(0);
             invitation.setCollect(0);
             invitation.setGood(0);
+            invitation.setComment(0);
             invitation.setTitle(title);
             invitation.setContent(content);
             Invitation res = dao.saveAndReturn(invitation);
@@ -102,12 +105,16 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
     }
 
     @Override
-    public CommonResponse<CommonPage<InvitationVO>> doQueryInvitation(InvitationQuery request) {
+    public CommonResponse<CommonPage<InvitationDTO>> doQueryInvitation(InvitationQuery request) {
         try {
             List<Invitation> response = dao.queryInvitation(request);
             BaseContextHolder.endPage(response);
-            List<InvitationVO> voList = BeanUtil.copyList(response,InvitationVO.class);
-            CommonPage<InvitationVO> page = CommonPage.restPage(voList);
+            List<InvitationDTO> dtoList = new ArrayList<>();
+            for (Invitation invitation : response) {
+                String json = JSON.toJSONString(invitation);
+                dtoList.add(JSON.parseObject(json, InvitationDTO.class));
+            }
+            CommonPage<InvitationDTO> page = CommonPage.restPage(dtoList);
             page.setTotal(Convert.toLong(BaseContextHolder.get("total")));
             return CommonResponseUtils.success(page);
         } catch (Exception e) {

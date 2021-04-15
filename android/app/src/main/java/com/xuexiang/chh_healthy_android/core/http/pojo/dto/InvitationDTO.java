@@ -39,11 +39,31 @@ public class InvitationDTO extends BaseDTO {
 
     private Integer type;
 
+    private Integer comment;
+
     private String content;
 
     private UserDTO user;
 
     private List<InvitationPictureDTO> pictureList;
+
+    private List<ReplyDTO> replyList;
+
+    public Integer getComment() {
+        return comment;
+    }
+
+    public void setComment(Integer comment) {
+        this.comment = comment;
+    }
+
+    public List<ReplyDTO> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<ReplyDTO> replyList) {
+        this.replyList = replyList;
+    }
 
     public List<InvitationPictureDTO> getPictureList() {
         return pictureList;

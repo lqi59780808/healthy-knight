@@ -18,17 +18,33 @@
     <result column="click" jdbcType="INTEGER" property="click" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
-    <association property="user" javaType="com.chh.healthy.backend.pojo.entity.User" column="created_by"
+      <result column="comment" jdbcType="INTEGER" property="comment" />
+
+      <association property="user" javaType="com.chh.healthy.backend.pojo.entity.User" column="created_by"
                  select="getUser" />
+      <collection property="pictureList"
+                  ofType="com.chh.healthy.backend.pojo.entity.InvitationPicture"
+                  resultMap="InvitationPictureMap"
+      />
   </resultMap>
+    <resultMap id="InvitationPictureMap" type="com.chh.healthy.backend.pojo.entity.InvitationPicture">
+        <id column="picture_id" jdbcType="BIGINT" property="id"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="invitation_id" jdbcType="BIGINT" property="invitationId"/>
+    </resultMap>
   <select id="getUser"
           resultType="com.chh.healthy.backend.pojo.entity.User">
         select * from h_user AS p where p.id=#{id}
     </select>
   <select id="queryInvitation" resultMap="BaseResultMap">
-        SELECT t1.*
+        SELECT
+        t1.*,
+        t2.id AS picture_id,
+        t2.url,
+        t2.invitation_id
         FROM
         h_invitation AS t1
+        LEFT JOIN h_invitation_picture AS t2 ON t2.invitation_id = t1.id
         <where>
           <if test="query.title != null">
             AND t1.title = #{query.title}

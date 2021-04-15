@@ -27,5 +27,5 @@ public interface InvitationService {
      * @see
      * @since
      */
-    CommonResponse<CommonPage<InvitationVO>> doQueryInvitation(InvitationQuery request);
+    CommonResponse<CommonPage<InvitationDTO>> doQueryInvitation(InvitationQuery request);
 }

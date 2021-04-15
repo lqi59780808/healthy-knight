@@ -1,95 +1,105 @@
-/*
- * Copyright (C) 2019 xuexiangjys(xuexiangjys@163.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
 package com.xuexiang.chh_healthy_android.fragment;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import com.google.android.material.navigation.NavigationView;
+import com.xuexiang.chh_healthy_android.MyApp;
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.activity.SettingActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
+import com.xuexiang.chh_healthy_android.core.FinalEnum;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
+import com.xuexiang.chh_healthy_android.fragment.user_info.UserInfoNicknameFragment;
+import com.xuexiang.chh_healthy_android.fragment.user_info.UserInfoSexFragment;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xpage.base.XPageFragment;
+import com.xuexiang.xpage.core.PageOption;
+import com.xuexiang.xpage.enums.CoreAnim;
+import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
 import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xutil.app.ActivityUtils;
 
 import butterknife.BindView;
 
-/**
- * @author xuexiang
- * @since 2019-10-15 22:38
- */
-@Page(name = "用户设置")
+@Page(anim = CoreAnim.none)
 public class UserInfoFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
 
-    @BindView(R.id.menu_common)
-    SuperTextView menuCommon;
-    @BindView(R.id.menu_privacy)
-    SuperTextView menuPrivacy;
-    @BindView(R.id.menu_push)
-    SuperTextView menuPush;
-    @BindView(R.id.menu_helper)
-    SuperTextView menuHelper;
-    @BindView(R.id.menu_change_account)
-    SuperTextView menuChangeAccount;
-    @BindView(R.id.menu_logout)
-    SuperTextView menuLogout;
+    @BindView(R.id.menu_nickname)
+    SuperTextView menuNickname;
+    @BindView(R.id.menu_sex)
+    SuperTextView menuSex;
 
+    private final int RESULT_NICKNAME = 100;
+    private final int RESULT_SEX = 101;
+
+    private UserDTO userInfo;
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_settings;
+        return R.layout.fragment_user_info;
     }
 
     @Override
     protected void initViews() {
-        menuCommon.setOnSuperTextViewClickListener(this);
-        menuPrivacy.setOnSuperTextViewClickListener(this);
-        menuPush.setOnSuperTextViewClickListener(this);
-        menuHelper.setOnSuperTextViewClickListener(this);
-        menuChangeAccount.setOnSuperTextViewClickListener(this);
-        menuLogout.setOnSuperTextViewClickListener(this);
+        userInfo = TokenUtils.getUserInfo();
+        menuNickname.setOnSuperTextViewClickListener(this);
+        menuSex.setOnSuperTextViewClickListener(this);
+        menuNickname.setRightBottomString(userInfo.getNickname());
+        String[] sexIndex = {"男","女","保密"};
+        menuSex.setRightBottomString(sexIndex[userInfo.getSex()]);
+    }
+
+    @Override
+    protected TitleBar initTitle() {
+        TitleBar titleBar = super.initTitle();
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorTitleBar));
+        titleBar.setTitle("用户信息");
+        titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_back));
+        return titleBar;
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Intent data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_NICKNAME) {
+            Bundle bundle = data.getExtras();
+            menuNickname.setRightBottomString(bundle.getString("nickname"));
+            MyApp myApp = (MyApp) getActivity().getApplication();
+            myApp.setUserInfoFlag(true);
+        } else if (requestCode == RESULT_SEX) {
+            Bundle bundle = data.getExtras();
+            String[] sexIndex = {"男","女","保密"};
+            int sex = bundle.getInt("sex");
+            menuSex.setRightBottomString(sexIndex[sex]);
+            MyApp myApp = (MyApp) getActivity().getApplication();
+            myApp.setUserInfoFlag(true);
+        }
     }
 
     @SingleClick
     @Override
     public void onClick(SuperTextView superTextView) {
         switch (superTextView.getId()) {
-            case R.id.menu_common:
-            case R.id.menu_privacy:
-            case R.id.menu_push:
-            case R.id.menu_helper:
-                XToastUtils.toast(superTextView.getLeftString());
+            case R.id.menu_nickname:
+                PageOption.to(UserInfoNicknameFragment.class)
+                        .setRequestCode(RESULT_NICKNAME)
+                        .setAddToBackStack(true)
+                        .setAnim(CoreAnim.slide)
+                        .open(this);
                 break;
-            case R.id.menu_change_account:
-                XToastUtils.toast(superTextView.getCenterString());
-                break;
-            case R.id.menu_logout:
-                DialogLoader.getInstance().showConfirmDialog(
-                        getContext(),
-                        getString(R.string.lab_logout_confirm),
-                        getString(R.string.lab_yes),
-                        (dialog, which) -> {
-                            dialog.dismiss();
-                            XUtil.getActivityLifecycleHelper().exit();
-                            TokenUtils.handleLogoutSuccess();
-                        },
-                        getString(R.string.lab_no),
-                        (dialog, which) -> dialog.dismiss()
-                );
+            case R.id.menu_sex:
+                PageOption.to(UserInfoSexFragment.class)
+                        .setRequestCode(RESULT_SEX)
+                        .setAddToBackStack(true)
+                        .setAnim(CoreAnim.slide)
+                        .open(this);
                 break;
             default:
                 break;

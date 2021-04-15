@@ -34,6 +34,16 @@ import com.xuexiang.chh_healthy_android.utils.sdkinit.XUpdateInit;
  */
 public class MyApp extends Application {
 
+    private boolean userInfoFlag;
+
+    public boolean isUserInfoFlag() {
+        return userInfoFlag;
+    }
+
+    public void setUserInfoFlag(boolean userInfoFlag) {
+        this.userInfoFlag = userInfoFlag;
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -43,6 +53,7 @@ public class MyApp extends Application {
 
     @Override
     public void onCreate() {
+        userInfoFlag = false;
         super.onCreate();
         initLibs();
     }

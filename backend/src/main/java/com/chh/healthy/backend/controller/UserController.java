@@ -3,6 +3,7 @@ package com.chh.healthy.backend.controller;
 import com.boss.xtrain.core.common.api.CommonRequest;
 import com.boss.xtrain.core.common.api.CommonResponse;
 import com.boss.xtrain.core.common.controller.BaseCRUDController;
+import com.boss.xtrain.core.context.BaseContextHolder;
 import com.chh.healthy.backend.api.UserApi;
 import com.chh.healthy.backend.dao.mapper.UserMapper;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
@@ -40,11 +41,19 @@ public class UserController extends BaseCRUDController<UserDTO, User, UserQuery,
 
     @Override
     public CommonResponse<UserDTO> init(@RequestBody CommonRequest<UserDTO> request) {
+        BaseContextHolder.setUserId(request.getBody().getId());
         return userService.doInit(request.getBody());
     }
 
     @Override
     public CommonResponse<UserDTO> updateIcon(@RequestParam long id, @RequestParam long version,@RequestParam MultipartFile multipartFile) {
+        BaseContextHolder.setUserId(id);
         return userService.doUpdateIcon(id,version,multipartFile);
+    }
+
+    @Override
+    public CommonResponse<UserDTO> update2(@RequestBody CommonRequest<UserDTO> request) {
+        BaseContextHolder.setUserId(request.getBody().getId());
+        return userService.doUpdate(request.getBody());
     }
 }

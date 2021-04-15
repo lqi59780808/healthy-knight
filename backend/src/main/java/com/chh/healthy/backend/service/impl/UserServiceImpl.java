@@ -129,6 +129,17 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
 
     }
 
+    @Override
+    public CommonResponse<UserDTO> doUpdate(UserDTO request) {
+        try {
+            User user = userDAO.updateAndReturn(BeanUtil.copy(request,User.class));
+            return CommonResponseUtils.success(BeanUtil.copy(user,UserDTO.class));
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.UPDATE_EXCEPTION,e);
+        }
+
+    }
+
     public Boolean checkRegister(UserDTO userDTO) {
         String username = userDTO.getUsername();
         String password = userDTO.getPassword();

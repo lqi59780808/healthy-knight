@@ -1,10 +1,10 @@
 package com.chh.healthy.backend.pojo.vo;
 
-import com.boss.xtrain.core.common.pojo.vo.BaseQuery;
 import com.boss.xtrain.core.common.pojo.vo.BaseVO;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
-import com.chh.healthy.backend.pojo.entity.User;
+import lombok.Data;
 
+@Data
 public class InvitationVO extends BaseVO {
     private String title;
 
@@ -25,6 +25,8 @@ public class InvitationVO extends BaseVO {
     private String content;
 
     private UserDTO user;
+
+    private Integer comment;
 
     public UserDTO getUser() {
         return user;

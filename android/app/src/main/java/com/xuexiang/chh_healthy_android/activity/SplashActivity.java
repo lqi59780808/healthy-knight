@@ -17,6 +17,7 @@
 
 package com.xuexiang.chh_healthy_android.activity;
 
+import android.content.Intent;
 import android.view.KeyEvent;
 
 import com.xuexiang.chh_healthy_android.R;

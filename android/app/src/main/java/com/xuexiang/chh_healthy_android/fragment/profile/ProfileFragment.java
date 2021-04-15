@@ -20,8 +20,11 @@ package com.xuexiang.chh_healthy_android.fragment.profile;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 
@@ -33,6 +36,7 @@ import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.activity.MainActivity;
+import com.xuexiang.chh_healthy_android.activity.SettingActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
@@ -42,6 +46,8 @@ import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;
 import com.xuexiang.chh_healthy_android.fragment.PublishFragment;
 import com.xuexiang.chh_healthy_android.fragment.SettingsFragment;
+import com.xuexiang.chh_healthy_android.fragment.UserInfoFragment;
+import com.xuexiang.chh_healthy_android.fragment.UserSettingFragment;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.Utils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
@@ -50,6 +56,7 @@ import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.callback.CallBackProxy;
 import com.xuexiang.xhttp2.callback.impl.IProgressResponseCallBack;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
@@ -74,6 +81,8 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     SuperTextView menuSettings;
     @BindView(R.id.menu_about)
     SuperTextView menuAbout;
+    @BindView(R.id.st_account)
+    SuperTextView stAccount;
     @BindView(R.id.icon_set)
     SuperTextView iconSet;
 
@@ -110,6 +119,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     protected void initListeners() {
         menuSettings.setOnSuperTextViewClickListener(this);
         menuAbout.setOnSuperTextViewClickListener(this);
+        stAccount.setOnSuperTextViewClickListener(this);
         iconSet.setOnSuperTextViewClickListener(this);
 
     }
@@ -143,12 +153,23 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                                     NavigationView nav = getActivity().findViewById(R.id.nav_view);
                                     RadiusImageView avatar = nav.getHeaderView(0).findViewById(R.id.iv_avatar);
                                     Glide.with(ProfileFragment.this).load(FinalEnum.frontUrl + response.getIcon()).into(avatar);
+                                    RadiusImageView riv = getActivity().findViewById(R.id.toolbar_avatar);
+                                    Glide.with(ProfileFragment.this).load(FinalEnum.frontUrl + response.getIcon()).into(riv);
                                     XToastUtils.success("头像更改成功");
                                 }
                             }){});
                     break;
                 default:
                     break;
+            }
+        } else if (resultCode == 100) {
+            Bundle bundle = data.getExtras();
+            String nickname = bundle.getString("nickname");
+            int sex = bundle.getInt("sex");
+            if (nickname != null) {
+                NavigationView nav = getActivity().findViewById(R.id.nav_view);
+                TextView tv = nav.getHeaderView(0).findViewById(R.id.tv_avatar);
+                tv.setText(bundle.getString("nickname"));
             }
         }
     }
@@ -158,10 +179,13 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     public void onClick(SuperTextView view) {
         switch(view.getId()) {
             case R.id.menu_settings:
-                openNewPage(SettingsFragment.class);
+                ActivityUtils.startActivityWithBundle(SettingActivity.class,"type","SettingsFragment");
                 break;
             case R.id.menu_about:
                 openNewPage(AboutFragment.class);
+                break;
+            case R.id.st_account:
+                ActivityUtils.startActivityForResultWithBundle(getActivity(),SettingActivity.class,100,"type","UserInfoFragment");
                 break;
             case R.id.icon_set:
                 PictureSelector.create(ProfileFragment.this)

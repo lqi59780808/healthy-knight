@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.Table;
 
-@Table(name = "t_user")
 @Data
 public class UserDTO extends BaseDTO {
 

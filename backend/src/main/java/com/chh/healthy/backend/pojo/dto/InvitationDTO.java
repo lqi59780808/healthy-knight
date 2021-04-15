@@ -30,4 +30,8 @@ public class InvitationDTO extends BaseDTO {
     private UserDTO user;
 
     private List<InvitationPictureDTO> pictureList;
+
+    private List<ReplyDTO> replyList;
+
+    private Integer comment;
 }

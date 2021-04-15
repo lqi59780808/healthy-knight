@@ -54,6 +54,10 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.core.webview.AgentWebActivity;
+import com.xuexiang.chh_healthy_android.fragment.UserSettingFragment;
+import com.xuexiang.xpage.base.XPageFragment;
+import com.xuexiang.xpage.core.PageOption;
+import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.utils.DrawableUtils;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
@@ -394,13 +398,5 @@ public final class Utils {
             canvas.setBitmap(null);
         }
         return bigBitmap;
-    }
-
-    /**
-     * @param url 通过URL得到 Drawable
-     * @return
-     */
-    public static void getDrawableGlide(String url, CustomTarget<Drawable> customTarget) {
-
     }
 }

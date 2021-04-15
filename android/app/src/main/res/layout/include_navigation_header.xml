@@ -28,40 +28,58 @@
         android:layout_height="20dp" />
 
     <LinearLayout
-        android:layout_width="240dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp">
+        android:orientation="horizontal">
 
         <com.xuexiang.xui.widget.imageview.RadiusImageView
             android:id="@+id/iv_avatar"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@drawable/ic_knight"
+            android:layout_marginStart="10dp"
             app:riv_is_circle="true"
             app:riv_selected_border_color="@color/xui_config_color_gray_4"
             app:riv_selected_border_width="1px"
             app:riv_selected_mask_color="@color/xui_config_color_gray_8" />
 
-        <TextView
-            android:id="@+id/tv_avatar"
-            style="@style/TextStyle.Title"
-            android:layout_marginStart="?attr/xui_config_content_spacing_horizontal" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_avatar"
+                style="@style/TextStyle.Title"
+                android:maxLines="2"
+                android:textAlignment="textStart"
+                android:maxWidth="220dp"
+                android:width="220dp"
+                android:layout_marginStart="?attr/xui_config_content_spacing_horizontal" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+                <com.xuexiang.xui.widget.imageview.RadiusImageView
+                    android:id="@+id/iv_sex"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/ic_secret"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"/>
+                <com.xuexiang.xui.widget.imageview.RadiusImageView
+                    android:id="@+id/iv_knight"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_logo_knight"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_sign"
-        style="@style/TextStyle.Explain"
-        android:layout_width="240dp"
-        android:layout_marginTop="?attr/xui_config_content_spacing_vertical"
-        android:gravity="start"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:singleLine="false" />
 
     <Space
         android:layout_width="wrap_content"

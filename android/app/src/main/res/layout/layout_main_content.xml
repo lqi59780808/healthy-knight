@@ -43,6 +43,25 @@
                 app:riv_selected_border_color="@color/xui_config_color_gray_4"
                 app:riv_selected_border_width="1px"
                 app:riv_selected_mask_color="@color/xui_config_color_gray_8" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <com.xuexiang.xui.widget.imageview.RadiusImageView
+                    android:id="@+id/title_logo_knight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_logo_knight" />
+                <com.xuexiang.xui.widget.imageview.RadiusImageView
+                    android:id="@+id/title_logo_text"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_logo_text" />
+            </LinearLayout>
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -52,7 +71,7 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
+        android:layout_marginTop="@dimen/config_title"
         android:layout_marginBottom="?actionBarSize"
         android:overScrollMode="never" />
 

@@ -1,31 +1,34 @@
-/*
- * Copyright (C) 2019 xuexiangjys(xuexiangjys@163.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
 package com.xuexiang.chh_healthy_android.fragment;
 
+import android.view.View;
+
+import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.activity.MainActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
+import com.xuexiang.chh_healthy_android.core.FinalEnum;
+import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.InvitationDTO;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
+import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.callback.CallBackProxy;
+import com.xuexiang.xhttp2.callback.impl.IProgressResponseCallBack;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xpage.enums.CoreAnim;
+import com.xuexiang.xui.utils.ResUtils;
+import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
 import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xutil.app.ActivityUtils;
+import com.xuexiang.xutil.file.FileUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -33,7 +36,7 @@ import butterknife.BindView;
  * @author xuexiang
  * @since 2019-10-15 22:38
  */
-@Page(name = "设置")
+@Page(anim = CoreAnim.none)
 public class SettingsFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
 
     @BindView(R.id.menu_common)
@@ -54,6 +57,14 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
         return R.layout.fragment_settings;
     }
 
+    @Override
+    protected TitleBar initTitle() {
+        TitleBar titleBar = super.initTitle();
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorTitleBar));
+        titleBar.setTitle("设置");
+        titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_back));
+        return titleBar;
+    }
     @Override
     protected void initViews() {
         menuCommon.setOnSuperTextViewClickListener(this);

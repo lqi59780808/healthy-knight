@@ -17,6 +17,7 @@
 
 package com.xuexiang.chh_healthy_android.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -46,6 +47,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.xuexiang.chh_healthy_android.MyApp;
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.core.BaseActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
@@ -150,16 +152,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         LinearLayout navHeader = headerView.findViewById(R.id.nav_header);
         RadiusImageView ivAvatar = headerView.findViewById(R.id.iv_avatar);
         TextView tvAvatar = headerView.findViewById(R.id.tv_avatar);
-        TextView tvSign = headerView.findViewById(R.id.tv_sign);
+        RadiusImageView ivSex = headerView.findViewById(R.id.iv_sex);
         if (Utils.isColorDark(ThemeUtils.resolveColor(this, R.attr.colorAccent))) {
             tvAvatar.setTextColor(Colors.WHITE);
-            tvSign.setTextColor(Colors.WHITE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ivAvatar.setImageTintList(ResUtils.getColors(R.color.xui_config_color_white));
             }
         } else {
             tvAvatar.setTextColor(ThemeUtils.resolveColor(this, R.attr.xui_config_color_title_text));
-            tvSign.setTextColor(ThemeUtils.resolveColor(this, R.attr.xui_config_color_explain_text));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ivAvatar.setImageTintList(ResUtils.getColors(R.color.xui_config_color_gray_3));
             }
@@ -171,7 +171,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Glide.with(this).load(FinalEnum.frontUrl + userInfo.getIcon()).into(toolbarAvatar);
         }
         tvAvatar.setText(userInfo.getNickname() == null ? "虚无骑士" : userInfo.getNickname());
-        tvSign.setText("降临~~~~~~~~~~");
+        int sex = (int)userInfo.getSex();
+        if (sex == 0) {
+            ivSex.setImageDrawable(getResources().getDrawable(R.drawable.ic_male));
+        } else if (sex == 1) {
+            ivSex.setImageDrawable(getResources().getDrawable(R.drawable.ic_female));
+        } else if (sex == 2) {
+            ivSex.setImageDrawable(getResources().getDrawable(R.drawable.ic_secret));
+        }
         navHeader.setOnClickListener(this);
     }
 
@@ -188,7 +195,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_settings:
-                        openNewPage(SettingsFragment.class);
+                        ActivityUtils.startActivity(SettingActivity.class);
                         break;
                     case R.id.nav_about:
                         openNewPage(AboutFragment.class);
@@ -328,6 +335,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (mChildView != null) {
             ViewCompat.setFitsSystemWindows(mChildView, false);
             ViewCompat.requestApplyInsets(mChildView);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyApp myApp = (MyApp) MainActivity.this.getApplication();
+        if (myApp.isUserInfoFlag()) {
+            UserDTO userInfo = TokenUtils.getUserInfo();
+            NavigationView nav = findViewById(R.id.nav_view);
+            TextView tv = nav.getHeaderView(0).findViewById(R.id.tv_avatar);
+            tv.setText(userInfo.getNickname());
+            RadiusImageView ivSex = nav.getHeaderView(0).findViewById(R.id.iv_sex);
+            if (userInfo.getSex() == 0) {
+                ivSex.setImageDrawable(getResources().getDrawable(R.drawable.ic_male));
+            } else if (userInfo.getSex() == 1) {
+                ivSex.setImageDrawable(getResources().getDrawable(R.drawable.ic_female));
+            } else if (userInfo.getSex() == 2) {
+                ivSex.setImageDrawable(getResources().getDrawable(R.drawable.ic_secret));
+            }
+            myApp.setUserInfoFlag(false);
         }
     }
 

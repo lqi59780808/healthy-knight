@@ -47,10 +47,10 @@ public class InvitationController extends BaseCRUDController<InvitationDTO, Invi
     }
 
     @Override
-    public CommonResponse<CommonPage<InvitationVO>> queryInvitation(@RequestBody CommonRequest<InvitationQuery> request) {
+    public CommonResponse<List<InvitationDTO>> queryInvitation(@RequestBody CommonRequest<InvitationQuery> request) {
         InvitationQuery query = request.getBody();
         this.doBeforePagination(query.getPageNum(),query.getPageSize());
-        List<InvitationQuery> response;
-        return null;
+        CommonResponse<CommonPage<InvitationDTO>> response = invitationService.doQueryInvitation(query);
+        return CommonResponseUtils.success(response.getBody().getData());
     }
 }

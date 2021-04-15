@@ -19,4 +19,6 @@ package com.xuexiang.chh_healthy_android.core;
 
 public class FinalEnum {
     public static final String frontUrl = "http://192.168.0.122:8080";
+
+    public static final int resultOK = 100;
 }

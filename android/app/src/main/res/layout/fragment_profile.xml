@@ -48,8 +48,9 @@
                 </com.xuexiang.xui.widget.textview.supertextview.SuperTextView>
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/st_account"
                     style="@style/InfoItem.Account"
-                    app:sLeftTextString="账号" />
+                    app:sLeftTextString="用户信息" />
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                     style="@style/InfoItem.Account"

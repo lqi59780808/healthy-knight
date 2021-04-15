@@ -1,9 +1,16 @@
 package com.chh.healthy.backend.pojo.entity;
 
 import com.boss.xtrain.core.common.pojo.entity.BaseEntity;
+import com.chh.healthy.backend.pojo.dto.InvitationPictureDTO;
+import com.chh.healthy.backend.pojo.dto.ReplyDTO;
+import com.chh.healthy.backend.pojo.dto.UserDTO;
+import lombok.Data;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "h_invitation")
+@Data
 public class Invitation extends BaseEntity {
     private String title;
 
@@ -23,15 +30,23 @@ public class Invitation extends BaseEntity {
 
     private String content;
 
+    private Integer comment;
+
+    @Transient
+    private List<InvitationPicture> pictureList;
+
+    @Transient
+    private List<Reply> replyList;
+
     @Transient
     private User user;
 
-    public User getUser() {
-        return user;
+    public Integer getComment() {
+        return comment;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setComment(Integer comment) {
+        this.comment = comment;
     }
 
     /**

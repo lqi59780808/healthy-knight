@@ -193,10 +193,11 @@ public abstract class XDelegateAdapter<T, V extends RecyclerView.ViewHolder> ext
      */
     public XDelegateAdapter refresh(Collection<T> collection) {
         if (collection != null) {
+            int size = mData.size();
             mData.clear();
+            notifyItemRangeRemoved(0, size);
             mData.addAll(collection);
-            mSelectPosition = -1;
-            notifyDataSetChanged();
+            notifyItemRangeInserted(0, collection.size());
         }
         return this;
     }

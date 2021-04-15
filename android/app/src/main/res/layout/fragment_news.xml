@@ -38,9 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
-            tools:listitem="@layout/adapter_news_card_view_list_item" />
+            tools:listitem="@layout/adapter_news_invitation_view_list_item" />
 
-        <!--    注意修改包名时，这里也需要修改    -->
         <com.xuexiang.chh_healthy_android.widget.MaterialFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -52,6 +52,10 @@ public enum ErrorCode implements IErrorCode {
      */
     ICON_EXCEPTION(200008,"更新头像失败"),
     /**
+     * 200004考试发布记录新增失败
+     */
+    UPDATE_EXCEPTION(200008,"更新失败"),
+    /**
      * 在以上增加其它错误码
      */
     UNDEFINED(900000, "未定义");

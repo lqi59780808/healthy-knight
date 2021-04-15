@@ -75,7 +75,6 @@ public abstract class BroccoliSimpleDelegateAdapter<T> extends SimpleDelegateAda
         }
     }
 
-
     /**
      * 绑定控件
      *

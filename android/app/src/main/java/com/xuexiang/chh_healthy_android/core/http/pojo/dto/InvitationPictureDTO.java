@@ -1,14 +1,27 @@
 package com.xuexiang.chh_healthy_android.core.http.pojo.dto;
 
 
-import com.xuexiang.chh_healthy_android.core.BaseDTO;
+import android.graphics.Rect;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class InvitationPictureDTO extends BaseDTO {
+import androidx.annotation.Nullable;
+
+import com.xuexiang.chh_healthy_android.core.BaseDTO;
+import com.xuexiang.xui.widget.imageview.preview.enitity.IPreviewInfo;
+
+public class InvitationPictureDTO extends BaseDTO implements IPreviewInfo {
     private Long invitationId;
 
-    private byte[] pic;
+    private String url;
 
-    private byte[] smallPic;
+    public InvitationPictureDTO(Parcel source) {
+        super();
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public Long getInvitationId() {
         return invitationId;
@@ -18,19 +31,41 @@ public class InvitationPictureDTO extends BaseDTO {
         this.invitationId = invitationId;
     }
 
-    public byte[] getPic() {
-        return pic;
+    @Override
+    public String getUrl() {
+        return url;
     }
 
-    public void setPic(byte[] pic) {
-        this.pic = pic;
+    @Override
+    public Rect getBounds() {
+        return null;
     }
 
-    public byte[] getSmallPic() {
-        return smallPic;
+    @Nullable
+    @Override
+    public String getVideoUrl() {
+        return null;
     }
 
-    public void setSmallPic(byte[] smallPic) {
-        this.smallPic = smallPic;
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+    }
+
+
+    public static final Parcelable.Creator<InvitationPictureDTO> CREATOR = new Parcelable.Creator<InvitationPictureDTO>() {
+        @Override
+        public InvitationPictureDTO createFromParcel(Parcel source) {
+            return new InvitationPictureDTO(source);
+        }
+
+        @Override
+        public InvitationPictureDTO[] newArray(int size) {
+            return new InvitationPictureDTO[size];
+        }
+    };
 }

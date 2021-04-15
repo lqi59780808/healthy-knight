@@ -40,4 +40,6 @@ public interface UserService {
      * @since
      */
     CommonResponse<UserDTO> doUpdateIcon(long id,long version, MultipartFile multipartFile);
+
+    CommonResponse<UserDTO> doUpdate(UserDTO request);
 }

@@ -34,9 +34,12 @@
 <!--            <table tableName="t_exam_publish_record" domainObjectName="ExamPublishRecord">-->
 <!--              <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
 <!--            </table>-->
-            <table tableName="h_invitation_picture" domainObjectName="InvitationPicture">
+            <table tableName="h_reply" domainObjectName="Reply">
               <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>
             </table>
+        <table tableName="h_user_reply" domainObjectName="UserReply">
+            <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>
+        </table>
 <!--            <table tableName="t_exam_record" domainObjectName="ExamRecord">-->
 <!--                <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
 <!--            </table>-->
