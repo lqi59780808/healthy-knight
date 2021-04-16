@@ -113,7 +113,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
         if (TokenUtils.getUserInfo().getIcon() != null) {
             Glide.with(ProfileFragment.this).load(FinalEnum.frontUrl + TokenUtils.getUserInfo().getIcon()).into(rivHeadPic);
         }
-    }
+}
 
     @Override
     protected void initListeners() {

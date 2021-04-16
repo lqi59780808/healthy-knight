@@ -48,4 +48,8 @@ public class InvitationDAO extends AbstractBaseDao<Invitation, InvitationMapper,
     public List<Invitation> queryInvitation(InvitationQuery query) {
         return myMapper.queryInvitation(query);
     }
+
+    public List<Invitation> queryInvitationById(Long id) {
+        return myMapper.queryInvitationById(id);
+    }
 }

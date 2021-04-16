@@ -22,12 +22,15 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.alibaba.android.vlayout.LayoutHelper;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.adapter.base.delegate.SimpleDelegateAdapter;
 import com.xuexiang.chh_healthy_android.adapter.base.delegate.XDelegateAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.samlss.broccoli.Broccoli;
@@ -97,7 +100,6 @@ public abstract class BroccoliSimpleDelegateAdapter<T> extends SimpleDelegateAda
         mHasLoad = true;
         return super.refresh(collection);
     }
-
     /**
      * 资源释放，防止内存泄漏
      */

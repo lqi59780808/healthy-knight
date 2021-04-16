@@ -8,6 +8,7 @@ import com.chh.healthy.backend.pojo.entity.User;
 import javax.persistence.Table;
 
 public class InvitationQuery extends BaseQuery {
+
     private String title;
 
     /**

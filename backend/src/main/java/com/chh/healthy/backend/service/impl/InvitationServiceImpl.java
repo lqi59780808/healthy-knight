@@ -28,6 +28,7 @@ import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.pojo.vo.InvitationVO;
 import com.chh.healthy.backend.service.InvitationService;
 import com.chh.healthy.backend.service.UserService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,6 +120,21 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
             return CommonResponseUtils.success(page);
         } catch (Exception e) {
             throw new ServiceException(ErrorCode.QUERY_INVITATION_EXCEPTION,e);
+        }
+    }
+
+    @Override
+    public CommonResponse<InvitationDTO> doQueryInvitationById(Long request) {
+        try {
+            List<Invitation> invitationList = dao.queryInvitationById(request);
+            if (invitationList.size() != 0) {
+                Invitation invitation = invitationList.get(0);
+                InvitationDTO invitationDTO = JSON.parseObject(JSON.toJSONString(invitation),InvitationDTO.class);
+                return CommonResponseUtils.success(invitationDTO);
+            }
+            return CommonResponseUtils.success(new InvitationDTO());
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.QUERY_EXCEPTION,e);
         }
     }
 }

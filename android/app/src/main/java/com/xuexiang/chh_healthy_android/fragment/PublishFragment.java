@@ -149,7 +149,7 @@ public class PublishFragment extends BaseFragment implements ImageSelectGridAdap
         recyclerView.setAdapter(mAdapter = new ImageSelectGridAdapter(getActivity(), this));
         mAdapter.setSelectList(mSelectList);
         mAdapter.setSelectMax(8);
-        mAdapter.setOnItemClickListener((position, v) -> PictureSelector.create(this).themeStyle(R.style.XUIPictureStyle).openExternalPreview(position, mSelectList));
+        mAdapter.setOnItemClickListener((position, v) -> PictureSelector.create(this).themeStyle(R.style.picture_default_style).openExternalPreview(position, mSelectList));
     }
 
     @Override

@@ -18,6 +18,7 @@
 package com.xuexiang.chh_healthy_android.core.http.pojo.dto;
 
 
+import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.core.BaseDTO;
 
 import java.util.List;
@@ -48,6 +49,16 @@ public class InvitationDTO extends BaseDTO {
     private List<InvitationPictureDTO> pictureList;
 
     private List<ReplyDTO> replyList;
+
+    private List<LocalMedia> mediaList;
+
+    public List<LocalMedia> getMediaList() {
+        return mediaList;
+    }
+
+    public void setMediaList(List<LocalMedia> mediaList) {
+        this.mediaList = mediaList;
+    }
 
     public Integer getComment() {
         return comment;

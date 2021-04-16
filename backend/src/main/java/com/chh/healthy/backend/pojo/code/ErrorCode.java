@@ -56,6 +56,10 @@ public enum ErrorCode implements IErrorCode {
      */
     UPDATE_EXCEPTION(200008,"更新失败"),
     /**
+     * 200004考试发布记录新增失败
+     */
+    QUERY_EXCEPTION(200009,"查询失败"),
+    /**
      * 在以上增加其它错误码
      */
     UNDEFINED(900000, "未定义");

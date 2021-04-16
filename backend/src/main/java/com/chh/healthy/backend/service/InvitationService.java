@@ -28,4 +28,13 @@ public interface InvitationService {
      * @since
      */
     CommonResponse<CommonPage<InvitationDTO>> doQueryInvitation(InvitationQuery request);
+
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.boss.xtrain.core.common.api.CommonPage<com.chh.healthy.backend.pojo.vo.InvitationVO>>
+     * @desc:
+     * @see
+     * @since
+     */
+    CommonResponse<InvitationDTO> doQueryInvitationById(Long request);
 }

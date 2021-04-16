@@ -54,4 +54,15 @@ public interface InvitationApi extends CommonCRUDApi<InvitationDTO, InvitationQu
      */
     CommonResponse<List<InvitationDTO>> queryInvitation(CommonRequest<InvitationQuery> request);
 
+    @PostMapping("/query/id")
+    @ApiOperation(value = "查询")
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.boss.xtrain.core.common.api.CommonPage<com.chh.healthy.backend.pojo.vo.InvitationVO>>
+     * @desc:
+     * @see
+     * @since
+     */
+    CommonResponse<InvitationDTO> queryInvitationById(CommonRequest<Long> request);
+
 }

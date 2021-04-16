@@ -53,8 +53,10 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.webview.AgentWebActivity;
 import com.xuexiang.chh_healthy_android.fragment.UserSettingFragment;
+import com.xuexiang.chh_healthy_android.fragment.profile.ProfileFragment;
 import com.xuexiang.xpage.base.XPageFragment;
 import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xpage.enums.CoreAnim;
@@ -236,7 +238,7 @@ public final class Utils {
     public static PictureSelectionModel getPictureSelector(Fragment fragment) {
         return PictureSelector.create(fragment)
                 .openGallery(PictureMimeType.ofImage())
-                .theme(R.style.XUIPictureStyle)
+                .theme(R.style.picture_default_style)
                 .maxSelectNum(8)
                 .minSelectNum(1)
                 .selectionMode(PictureConfig.MULTIPLE)
@@ -398,5 +400,9 @@ public final class Utils {
             canvas.setBitmap(null);
         }
         return bigBitmap;
+    }
+
+    public static void useGlide (Fragment fragment,String url,ImageView v) {
+        Glide.with(fragment).load(url).into(v);
     }
 }

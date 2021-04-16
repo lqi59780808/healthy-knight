@@ -32,7 +32,7 @@ import com.xuexiang.xutil.net.JsonUtil;
  * @author xuexiang
  * @since 2019-11-17 22:37
  */
-public final class  TokenUtils {
+public final class      TokenUtils {
 
     private static String sToken;
 

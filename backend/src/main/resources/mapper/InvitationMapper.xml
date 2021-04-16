@@ -54,4 +54,23 @@
         t1.updated_time DESC,
         t1.id DESC
   </select>
+
+    <select id="queryInvitationById" resultMap="BaseResultMap">
+        SELECT
+        t1.*,
+        t2.id AS picture_id,
+        t2.url,
+        t2.invitation_id
+        FROM
+        h_invitation AS t1
+        LEFT JOIN h_invitation_picture AS t2 ON t2.invitation_id = t1.id
+        <where>
+            <if test="query != null">
+                AND t1.id = #{query}
+            </if>
+        </where>
+        ORDER BY
+        t1.updated_time DESC,
+        t1.id DESC
+    </select>
 </mapper>

@@ -18,4 +18,14 @@ public interface InvitationMapper extends CommonMapper<Invitation> {
      * @since
      */
     List<Invitation> queryInvitation(@Param("query") InvitationQuery query);
+
+    /**
+     * @param: [query]
+     * @return: java.util.List<com.chh.healthy.backend.pojo.entity.Invitation>
+     * @desc: 查询帖子
+     * @see
+     * @since
+     */
+    List<Invitation> queryInvitationById(@Param("query") Long query);
+
 }
