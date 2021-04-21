@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-public class InvitationController extends BaseCRUDController<InvitationDTO, Invitation, InvitationQuery, InvitationMapper, InvitationVO> implements InvitationApi {
+    public class InvitationController extends BaseCRUDController<InvitationDTO, Invitation, InvitationQuery, InvitationMapper, InvitationVO> implements InvitationApi {
     @Autowired
     InvitationService invitationService;
 

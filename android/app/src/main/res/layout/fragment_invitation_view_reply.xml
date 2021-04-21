@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/invitation_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal">
+            <com.xuexiang.xui.widget.imageview.RadiusImageView
+                android:id="@+id/invitation_avatar"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/ic_knight"
+                app:riv_is_circle="true"
+                app:riv_selected_border_color="@color/xui_config_color_gray_4"
+                app:riv_selected_border_width="1px"
+                app:riv_selected_mask_color="@color/xui_config_color_gray_8" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/invitation_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="12sp"/>
+                    <com.xuexiang.xui.widget.imageview.RadiusImageView
+                        android:id="@+id/is_master"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_master"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="4dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/invitation_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_reply_reply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_gray10"
+                    android:layout_marginTop="6dp"
+                    android:padding="6dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/ll_reply1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/user_reply1"
+                            android:layout_marginStart="6dp"
+                            android:textSize="13sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_reply2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/user_reply2"
+                            android:textSize="13sp"
+                            android:layout_marginStart="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                    <com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout
+                        android:id="@+id/ll_show_more"
+                        android:orientation="horizontal"
+                        android:gravity="start"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/show_more"
+                            android:textSize="14sp"
+                            android:layout_marginStart="6dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/xui_config_color_blue"
+                            android:text="查看全部评论"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_praise"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_praise" />
+
+                    <TextView
+                        android:id="@+id/tv_praise"
+                        style="@style/TextStyle.Explain"
+                        android:layout_marginStart="5dp"
+                        android:text="点赞" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/xui_config_color_gray_9" />
+    </LinearLayout>
+
+</LinearLayout>

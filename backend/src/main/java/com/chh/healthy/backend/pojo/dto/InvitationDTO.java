@@ -34,4 +34,8 @@ public class InvitationDTO extends BaseDTO {
     private List<ReplyDTO> replyList;
 
     private Integer comment;
+
+    private Integer pageNum;
+
+    private Integer pageMax;
 }

@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -133,9 +134,13 @@ public class NewsFragment extends BaseFragment {
             @Override
             protected void onBindData(RecyclerViewHolder holder, InvitationDTO model, int position) {
                 holder.image(R.id.invitation_avatar,getResources().getDrawable(R.drawable.ic_knight));
-                holder.click(R.id.invitation_image1, null);
-                holder.click(R.id.invitation_image2, null);
-                holder.click(R.id.invitation_image3, null);
+                //由于imageView的复用问题，这边要进行重置
+                RadiusImageView img1 = holder.findViewById(R.id.invitation_image1);
+                RadiusImageView img2 = holder.findViewById(R.id.invitation_image2);
+                RadiusImageView img3 = holder.findViewById(R.id.invitation_image3);
+                img1.setClickable(false);
+                img2.setClickable(false);
+                img3.setClickable(false);
                 model.setMediaList(new ArrayList<>());
                 if (model.getUser().getIcon() != null) {
                     holder.image(R.id.invitation_avatar,FinalEnum.frontUrl + model.getUser().getIcon());
@@ -155,12 +160,15 @@ public class NewsFragment extends BaseFragment {
                     if (iList.size() == 0) {
                         linearLayout.setVisibility(View.GONE);
                     } else if (iList.size() >= 1) {
+                        img1.setClickable(true);
                         holder.image(R.id.invitation_image1,FinalEnum.frontUrl + model.getPictureList().get(0).getUrl());
                         holder.click(R.id.invitation_image1, v -> PictureSelector.create(NewsFragment.this).themeStyle(R.style.picture_default_style).openExternalPreview(0, model.getMediaList()));
                         if (iList.size() >= 2) {
+                            img2.setClickable(true);
                             holder.image(R.id.invitation_image2,FinalEnum.frontUrl + model.getPictureList().get(1).getUrl());
                             holder.click(R.id.invitation_image2, v -> PictureSelector.create(NewsFragment.this).themeStyle(R.style.picture_default_style).openExternalPreview(1, model.getMediaList()));
                             if (iList.size() >= 3) {
+                                img3.setClickable(true);
                                 holder.image(R.id.invitation_image3,FinalEnum.frontUrl + model.getPictureList().get(2).getUrl());
                                 holder.click(R.id.invitation_image3, v -> PictureSelector.create(NewsFragment.this).themeStyle(R.style.picture_default_style).openExternalPreview(2, model.getMediaList()));
                             }

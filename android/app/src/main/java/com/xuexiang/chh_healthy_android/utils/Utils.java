@@ -258,7 +258,7 @@ public final class Utils {
     public static PictureSelectionModel getPictureSelectorCrop(Fragment fragment) {
         return PictureSelector.create(fragment)
                 .openGallery(PictureMimeType.ofImage())
-                .theme(R.style.XUIPictureStyle)
+                .theme(R.style.picture_default_style)
                 .enableCrop(true)
                 .compress(true);
     }
@@ -266,7 +266,7 @@ public final class Utils {
     public static PictureSelectionModel getPictureSelector(Activity activity) {
         return PictureSelector.create(activity)
                 .openGallery(PictureMimeType.ofImage())
-                .theme(R.style.XUIPictureStyle)
+                .theme(R.style.picture_default_style)
                 .maxSelectNum(8)
                 .minSelectNum(1)
                 .selectionMode(PictureConfig.MULTIPLE)

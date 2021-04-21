@@ -22,29 +22,44 @@
 
       <association property="user" javaType="com.chh.healthy.backend.pojo.entity.User" column="created_by"
                  select="getUser" />
-      <collection property="pictureList"
-                  ofType="com.chh.healthy.backend.pojo.entity.InvitationPicture"
-                  resultMap="InvitationPictureMap"
-      />
+<!--      <collection property="pictureList"-->
+<!--                  ofType="com.chh.healthy.backend.pojo.entity.InvitationPicture"-->
+<!--                  resultMap="InvitationPictureMap"-->
+<!--      />-->
+          <collection column="id" property="pictureList" ofType="com.chh.healthy.backend.pojo.entity.InvitationPicture" select="getPictureList">
+          </collection>
   </resultMap>
-    <resultMap id="InvitationPictureMap" type="com.chh.healthy.backend.pojo.entity.InvitationPicture">
-        <id column="picture_id" jdbcType="BIGINT" property="id"/>
-        <result column="url" jdbcType="VARCHAR" property="url"/>
-        <result column="invitation_id" jdbcType="BIGINT" property="invitationId"/>
-    </resultMap>
+<!--    <resultMap id="InvitationPictureMap" type="com.chh.healthy.backend.pojo.entity.InvitationPicture">-->
+<!--        <id column="picture_id" jdbcType="BIGINT" property="id"/>-->
+<!--        <result column="url" jdbcType="VARCHAR" property="url"/>-->
+<!--        <result column="invitation_id" jdbcType="BIGINT" property="invitationId"/>-->
+<!--    </resultMap>-->
   <select id="getUser"
           resultType="com.chh.healthy.backend.pojo.entity.User">
-        select * from h_user AS p where p.id=#{id}
+        select
+        p.id,
+        p.username,
+        p.nickname,
+        p.sex,
+        p.status,
+        p.created_by,
+        p.created_time,
+        p.updated_by,
+        p.updated_time,
+        p.version,
+        p.email,
+        p.icon
+        from h_user AS p where p.id=#{id}
+    </select>
+    <select id="getPictureList"
+            resultType="com.chh.healthy.backend.pojo.entity.InvitationPicture">
+        select * from h_invitation_picture AS p where p.invitation_id = #{id}
     </select>
   <select id="queryInvitation" resultMap="BaseResultMap">
         SELECT
-        t1.*,
-        t2.id AS picture_id,
-        t2.url,
-        t2.invitation_id
+        t1.*
         FROM
         h_invitation AS t1
-        LEFT JOIN h_invitation_picture AS t2 ON t2.invitation_id = t1.id
         <where>
           <if test="query.title != null">
             AND t1.title = #{query.title}

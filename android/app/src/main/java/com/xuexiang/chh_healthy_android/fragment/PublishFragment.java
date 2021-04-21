@@ -114,7 +114,7 @@ public class PublishFragment extends BaseFragment implements ImageSelectGridAdap
                                     @Override
                                     public void onSuccess(InvitationDTO response) throws Throwable {
                                         XToastUtils.success("发布成功");
-                                        ActivityUtils.startActivity(MainActivity.class);
+                                        popToBack();
                                     }
                                 }){});
                     } else {

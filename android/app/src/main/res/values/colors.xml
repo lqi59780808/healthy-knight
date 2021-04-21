@@ -5,6 +5,7 @@
     <color name="colorAccent">#299EE3</color>
     <color name="colorTitleBar">#17191c</color>
     <color name="color_f4">#F4F4F4</color>
+    <color name="color_gray10">#f9f9f9</color>
 
     <color name="config_color_select_bg">#FFF1F1F1</color>
 
@@ -16,7 +17,6 @@
     <color name="toast_success_color" tools:ignore="PrivateResource">#388E3C</color>
     <color name="toast_warning_color" tools:ignore="PrivateResource">@color/xui_config_color_waring</color>
     <color name="toast_normal_tint_color" tools:ignore="PrivateResource">#353A3E</color>
-
     <color name="app_color_theme_1">#EF5362</color> <!-- Grapefruit -->
     <color name="app_color_theme_2">#FE6D4B</color> <!-- Bittersweet -->
     <color name="app_color_theme_3">#FFCF47</color> <!-- Sunflower -->

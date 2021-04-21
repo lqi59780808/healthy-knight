@@ -14,5 +14,92 @@
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
     <result column="version" jdbcType="BIGINT" property="version" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
+      <result column="comment" jdbcType="INTEGER" property="comment" />
+      <result column="good" jdbcType="INTEGER" property="good" />
+      <result column="reply_id" jdbcType="BIGINT" property="replyId" />
+      <result column="reply_user_id" jdbcType="BIGINT" property="replyUserId" />
+
+      <association property="user" javaType="com.chh.healthy.backend.pojo.entity.User" column="created_by"
+                 select="getUser" />
+      <association property="replyUser" javaType="com.chh.healthy.backend.pojo.entity.User" column="reply_user_id"
+                   select="getReplyUser" />
+      <collection column="id" property="userReplyList" ofType="com.chh.healthy.backend.pojo.entity.Reply" select="getReplyList">
+      </collection>
   </resultMap>
+  <select id="getUser"
+          resultType="com.chh.healthy.backend.pojo.entity.User">
+        select
+        p.id,
+        p.username,
+        p.nickname,
+        p.sex,
+        p.status,
+        p.created_by,
+        p.created_time,
+        p.updated_by,
+        p.updated_time,
+        p.version,
+        p.email,
+        p.icon
+        from h_user AS p where p.id=#{id}
+    </select>
+
+    <select id="getReplyUser"
+            resultType="com.chh.healthy.backend.pojo.entity.User">
+        select
+        p.id,
+        p.username,
+        p.nickname,
+        p.sex,
+        p.status,
+        p.created_by,
+        p.created_time,
+        p.updated_by,
+        p.updated_time,
+        p.version,
+        p.email,
+        p.icon
+        from h_user AS p where p.id=#{id}
+    </select>
+
+    <select id="getReplyList"
+            resultMap="BaseResultMap"
+            resultType="com.chh.healthy.backend.pojo.entity.Reply">
+        select * from h_reply AS p where p.reply_id = #{id}
+        LIMIT 3
+    </select>
+
+  <select id="queryByPage" resultMap="BaseResultMap">
+    SELECT
+    t1.*
+    FROM
+    h_reply AS t1
+    <where>
+      <if test="query.invitationId != null">
+        AND t1.invitation_id = #{query.invitationId}
+      </if>
+      AND t1.reply_id is null
+    </where>
+    ORDER BY
+    t1.updated_time,
+    t1.id
+  </select>
+
+    <select id="queryByPage2" resultMap="BaseResultMap">
+        SELECT
+        t1.*
+        FROM
+        h_reply AS t1
+        <where>
+            <if test="query.invitationId != null">
+                AND t1.invitation_id = #{query.invitationId}
+            </if>
+            <if test="query.replyId != null">
+                AND t1.reply_id = #{query.replyId}
+            </if>
+        </where>
+        ORDER BY
+        t1.updated_time,
+        t1.id
+    </select>
 </mapper>

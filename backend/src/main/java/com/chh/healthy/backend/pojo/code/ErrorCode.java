@@ -60,6 +60,10 @@ public enum ErrorCode implements IErrorCode {
      */
     QUERY_EXCEPTION(200009,"查询失败"),
     /**
+     * 200004考试发布记录新增失败
+     */
+    REPLY_EXCEPTION(200010,"回复失败"),
+    /**
      * 在以上增加其它错误码
      */
     UNDEFINED(900000, "未定义");

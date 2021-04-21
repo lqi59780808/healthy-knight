@@ -8,11 +8,54 @@ import java.util.List;
 public class ReplyDTO extends BaseDTO {
     private Long invitationId;
 
+    private Long replyId;
+
+    private Long replyUserId;
+
     private String content;
 
-    private List<UserReplyDTO> userReplyList;
+    private List<ReplyDTO> userReplyList;
+
+    private UserDTO replyUser;
+
+    private Integer comment;
+
+    private Integer good;
 
     private UserDTO user;
+
+    public UserDTO getReplyUser() {
+        return replyUser;
+    }
+
+    public void setReplyUser(UserDTO replyUser) {
+        this.replyUser = replyUser;
+    }
+
+
+    public Long getReplyUserId() {
+        return replyUserId;
+    }
+
+    public void setReplyUserId(Long replyUserId) {
+        this.replyUserId = replyUserId;
+    }
+
+    public Integer getComment() {
+        return comment;
+    }
+
+    public void setComment(Integer comment) {
+        this.comment = comment;
+    }
+
+    public Integer getGood() {
+        return good;
+    }
+
+    public void setGood(Integer good) {
+        this.good = good;
+    }
 
     public UserDTO getUser() {
         return user;
@@ -22,12 +65,20 @@ public class ReplyDTO extends BaseDTO {
         this.user = user;
     }
 
-    public List<UserReplyDTO> getUserReplyList() {
+    public List<ReplyDTO> getUserReplyList() {
         return userReplyList;
     }
 
-    public void setUserReplyList(List<UserReplyDTO> userReplyList) {
+    public void setUserReplyList(List<ReplyDTO> userReplyList) {
         this.userReplyList = userReplyList;
+    }
+
+    public Long getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(Long replyId) {
+        this.replyId = replyId;
     }
 
     /**

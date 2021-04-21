@@ -64,7 +64,7 @@ public class RegisterFragment extends BaseFragment {
                 .setImmersive(true);
         titleBar.setBackgroundColor(Color.TRANSPARENT);
         titleBar.setTitle("");
-        titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_back));
+        titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_login_close));
         titleBar.setActionTextColor(ThemeUtils.resolveColor(getContext(), R.attr.colorAccent));
         return titleBar;
     }

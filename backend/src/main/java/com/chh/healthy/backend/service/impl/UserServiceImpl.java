@@ -114,6 +114,7 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CommonResponse<UserDTO> doUpdateIcon(long id, long version,MultipartFile multipartFile) {
         try {
             User user = new User();
@@ -130,6 +131,7 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CommonResponse<UserDTO> doUpdate(UserDTO request) {
         try {
             User user = userDAO.updateAndReturn(BeanUtil.copy(request,User.class));

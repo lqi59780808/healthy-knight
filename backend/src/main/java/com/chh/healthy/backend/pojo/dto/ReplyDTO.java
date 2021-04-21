@@ -2,17 +2,29 @@ package com.chh.healthy.backend.pojo.dto;
 
 import com.boss.xtrain.core.common.pojo.dto.BaseDTO;
 import com.chh.healthy.backend.pojo.entity.User;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class ReplyDTO extends BaseDTO {
     private Long invitationId;
 
     private String content;
 
-    private List<UserReplyDTO> userReplyList;
-
     private UserDTO user;
+
+    private UserDTO replyUser;
+
+    private Long replyId;
+
+    private Long replyUserId;
+
+    List<ReplyDTO> userReplyList;
+
+    private Integer comment;
+
+    private Integer good;
 
     public UserDTO getUser() {
         return user;
@@ -22,13 +34,6 @@ public class ReplyDTO extends BaseDTO {
         this.user = user;
     }
 
-    public List<UserReplyDTO> getUserReplyList() {
-        return userReplyList;
-    }
-
-    public void setUserReplyList(List<UserReplyDTO> userReplyList) {
-        this.userReplyList = userReplyList;
-    }
 
     /**
      * @return invitation_id
