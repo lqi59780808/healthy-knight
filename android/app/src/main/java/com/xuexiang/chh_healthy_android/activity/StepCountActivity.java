@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.xuexiang.chh_healthy_android.R;
 
 import com.xuexiang.chh_healthy_android.core.BaseActivity;
+import com.xuexiang.chh_healthy_android.step.UpdateUiCallBack;
+import com.xuexiang.chh_healthy_android.step.service.StepService;
 import com.xuexiang.chh_healthy_android.utils.SharedPreferencesUtils;
 import com.xuexiang.chh_healthy_android.widget.StepArcView;
 
@@ -20,16 +22,16 @@ import butterknife.BindView;
 /**
  * 记步主页
  */
-public class StepCountActivity extends BaseActivity {
-//    @BindView(R.id.tv_data)
-//    private TextView tv_data;
-//    @BindView(R.id.cc)
-//    private StepArcView cc;
-//    @BindView(R.id.tv_set)
-//    private TextView tv_set;
-//    @BindView(R.id.tv_isSupport)
-//    private TextView tv_isSupport;
-//    private SharedPreferencesUtils sp;
+public class StepCountActivity extends BaseActivity implements View.OnClickListener {
+    @BindView(R.id.tv_data)
+    TextView tv_data;
+    @BindView(R.id.cc)
+    StepArcView cc;
+    @BindView(R.id.tv_set)
+    TextView tv_set;
+    @BindView(R.id.tv_isSupport)
+    TextView tv_isSupport;
+    SharedPreferencesUtils sp;
 
     @Override
     protected int getLayoutId() {
@@ -39,81 +41,81 @@ public class StepCountActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        initData();
-//        addListener();
+        initData();
+        addListener();
     }
 
 
-//    private void addListener() {
-//        tv_set.setOnClickListener(this);
-//        tv_data.setOnClickListener(this);
-//    }
-//
-//    private void initData() {
-//        sp = new SharedPreferencesUtils(this);
-//        //获取用户设置的计划锻炼步数，没有设置过的话默认7000
-//        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
-//        //设置当前步数为0
-//        cc.setCurrentCount(Integer.parseInt(planWalk_QTY), 0);
-//        tv_isSupport.setText("计步中...");
-//        setupService();
-//    }
-//
-//
-//    private boolean isBind = false;
-//
-//    /**
-//     * 开启计步服务
-//     */
-//    private void setupService() {
-//        Intent intent = new Intent(this, StepService.class);
-//        isBind = bindService(intent, conn, Context.BIND_AUTO_CREATE);
-//        startService(intent);
-//    }
-//
-//    /**
-//     * 用于查询应用服务（application Service）的状态的一种interface，
-//     * 更详细的信息可以参考Service 和 context.bindService()中的描述，
-//     * 和许多来自系统的回调方式一样，ServiceConnection的方法都是进程的主线程中调用的。
-//     */
-//    ServiceConnection conn = new ServiceConnection() {
-//        /**
-//         * 在建立起于Service的连接时会调用该方法，目前Android是通过IBind机制实现与服务的连接。
-//         * @param name 实际所连接到的Service组件名称
-//         * @param service 服务的通信信道的IBind，可以通过Service访问对应服务
-//         */
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//            StepService stepService = ((StepService.StepBinder) service).getService();
-//            //设置初始化数据
-//            String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
-//            cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepService.getStepCount());
-//
-//            //设置步数监听回调
-//            stepService.registerCallback(new UpdateUiCallBack() {
-//                @Override
-//                public void updateUi(int stepCount) {
-//                    String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
-//                    cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepCount);
-//                }
-//            });
-//        }
-//
-//        /**
-//         * 当与Service之间的连接丢失的时候会调用该方法，
-//         * 这种情况经常发生在Service所在的进程崩溃或者被Kill的时候调用，
-//         * 此方法不会移除与Service的连接，当服务重新启动的时候仍然会调用 onServiceConnected()。
-//         * @param name 丢失连接的组件名称
-//         */
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//
-//        }
-//    };
-//
-//
-//    @Override
-//    public void onClick(View v) {
+    private void addListener() {
+        tv_set.setOnClickListener(this);
+        tv_data.setOnClickListener(this);
+    }
+
+    private void initData() {
+        sp = new SharedPreferencesUtils(this);
+        //获取用户设置的计划锻炼步数，没有设置过的话默认7000
+        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+        //设置当前步数为0
+        cc.setCurrentCount(Integer.parseInt(planWalk_QTY), 0);
+        tv_isSupport.setText("计步中...");
+        setupService();
+    }
+
+
+    private boolean isBind = false;
+
+    /**
+     * 开启计步服务
+     */
+    private void setupService() {
+        Intent intent = new Intent(this, StepService.class);
+        isBind = bindService(intent, conn, Context.BIND_AUTO_CREATE);
+        startService(intent);
+    }
+
+    /**
+     * 用于查询应用服务（application Service）的状态的一种interface，
+     * 更详细的信息可以参考Service 和 context.bindService()中的描述，
+     * 和许多来自系统的回调方式一样，ServiceConnection的方法都是进程的主线程中调用的。
+     */
+    ServiceConnection conn = new ServiceConnection() {
+        /**
+         * 在建立起于Service的连接时会调用该方法，目前Android是通过IBind机制实现与服务的连接。
+         * @param name 实际所连接到的Service组件名称
+         * @param service 服务的通信信道的IBind，可以通过Service访问对应服务
+         */
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            StepService stepService = ((StepService.StepBinder) service).getService();
+            //设置初始化数据
+            String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+            cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepService.getStepCount());
+
+            //设置步数监听回调
+            stepService.registerCallback(new UpdateUiCallBack() {
+                @Override
+                public void updateUi(int stepCount) {
+                    String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
+                    cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepCount);
+                }
+            });
+        }
+
+        /**
+         * 当与Service之间的连接丢失的时候会调用该方法，
+         * 这种情况经常发生在Service所在的进程崩溃或者被Kill的时候调用，
+         * 此方法不会移除与Service的连接，当服务重新启动的时候仍然会调用 onServiceConnected()。
+         * @param name 丢失连接的组件名称
+         */
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+
+    @Override
+    public void onClick(View v) {
 //        switch (v.getId()) {
 //            case R.id.tv_set:
 //                startActivity(new Intent(this, SetPlanActivity.class));
@@ -122,13 +124,13 @@ public class StepCountActivity extends BaseActivity {
 //                startActivity(new Intent(this, HistoryActivity.class));
 //                break;
 //        }
-//    }
-//
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        if (isBind) {
-//            this.unbindService(conn);
-//        }
-//    }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (isBind) {
+            this.unbindService(conn);
+        }
+    }
 }

@@ -64,6 +64,10 @@ public enum ErrorCode implements IErrorCode {
      */
     REPLY_EXCEPTION(200010,"回复失败"),
     /**
+     * 200004考试发布记录新增失败
+     */
+    SAVE_EXCEPTION(200011,"保存失败"),
+    /**
      * 在以上增加其它错误码
      */
     UNDEFINED(900000, "未定义");

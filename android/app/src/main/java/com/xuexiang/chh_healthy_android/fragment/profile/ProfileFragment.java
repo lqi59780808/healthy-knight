@@ -37,6 +37,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.activity.MainActivity;
 import com.xuexiang.chh_healthy_android.activity.SettingActivity;
+import com.xuexiang.chh_healthy_android.activity.StepCountActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
@@ -85,6 +86,8 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     SuperTextView stAccount;
     @BindView(R.id.icon_set)
     SuperTextView iconSet;
+    @BindView(R.id.step)
+    SuperTextView step;
 
     private List<LocalMedia> mSelectList = new ArrayList<>();
     /**
@@ -121,7 +124,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
         menuAbout.setOnSuperTextViewClickListener(this);
         stAccount.setOnSuperTextViewClickListener(this);
         iconSet.setOnSuperTextViewClickListener(this);
-
+        step.setOnSuperTextViewClickListener(this);
     }
 
     @Override
@@ -173,7 +176,6 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
             }
         }
     }
-
     @SingleClick
     @Override
     public void onClick(SuperTextView view) {
@@ -186,6 +188,9 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                 break;
             case R.id.st_account:
                 ActivityUtils.startActivityForResultWithBundle(getActivity(),SettingActivity.class,100,"type","UserInfoFragment");
+                break;
+            case R.id.step:
+                ActivityUtils.startActivity(StepCountActivity .class);
                 break;
             case R.id.icon_set:
                 PictureSelector.create(ProfileFragment.this)
