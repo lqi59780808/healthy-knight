@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chh.healthy.backend.dao.mapper.StepMapper">
-  <resultMap id="BaseResultMap" type="com.chh.healthy.backend.pojo.entity.Step">
+<mapper namespace="com.chh.healthy.backend.dao.mapper.BMIMapper">
+  <resultMap id="BaseResultMap" type="com.chh.healthy.backend.pojo.entity.BMI">
     <!--
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="height" jdbcType="VARCHAR" property="height" />
+    <result column="bmi" jdbcType="VARCHAR" property="bmi" />
     <result column="today" jdbcType="VARCHAR" property="today" />
-    <result column="step" jdbcType="VARCHAR" property="step" />
     <result column="created_by" jdbcType="BIGINT" property="createdBy" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_by" jdbcType="BIGINT" property="updatedBy" />
@@ -17,7 +19,6 @@
     <association property="user" javaType="com.chh.healthy.backend.pojo.entity.User" column="created_by"
                  select="getUser" />
   </resultMap>
-
   <select id="getUser"
           resultType="com.chh.healthy.backend.pojo.entity.User">
         select
@@ -36,17 +37,14 @@
         from h_user AS p where p.id=#{id}
     </select>
 
-  <select id="queryStep" resultMap="BaseResultMap">
+  <select id="queryBMI" resultMap="BaseResultMap">
     SELECT
     t1.*
     FROM
-    h_step AS t1
+    h_bmi AS t1
     <where>
       <if test="query.today != null">
         AND t1.today= #{query.today}
-      </if>
-      <if test="query.step != null">
-        AND t1.step = #{query.step}
       </if>
       <if test="query.createdBy != null">
         AND t1.created_by = #{query.createdBy}

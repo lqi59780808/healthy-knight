@@ -21,13 +21,11 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.xuexiang.chh_healthy_android.activity.StepCountActivity;
+import com.xuexiang.chh_healthy_android.activity.StepActivity;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
-import com.xuexiang.chh_healthy_android.core.http.pojo.dto.ReplyDTO;
-import com.xuexiang.chh_healthy_android.core.http.pojo.query.ReplyQuery;
 import com.xuexiang.chh_healthy_android.core.http.pojo.query.StepQuery;
 import com.xuexiang.chh_healthy_android.step.UpdateUiCallBack;
 import com.xuexiang.chh_healthy_android.step.accelerometer.StepCount;
@@ -40,11 +38,11 @@ import java.util.List;
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.step.accelerometer.StepValuePassListener;
 import com.xuexiang.chh_healthy_android.step.bean.StepData;
+import com.xuexiang.chh_healthy_android.utils.MMKVUtils;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.callback.CallBackProxy;
 import com.xuexiang.xhttp2.exception.ApiException;
-import com.xuexiang.xutil.app.ServiceUtils;
 import com.xuexiang.xutil.common.logger.Logger;
 import com.xuexiang.xutil.net.JsonUtil;
 
@@ -109,6 +107,9 @@ public class StepService extends Service implements SensorEventListener {
 
     private List<StepData> list = new ArrayList<>();
 
+    private String CHANNEL_ONE_ID;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -140,7 +141,7 @@ public class StepService extends Service implements SensorEventListener {
      * 初始化通知栏
      */
     private void initNotification() {
-        String CHANNEL_ONE_ID = "chh";
+        CHANNEL_ONE_ID = "chh";
         String CHANNEL_ONE_NAME = "Channel One";
         NotificationChannel notificationChannel = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -180,6 +181,8 @@ public class StepService extends Service implements SensorEventListener {
         CommonRequest<StepQuery> commonRequest = new CommonRequest<>();
         commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
+        Integer localStep = MMKVUtils.getInt(CURRENT_DATE + TokenUtils.getUserInfo().getId(),-1);
+        CURRENT_STEP = localStep;
         XHttp.post(FinalEnum.frontUrl + "/healthy/step/query")
                 .upJson(body)
                 .syncRequest(false)
@@ -188,13 +191,16 @@ public class StepService extends Service implements SensorEventListener {
                     @Override
                     public void onSuccess(List<StepData> response) throws Throwable {
                         list = response;
-                        if (list.size() == 0 || list.isEmpty()) {
+                        if ( (list.size() == 0 || list.isEmpty()) && localStep == -1) {
                             CURRENT_STEP = 0;
                         } else if (list.size() == 1) {
                             Log.v(TAG, "StepData=" + list.get(0).toString());
-                            CURRENT_STEP = Integer.parseInt(list.get(0).getStep());
+                            if (localStep >= Integer.parseInt(list.get(0).getStep())) {
+                                CURRENT_STEP = localStep;
+                            } else {
+                                CURRENT_STEP = Integer.parseInt(list.get(0).getStep());
+                            }
                         } else {
-                            Log.v(TAG, "出错了！");
                         }
                         if (mStepCount != null) {
                             mStepCount.setSteps(CURRENT_STEP);
@@ -203,29 +209,11 @@ public class StepService extends Service implements SensorEventListener {
                     }
                     @Override
                     public void onError(ApiException e) {
-                        super.onError(e);
-                    }
-                }){});
-    }
-
-    public void queryByWhere() {
-        StepQuery query = new StepQuery();
-        query.setToday(CURRENT_DATE);
-        query.setCreatedBy(TokenUtils.getUserInfo().getId());
-        CommonRequest<StepQuery> commonRequest = new CommonRequest<>();
-        commonRequest.setBody(query);
-        String body = JsonUtil.toJson(commonRequest);
-        XHttp.post(FinalEnum.frontUrl + "/healthy/step/query")
-                .upJson(body)
-                .syncRequest(true)
-                .execute(new CallBackProxy<CommonResponse<List<StepData>>, List<StepData>>(new TipCallBack<List<StepData>>() {
-                    @Override
-                    public void onSuccess(List<StepData> response) throws Throwable {
-                        list = response;
-                    }
-                    @Override
-                    public void onError(ApiException e) {
-                        super.onError(e);
+                        //本地有记录
+                        if (localStep.equals(-1)) {
+                            CURRENT_STEP = 0;
+                        }
+                        updateNotification();
                     }
                 }){});
     }
@@ -310,9 +298,9 @@ public class StepService extends Service implements SensorEventListener {
      * 监听时间变化提醒用户锻炼
      */
     private void isCall() {
-        String time = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("achieveTime", "21:00");
-        String plan = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("planWalk_QTY", "7000");
-        String remind = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("remind", "1");
+        String time = MMKVUtils.getString("achieveTime", "21:00");
+        String plan = MMKVUtils.getString("planWalk_QTY", "7000");
+        String remind = MMKVUtils.getString("remind", "1");
         Logger.d("time=" + time + "\n" +
                 "new SimpleDateFormat(\"HH: mm\").format(new Date()))=" + new SimpleDateFormat("HH:mm").format(new Date()));
         if (("1".equals(remind)) &&
@@ -339,7 +327,7 @@ public class StepService extends Service implements SensorEventListener {
      */
     private void updateNotification() {
         //设置点击跳转
-        Intent hangIntent = new Intent(this, StepCountActivity.class);
+        Intent hangIntent = new Intent(this, StepActivity.class);
         PendingIntent hangPendingIntent = PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Notification notification = mBuilder.setContentTitle(getResources().getString(R.string.app_name))
@@ -383,14 +371,15 @@ public class StepService extends Service implements SensorEventListener {
     private void remindNotify() {
 
         //设置点击跳转
-        Intent hangIntent = new Intent(this, StepCountActivity.class);
+        Intent hangIntent = new Intent(this, StepActivity.class);
         PendingIntent hangPendingIntent = PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        String plan = this.getSharedPreferences("share_date", Context.MODE_MULTI_PROCESS).getString("planWalk_QTY", "7000");
+        String plan = MMKVUtils.getString("planWalk_QTY", "7000");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle("今日步数" + CURRENT_STEP + " 步")
                 .setContentText("距离目标还差" + (Integer.valueOf(plan) - CURRENT_STEP) + "步，加油！")
                 .setContentIntent(hangPendingIntent)
+                .setChannelId(CHANNEL_ONE_ID)
                 .setTicker(getResources().getString(R.string.app_name) + "提醒您开始锻炼了")//通知首次出现在通知栏，带上升动画效果的
                 .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
                 .setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
@@ -607,6 +596,7 @@ public class StepService extends Service implements SensorEventListener {
         CommonRequest<StepQuery> commonRequest = new CommonRequest<>();
         commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
+        MMKVUtils.put(CURRENT_DATE + TokenUtils.getUserInfo().getId(),tempStep);
         XHttp.post(FinalEnum.frontUrl + "/healthy/step/query")
                 .upJson(body)
                 .syncRequest(false)
@@ -620,7 +610,7 @@ public class StepService extends Service implements SensorEventListener {
                             data.setToday(CURRENT_DATE);
                             data.setStep(tempStep + "");
                             data.setCreatedBy(TokenUtils.getUserInfo().getId());
-                            saveStep(data);
+                            saveStep(data,tempStep);
                         } else if (list.size() == 1) {
                             StepData data = list.get(0);
                             data.setStep(tempStep + "");
@@ -631,12 +621,11 @@ public class StepService extends Service implements SensorEventListener {
                     }
                     @Override
                     public void onError(ApiException e) {
-                        super.onError(e);
                     }
                 }){});
     }
 
-    public void saveStep(StepData data) {
+    public void saveStep(StepData data,int tempStep) {
         CommonRequest<StepData> commonRequest = new CommonRequest<>();
         commonRequest.setBody(data);
         String body = JsonUtil.toJson(commonRequest);

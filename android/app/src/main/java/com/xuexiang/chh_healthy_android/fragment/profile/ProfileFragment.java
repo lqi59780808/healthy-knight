@@ -19,14 +19,8 @@ package com.xuexiang.chh_healthy_android.fragment.profile;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.TextView;
-import android.widget.Toolbar;
-
-import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
@@ -35,29 +29,21 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.R;
-import com.xuexiang.chh_healthy_android.activity.MainActivity;
 import com.xuexiang.chh_healthy_android.activity.SettingActivity;
-import com.xuexiang.chh_healthy_android.activity.StepCountActivity;
+import com.xuexiang.chh_healthy_android.activity.StepActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
-import com.xuexiang.chh_healthy_android.core.http.pojo.dto.InvitationDTO;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;
-import com.xuexiang.chh_healthy_android.fragment.PublishFragment;
-import com.xuexiang.chh_healthy_android.fragment.SettingsFragment;
-import com.xuexiang.chh_healthy_android.fragment.UserInfoFragment;
-import com.xuexiang.chh_healthy_android.fragment.UserSettingFragment;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
-import com.xuexiang.chh_healthy_android.utils.Utils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.callback.CallBackProxy;
 import com.xuexiang.xhttp2.callback.impl.IProgressResponseCallBack;
 import com.xuexiang.xpage.annotation.Page;
-import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
@@ -190,7 +176,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                 ActivityUtils.startActivityForResultWithBundle(getActivity(),SettingActivity.class,100,"type","UserInfoFragment");
                 break;
             case R.id.step:
-                ActivityUtils.startActivity(StepCountActivity .class);
+                ActivityUtils.startActivity(StepActivity.class);
                 break;
             case R.id.icon_set:
                 PictureSelector.create(ProfileFragment.this)

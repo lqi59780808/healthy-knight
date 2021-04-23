@@ -2,6 +2,7 @@ package com.chh.healthy.backend.pojo.dto;
 
 import com.boss.xtrain.core.common.pojo.dto.BaseDTO;
 import com.boss.xtrain.core.common.pojo.entity.BaseEntity;
+import com.chh.healthy.backend.pojo.entity.User;
 import lombok.Data;
 
 import javax.persistence.Table;
@@ -11,6 +12,8 @@ public class StepDTO extends BaseDTO {
     private String today;
 
     private String step;
+
+    private UserDTO user;
 
     /**
      * @return today

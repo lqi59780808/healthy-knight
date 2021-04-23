@@ -1,10 +1,12 @@
 package com.xuexiang.chh_healthy_android.core.http.pojo.query;
 
+import com.xuexiang.chh_healthy_android.core.BaseQuery;
+
 /**
  * Created by dylan on 2016/1/30.
  */
 
-public class StepQuery {
+public class StepQuery extends BaseQuery {
 
     private String today;
 

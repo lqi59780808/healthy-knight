@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF">
 
     <RelativeLayout
@@ -10,10 +11,11 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/config_title"
         android:layout_alignParentStart="true">
         <!--android:background="@mipmap/step_bg"-->
 
-        <TextView
+        <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
             android:id="@+id/tv_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,7 +23,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="40dp"
             android:layout_marginTop="40dp"
-            android:drawableLeft="@mipmap/home_statistical"
+            android:drawableLeft="@drawable/ic_set"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:text="查看历史步数"
@@ -34,8 +36,7 @@
             android:layout_below="@+id/tv_data"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp" />
-
-        <TextView
+        <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
             android:id="@+id/tv_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,21 +45,33 @@
             android:layout_alignParentStart="true"
             android:layout_marginLeft="40dp"
             android:layout_marginStart="40dp"
-            android:drawableLeft="@mipmap/home_question_mark"
+            android:drawableLeft="@drawable/ic_history"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:text="设置锻炼计划"
             android:textColor="#333333" />
 
-        <TextView
-            android:id="@+id/tv_isSupport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_below="@+id/cc"
             android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:text="该设备支持计步"
-            android:textColor="#333333" />
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+            <com.xuexiang.xui.widget.imageview.RadiusImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_target"/>
+            <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
+                android:id="@+id/tv_isSupport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="#333333" />
+        </LinearLayout>
 
     </RelativeLayout>
 </RelativeLayout>

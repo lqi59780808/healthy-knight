@@ -21,25 +21,19 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -47,8 +41,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.xuexiang.chh_healthy_android.MyApp;
@@ -58,25 +50,23 @@ import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;
-import com.xuexiang.chh_healthy_android.fragment.SettingsFragment;
 import com.xuexiang.chh_healthy_android.fragment.news.NewsFragment;
 import com.xuexiang.chh_healthy_android.fragment.profile.ProfileFragment;
-import com.xuexiang.chh_healthy_android.fragment.trending.TrendingFragment;
+import com.xuexiang.chh_healthy_android.fragment.utils.UtilsFragment;
 import com.xuexiang.chh_healthy_android.step.UpdateUiCallBack;
 import com.xuexiang.chh_healthy_android.step.service.StepService;
 import com.xuexiang.chh_healthy_android.utils.SharedPreferencesUtils;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.Utils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
-import com.xuexiang.chh_healthy_android.widget.GuideTipsDialog;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
-import com.xuexiang.xui.utils.StatusBarUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.app.ActivityUtils;
+import com.xuexiang.xutil.app.ServiceUtils;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
@@ -110,7 +100,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.toolbar_avatar)
     RadiusImageView toolbarAvatar;
 
-    StepCountActivity stepCountActivity;
+    StepActivity stepActivity;
 
     SharedPreferencesUtils sp;
 
@@ -156,19 +146,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
          */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            StepService stepService = ((StepService.StepBinder) service).getService();
-            //设置初始化数据
-            String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
-//            cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepService.getStepCount());
-
-            //设置步数监听回调
-            stepService.registerCallback(new UpdateUiCallBack() {
-                @Override
-                public void updateUi(int stepCount) {
-                    String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
-//                    cc.setCurrentCount(Integer.parseInt(planWalk_QTY), stepCount);
-                }
-            });
         }
 
         /**
@@ -200,7 +177,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //主页内容填充
         BaseFragment[] fragments = new BaseFragment[]{
                 new NewsFragment(),
-                new TrendingFragment(),
+                new UtilsFragment(),
                 new ProfileFragment()
         };
         FragmentAdapter<BaseFragment> adapter = new FragmentAdapter<>(getSupportFragmentManager(), fragments);

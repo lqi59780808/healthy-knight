@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/invitation_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/xui_config_color_white"
+    android:orientation="vertical">
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout style="@style/PullDownStyle">
+        <androidx.core.widget.NestedScrollView style="@style/ScrollViewStyle">
+            <LinearLayout
+                android:id="@+id/rl_head"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/config_title">
+
+                <TextView
+                    style="@style/TextStyle.Content"
+                    android:layout_marginStart="10dp"
+                    android:text="体重" />
+                <com.xuexiang.xui.widget.picker.RulerView
+                    android:id="@+id/rv_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_margin="20dp"
+
+                    app:rv_firstScale="50"
+                    app:rv_minScale="0"
+                    app:rv_maxScale="200"
+                    app:rv_scaleCount="10"
+                    app:rv_unit="kg"
+
+                    app:rv_bgColor="#fcfffc"
+                    app:rv_smallScaleColor="#aaaaaa"
+                    app:rv_midScaleColor="#999999"
+                    app:rv_largeScaleColor="#50b586"
+                    app:rv_resultNumColor="#50b586"
+                    app:rv_scaleNumColor="#666666"
+                    app:rv_unitColor="#50b586"
+                    app:rv_unitTextSize="10sp" />
+
+                <TextView
+                    style="@style/TextStyle.Content.wrap"
+                    android:layout_marginStart="10dp"
+                    android:text="身高" />
+                <com.xuexiang.xui.widget.picker.RulerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/rv_height"
+                    android:layout_height="120dp"
+                    android:layout_margin="10dp"
+
+                    app:rv_firstScale="175"
+                    app:rv_minScale="50"
+                    app:rv_maxScale="230"
+                    app:rv_scaleCount="5"
+                    app:rv_unit="cm"
+
+                    app:rv_bgColor="#fcfffc"
+                    app:rv_smallScaleColor="@color/colorPrimary"
+                    app:rv_midScaleColor="@color/colorPrimaryDark"
+                    app:rv_largeScaleColor="@color/colorAccent"
+                    app:rv_resultNumColor="#50b586"
+                    app:rv_scaleNumColor="#666666"
+                    app:rv_unitColor="#50b586"
+                    app:rv_unitTextSize="10sp" />
+
+                <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="计算BMI"
+                    android:id="@+id/bt_count"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_bmi"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+                        <com.xuexiang.xui.widget.imageview.RadiusImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="90dp"
+                            app:srcCompat="@drawable/ic_bmi"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:id="@+id/tv_bmi"
+                            android:textSize="30sp"
+                            android:text="19.2"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:id="@+id/tv_type"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="10dp"
+                            android:textSize="30sp"
+                            android:text="偏重"/>
+                    </LinearLayout>
+                    <com.xuexiang.xui.widget.alpha.XUIAlphaButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:text="保存到用户数据"
+                        android:id="@+id/bt_save"/>
+                    <com.xuexiang.xui.widget.imageview.RadiusImageView
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/ic_bmi_standard"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+</FrameLayout>

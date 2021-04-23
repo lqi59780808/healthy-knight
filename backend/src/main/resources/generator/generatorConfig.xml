@@ -34,7 +34,7 @@
 <!--            <table tableName="t_exam_publish_record" domainObjectName="ExamPublishRecord">-->
 <!--              <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>-->
 <!--            </table>-->
-            <table tableName="h_step" domainObjectName="Step">
+            <table tableName="h_bmi" domainObjectName="BMI">
               <generatedKey column="id"  sqlStatement="MySQL" identity="true"/>
             </table>
 <!--        <table tableName="h_user_reply" domainObjectName="UserReply">-->

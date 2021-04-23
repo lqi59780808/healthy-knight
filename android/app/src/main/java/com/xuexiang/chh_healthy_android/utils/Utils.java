@@ -54,9 +54,17 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
+import com.xuexiang.chh_healthy_android.core.http.callback.TipCallBack;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
+import com.xuexiang.chh_healthy_android.core.http.pojo.query.StepQuery;
 import com.xuexiang.chh_healthy_android.core.webview.AgentWebActivity;
 import com.xuexiang.chh_healthy_android.fragment.UserSettingFragment;
 import com.xuexiang.chh_healthy_android.fragment.profile.ProfileFragment;
+import com.xuexiang.chh_healthy_android.step.bean.StepData;
+import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.callback.CallBackProxy;
+import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xpage.base.XPageFragment;
 import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xpage.enums.CoreAnim;
@@ -69,11 +77,13 @@ import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.data.DateUtils;
 import com.xuexiang.xutil.file.FileIOUtils;
 import com.xuexiang.xutil.file.FileUtils;
+import com.xuexiang.xutil.net.JsonUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.xuexiang.chh_healthy_android.core.webview.AgentWebFragment.KEY_URL;
@@ -405,4 +415,36 @@ public final class Utils {
     public static void useGlide (Fragment fragment,String url,ImageView v) {
         Glide.with(fragment).load(url).into(v);
     }
+//    StepQuery query = new StepQuery();
+//    query.setToday(CURRENT_DATE);
+//    query.setCreatedBy(TokenUtils.getUserInfo().getId());
+//    CommonRequest<StepQuery> commonRequest = new CommonRequest<>();
+//    commonRequest.setBody(query);
+//    String body = JsonUtil.toJson(commonRequest);
+//    XHttp.post(FinalEnum.frontUrl + "/healthy/step/query")
+//            .upJson(body)
+//                .syncRequest(false)
+//                .onMainThread(true)
+//                .execute(new CallBackProxy<CommonResponse<List<StepData>>, List<StepData>>(new TipCallBack<List<StepData>>() {
+//        @Override
+//        public void onSuccess(List<StepData> response) throws Throwable {
+//            list = response;
+//            if (list.size() == 0 || list.isEmpty()) {
+//                StepData data = new StepData();
+//                data.setToday(CURRENT_DATE);
+//                data.setStep(tempStep + "");
+//                data.setCreatedBy(TokenUtils.getUserInfo().getId());
+//                saveStep(data,tempStep);
+//            } else if (list.size() == 1) {
+//                StepData data = list.get(0);
+//                data.setStep(tempStep + "");
+//                data.setVersion(data.getVersion());
+//                updateStep(data);
+//            } else {
+//            }
+//        }
+//        @Override
+//        public void onError(ApiException e) {
+//        }
+//    }){});
 }
