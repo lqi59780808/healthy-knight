@@ -8,14 +8,15 @@
     android:layout_height="match_parent"
     android:background="@color/xui_config_color_white"
     android:orientation="vertical">
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout style="@style/PullDownStyle">
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout style="@style/PullDownStyle"
+        android:layout_marginTop="@dimen/config_title">
         <androidx.core.widget.NestedScrollView style="@style/ScrollViewStyle">
             <LinearLayout
                 android:id="@+id/rl_head"
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/config_title">
+                android:orientation="vertical">
 
                 <TextView
                     style="@style/TextStyle.Content"
@@ -89,12 +90,13 @@
                         <com.xuexiang.xui.widget.imageview.RadiusImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginStart="90dp"
-                            app:srcCompat="@drawable/ic_bmi"/>
+                            android:layout_marginStart="88dp"
+                            app:srcCompat="@drawable/ic_bmi_logo"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
                             android:id="@+id/tv_bmi"
+                            android:layout_marginStart="10dp"
                             android:textSize="30sp"
                             android:text="19.2"/>
                         <TextView
@@ -108,7 +110,7 @@
                     <com.xuexiang.xui.widget.alpha.XUIAlphaButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginStart="30dp"
                         android:layout_marginEnd="30dp"
                         android:text="保存到用户数据"
@@ -118,6 +120,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_gravity="center"
+                        android:layout_marginBottom="20dp"
                         app:srcCompat="@drawable/ic_bmi_standard"/>
                 </LinearLayout>
 

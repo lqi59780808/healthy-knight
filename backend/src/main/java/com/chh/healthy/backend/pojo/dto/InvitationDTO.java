@@ -1,6 +1,7 @@
 package com.chh.healthy.backend.pojo.dto;
 
 import com.boss.xtrain.core.common.pojo.dto.BaseDTO;
+import com.chh.healthy.backend.pojo.entity.Good;
 import com.chh.healthy.backend.pojo.entity.User;
 import lombok.Data;
 
@@ -32,6 +33,10 @@ public class InvitationDTO extends BaseDTO {
     private List<InvitationPictureDTO> pictureList;
 
     private List<ReplyDTO> replyList;
+
+    private GoodDTO goodInfo;
+
+    private CollectDTO collectInfo;
 
     private Integer comment;
 

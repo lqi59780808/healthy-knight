@@ -66,15 +66,10 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     RadiusImageView rivHeadPic;
     @BindView(R.id.menu_settings)
     SuperTextView menuSettings;
-    @BindView(R.id.menu_about)
-    SuperTextView menuAbout;
     @BindView(R.id.st_account)
     SuperTextView stAccount;
     @BindView(R.id.icon_set)
     SuperTextView iconSet;
-    @BindView(R.id.step)
-    SuperTextView step;
-
     private List<LocalMedia> mSelectList = new ArrayList<>();
     /**
      * @return 返回为 null意为不需要导航栏
@@ -107,10 +102,8 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     @Override
     protected void initListeners() {
         menuSettings.setOnSuperTextViewClickListener(this);
-        menuAbout.setOnSuperTextViewClickListener(this);
         stAccount.setOnSuperTextViewClickListener(this);
         iconSet.setOnSuperTextViewClickListener(this);
-        step.setOnSuperTextViewClickListener(this);
     }
 
     @Override
@@ -169,14 +162,8 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
             case R.id.menu_settings:
                 ActivityUtils.startActivityWithBundle(SettingActivity.class,"type","SettingsFragment");
                 break;
-            case R.id.menu_about:
-                openNewPage(AboutFragment.class);
-                break;
             case R.id.st_account:
                 ActivityUtils.startActivityForResultWithBundle(getActivity(),SettingActivity.class,100,"type","UserInfoFragment");
-                break;
-            case R.id.step:
-                ActivityUtils.startActivity(StepActivity.class);
                 break;
             case R.id.icon_set:
                 PictureSelector.create(ProfileFragment.this)

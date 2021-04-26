@@ -1,5 +1,6 @@
 package com.xuexiang.chh_healthy_android.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -148,6 +149,7 @@ public class ReplyFragment extends BaseFragment implements  View.OnClickListener
                             @Override
                             public void onSuccess(ReplyDTO response) throws Throwable {
                                 XToastUtils.success("回复成功");
+                                setFragmentResult(101,new Intent());
                                 etReply.setText("");
                                 refreshLayout.autoRefresh();
                             }
@@ -214,6 +216,7 @@ public class ReplyFragment extends BaseFragment implements  View.OnClickListener
                 }
                 holder.text(R.id.invitation_nickname,reply.getUser().getNickname());
                 holder.text(R.id.invitation_content,reply.getContent());
+                holder.text(R.id.iv_date,reply.getCreatedTime());
                 holder.click(R.id.invitation_view,view -> {
                    replyId = reply.getId();
                    replyUserId = reply.getUser().getId();

@@ -66,6 +66,8 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
     XUIAlphaButton btSave;
 
     private String bmiString;
+    private String height;
+    private String weight;
     private String date;
     private List<BMIDTO> list;
 
@@ -78,6 +80,7 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initViews() {
         llBmi.setVisibility(View.GONE);
+        init();
     }
 
     @Override
@@ -87,7 +90,16 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
         titleBar.setTitle("BMI小助手");
         titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_back));
         titleBar.setActionTextColor(getResources().getColor(R.color.white));
-
+        titleBar.addAction(new TitleBar.TextAction("历史记录") {
+            @Override
+            public void performAction(View view) {
+                PageOption.to(HistoryBmiFragment.class)
+                        .setRequestCode(100)
+                        .setAddToBackStack(true)
+                        .setAnim(CoreAnim.slide)
+                        .open(BmiFragment.this);
+            }
+        });
         return titleBar;
 //        return null;
     }
@@ -101,6 +113,7 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
     @Override
     protected void initListeners() {
         btCount.setOnClickListener(this);
+        btSave.setOnClickListener(this);
         super.initListeners();
     }
 
@@ -123,6 +136,8 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
         BigDecimal b = new BigDecimal(bmi);
         bmi = b.setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
         bmiString = bmi.toString();
+        this.height = height.toString();
+        this.weight = weight.toString();
         tvBmi.setText(bmiString);
         tvType.setText(judgeType(bmi));
         llBmi.setVisibility(View.VISIBLE);
@@ -131,7 +146,7 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
     private String judgeType(Float bmi) {
         if (bmi <= 18.4) {
             return "偏瘦";
-        } else if (18.4>bmi && bmi <= 23.9 ) {
+        } else if (bmi > 18.4 && bmi <= 23.9 ) {
             return "正常";
         } else if (bmi > 23.9 && bmi <= 27.9) {
             return "过重";
@@ -154,7 +169,7 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
         CommonRequest<BMIQuery> commonRequest = new CommonRequest<>();
         commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
-        XHttp.post(FinalEnum.frontUrl + "/healthy/step/query")
+        XHttp.post(FinalEnum.frontUrl + "/healthy/bmi/query")
                 .upJson(body)
                 .syncRequest(false)
                 .onMainThread(true)
@@ -166,11 +181,15 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
                             BMIDTO data = new BMIDTO();
                             data.setToday(getTodayDate());
                             data.setBmi(bmiString);
+                            data.setHeight(height);
+                            data.setWeight(weight);
                             data.setCreatedBy(TokenUtils.getUserInfo().getId());
                             saveBMI(data);
                         } else if (list.size() == 1) {
                             BMIDTO data = list.get(0);
                             data.setBmi(bmiString);
+                            data.setHeight(height);
+                            data.setWeight(weight);
                             data.setVersion(data.getVersion());
                             updateBMI(data);
                         } else {
@@ -214,5 +233,33 @@ public class BmiFragment extends BaseFragment implements View.OnClickListener {
                         XToastUtils.success("保存BMI成功");
                     }
                 }){});
+    }
+
+    public void init() {
+        BMIQuery query = new BMIQuery();
+        query.setCreatedBy(TokenUtils.getUserInfo().getId());
+        CommonRequest<BMIQuery> commonRequest = new CommonRequest<>();
+        commonRequest.setBody(query);
+        String body = JsonUtil.toJson(commonRequest);
+        XHttp.post(FinalEnum.frontUrl + "/healthy/bmi/query")
+                .upJson(body)
+                .syncRequest(false)
+                .onMainThread(true)
+                .execute(new CallBackProxy<CommonResponse<List<BMIDTO>>, List<BMIDTO>>(new TipCallBack<List<BMIDTO>>() {
+                    @Override
+                    public void onSuccess(List<BMIDTO> response) throws Throwable {
+                        list = response;
+                        if (list.size() != 0) {
+                            BMIDTO res = list.get(0);
+                            rvHeight.setCurrentValue(Float.parseFloat(res.getHeight()));
+                            rvWeight.setCurrentValue(Float.parseFloat(res.getWeight()));
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiException e) {
+                    }
+                }) {
+                });
     }
 }

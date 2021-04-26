@@ -70,7 +70,12 @@ public enum ErrorCode implements IErrorCode {
     /**
      * 在以上增加其它错误码
      */
-    UNDEFINED(900000, "未定义");
+    UNDEFINED(900000, "未定义"),
+
+    /**
+     * 在以上增加其它错误码
+     */
+    FAIL(100000, "失败");
 
     private int code;
     private String message;

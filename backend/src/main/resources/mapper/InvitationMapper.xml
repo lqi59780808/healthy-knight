@@ -55,6 +55,7 @@
             resultType="com.chh.healthy.backend.pojo.entity.InvitationPicture">
         select * from h_invitation_picture AS p where p.invitation_id = #{id}
     </select>
+
   <select id="queryInvitation" resultMap="BaseResultMap">
         SELECT
         t1.*

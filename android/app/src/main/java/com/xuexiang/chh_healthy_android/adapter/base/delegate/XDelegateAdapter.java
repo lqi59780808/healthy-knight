@@ -169,6 +169,7 @@ public abstract class XDelegateAdapter<T, V extends RecyclerView.ViewHolder> ext
     public XDelegateAdapter delete(int pos) {
         mData.remove(pos);
         notifyItemRemoved(pos);
+        notifyItemRangeChanged(0,mData.size());
         return this;
     }
 

@@ -46,6 +46,27 @@ public class InvitationDTO extends BaseDTO {
 
     private UserDTO user;
 
+    private GoodDTO goodInfo;
+
+    private CollectDTO collectInfo;
+
+
+    public CollectDTO getCollectInfo() {
+        return collectInfo;
+    }
+
+    public void setCollectInfo(CollectDTO collectInfo) {
+        this.collectInfo = collectInfo;
+    }
+
+    public GoodDTO getGoodInfo() {
+        return goodInfo;
+    }
+
+    public void setGoodInfo(GoodDTO goodInfo) {
+        this.goodInfo = goodInfo;
+    }
+
     private List<InvitationPictureDTO> pictureList;
 
     private List<ReplyDTO> replyList;

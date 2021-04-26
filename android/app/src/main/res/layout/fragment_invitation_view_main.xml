@@ -68,11 +68,12 @@
                         app:met_maxCharacters="500"
                         app:met_iconLeft="@drawable/ic_invitation2"
                         android:hint="回复楼主"
+                        android:textColor="@color/xui_config_color_gray_4"
                         android:textSize="15sp"
                         android:inputType="textMultiLine"/>
 
                 </LinearLayout>
-                <LinearLayout
+                <com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout
                     android:id="@+id/ll_comment"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -102,8 +103,8 @@
                             android:text="回复楼主"
                             android:textSize="12sp"/>
                     </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
+                </com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout>
+                <com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout
                     android:id="@+id/ll_collect"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -127,9 +128,10 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="3dp"
                         android:text="收藏"
+                        android:textColor="@color/xui_config_color_gray_4"
                         android:textSize="12sp"/>
-                </LinearLayout>
-                <LinearLayout
+                </com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout>
+                <com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout
                     android:id="@+id/ll_good"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -153,8 +155,9 @@
                         android:layout_marginStart="3dp"
                         android:layout_gravity="center"
                         android:text="点赞"
+                        android:textColor="@color/xui_config_color_gray_4"
                         android:textSize="12sp"/>
-                </LinearLayout>
+                </com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout>
                 <LinearLayout
                     android:id="@+id/ll_reply"
                     android:layout_width="0dp"

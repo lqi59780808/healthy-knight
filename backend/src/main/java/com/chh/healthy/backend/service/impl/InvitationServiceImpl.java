@@ -11,18 +11,12 @@ import com.boss.xtrain.core.common.exception.ServiceException;
 import com.boss.xtrain.core.common.service.BaseCURDService;
 import com.boss.xtrain.core.context.BaseContextHolder;
 import com.boss.xtrain.util.BeanUtil;
-import com.chh.healthy.backend.dao.impl.InvitationDAO;
-import com.chh.healthy.backend.dao.impl.InvitationPictureDAO;
-import com.chh.healthy.backend.dao.impl.UserDAO;
+import com.chh.healthy.backend.dao.impl.*;
 import com.chh.healthy.backend.dao.mapper.InvitationMapper;
 import com.chh.healthy.backend.dao.mapper.UserMapper;
 import com.chh.healthy.backend.pojo.code.ErrorCode;
-import com.chh.healthy.backend.pojo.dto.InvitationDTO;
-import com.chh.healthy.backend.pojo.dto.InvitationPictureDTO;
-import com.chh.healthy.backend.pojo.dto.UserDTO;
-import com.chh.healthy.backend.pojo.entity.Invitation;
-import com.chh.healthy.backend.pojo.entity.InvitationPicture;
-import com.chh.healthy.backend.pojo.entity.User;
+import com.chh.healthy.backend.pojo.dto.*;
+import com.chh.healthy.backend.pojo.entity.*;
 import com.chh.healthy.backend.pojo.query.InvitationQuery;
 import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.pojo.vo.InvitationVO;
@@ -47,6 +41,12 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
     InvitationDAO dao;
     @Autowired
     InvitationPictureDAO picDao;
+    @Autowired
+    CollectDAO collectDao;
+    @Autowired
+    GoodDAO goodDAO;
+    @Autowired
+    ReplyDAO replyDAO;
     @Autowired
     IdGenerator idGenerator;
 
@@ -112,6 +112,12 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
             BaseContextHolder.endPage(response);
             List<InvitationDTO> dtoList = new ArrayList<>();
             for (Invitation invitation : response) {
+                Good query = new Good();
+                query.setInvitationId(invitation.getId());
+                Reply reply = new Reply();
+                reply.setInvitationId(invitation.getId());
+                invitation.setGood(goodDAO.count(query));
+                invitation.setComment(replyDAO.count(reply));
                 String json = JSON.toJSONString(invitation);
                 dtoList.add(JSON.parseObject(json, InvitationDTO.class));
             }
@@ -124,17 +130,71 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
     }
 
     @Override
-    public CommonResponse<InvitationDTO> doQueryInvitationById(Long request) {
+    public CommonResponse<InvitationDTO> doQueryInvitationById(InvitationQuery request) {
         try {
-            List<Invitation> invitationList = dao.queryInvitationById(request);
+            List<Invitation> invitationList = dao.queryInvitationById(request.getRequestInvitationId());
             if (invitationList.size() != 0) {
                 Invitation invitation = invitationList.get(0);
+                Collect collect = collectDao.queryCollectForInvitaiton(request.getRequestUserId(),request.getRequestInvitationId());
+                Good good = goodDAO.queryCollectForInvitaiton(request.getRequestUserId(),request.getRequestInvitationId());
+                invitation.setCollectInfo(collect);
+                invitation.setGoodInfo(good);
+                Good query = new Good();
+                query.setInvitationId(invitation.getId());
+                Reply reply = new Reply();
+                reply.setInvitationId(invitation.getId());
+                invitation.setGood(goodDAO.count(query));
+                invitation.setComment(replyDAO.count(reply));
                 InvitationDTO invitationDTO = JSON.parseObject(JSON.toJSONString(invitation),InvitationDTO.class);
                 return CommonResponseUtils.success(invitationDTO);
             }
             return CommonResponseUtils.success(new InvitationDTO());
         } catch (Exception e) {
             throw new ServiceException(ErrorCode.QUERY_EXCEPTION,e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResponse<GoodDTO> doSaveGood(GoodDTO request) {
+        try {
+            Good res = goodDAO.saveAndReturn(BeanUtil.copy(request,Good.class));
+            return CommonResponseUtils.success(BeanUtil.copy(res,GoodDTO.class));
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.SAVE_EXCEPTION,e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResponse<CollectDTO> doSaveCollect(CollectDTO request) {
+        try {
+            Collect res = collectDao.saveAndReturn(BeanUtil.copy(request,Collect.class));
+            return CommonResponseUtils.success(BeanUtil.copy(res,CollectDTO.class));
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.FAIL,e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResponse<Integer> doDeleteGood(GoodDTO request) {
+        try {
+            Integer res = goodDAO.delete(request.getId());
+            return CommonResponseUtils.success(res);
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.FAIL,e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResponse<Integer> doDeleteCollect(CollectDTO request) {
+        try {
+            Integer res = collectDao.delete(request.getId());
+            return CommonResponseUtils.success(res);
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.FAIL,e);
         }
     }
 }

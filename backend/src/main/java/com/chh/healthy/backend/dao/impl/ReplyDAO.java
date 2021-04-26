@@ -10,6 +10,7 @@ import com.chh.healthy.backend.pojo.entity.Reply;
 import com.chh.healthy.backend.pojo.entity.User;
 import com.chh.healthy.backend.pojo.query.ReplyQuery;
 import com.chh.healthy.backend.pojo.query.UserQuery;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +34,9 @@ public class ReplyDAO {
 
     public List<Reply> queryByPage2 (ReplyQuery query) {
         return mapper.queryByPage2(query);
+    }
+
+    public Integer count (Reply entity) {
+        return mapper.selectCount(entity);
     }
 }

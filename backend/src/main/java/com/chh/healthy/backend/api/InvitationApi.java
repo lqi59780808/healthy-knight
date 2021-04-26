@@ -4,8 +4,11 @@ import com.boss.xtrain.core.common.api.CommonCRUDApi;
 import com.boss.xtrain.core.common.api.CommonPage;
 import com.boss.xtrain.core.common.api.CommonRequest;
 import com.boss.xtrain.core.common.api.CommonResponse;
+import com.chh.healthy.backend.pojo.dto.CollectDTO;
+import com.chh.healthy.backend.pojo.dto.GoodDTO;
 import com.chh.healthy.backend.pojo.dto.InvitationDTO;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
+import com.chh.healthy.backend.pojo.entity.Collect;
 import com.chh.healthy.backend.pojo.query.InvitationQuery;
 import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.pojo.vo.InvitationVO;
@@ -63,6 +66,50 @@ public interface InvitationApi extends CommonCRUDApi<InvitationDTO, InvitationQu
      * @see
      * @since
      */
-    CommonResponse<InvitationDTO> queryInvitationById(CommonRequest<Long> request);
+    CommonResponse<InvitationDTO> queryInvitationById(CommonRequest<InvitationQuery> request);
+
+    @PostMapping("/good/save")
+    @ApiOperation(value = "点赞")
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.boss.xtrain.core.common.api.CommonPage<com.chh.healthy.backend.pojo.vo.InvitationVO>>
+     * @desc:
+     * @see
+     * @since
+     */
+    CommonResponse<GoodDTO> saveGood(CommonRequest<GoodDTO> request);
+
+    @PostMapping("/collect/save")
+    @ApiOperation(value = "收藏")
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.boss.xtrain.core.common.api.CommonPage<com.chh.healthy.backend.pojo.vo.InvitationVO>>
+     * @desc:
+     * @see
+     * @since
+     */
+    CommonResponse<CollectDTO> saveCollect(CommonRequest<CollectDTO> request);
+
+    @PostMapping("/good/delete")
+    @ApiOperation(value = "取消点赞")
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.boss.xtrain.core.common.api.CommonPage<com.chh.healthy.backend.pojo.vo.InvitationVO>>
+     * @desc:
+     * @see
+     * @since
+     */
+    CommonResponse<Integer> deleteGood(CommonRequest<GoodDTO> request);
+
+    @PostMapping("/collect/delete")
+    @ApiOperation(value = "取消收藏")
+    /**
+     * @param: [request]
+     * @return: com.boss.xtrain.core.common.api.CommonResponse<com.boss.xtrain.core.common.api.CommonPage<com.chh.healthy.backend.pojo.vo.InvitationVO>>
+     * @desc:
+     * @see
+     * @since
+     */
+    CommonResponse<Integer> deleteCollect(CommonRequest<CollectDTO> request);
 
 }

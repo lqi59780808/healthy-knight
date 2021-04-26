@@ -25,6 +25,26 @@ public class InvitationQuery extends BaseQuery {
 
     private UserDTO user;
 
+    private Long requestUserId;
+
+    private Long requestInvitationId;
+
+    public Long getRequestUserId() {
+        return requestUserId;
+    }
+
+    public void setRequestUserId(Long requestUserId) {
+        this.requestUserId = requestUserId;
+    }
+
+    public Long getRequestInvitationId() {
+        return requestInvitationId;
+    }
+
+    public void setRequestInvitationId(Long requestInvitationId) {
+        this.requestInvitationId = requestInvitationId;
+    }
+
     public UserDTO getUser() {
         return user;
     }

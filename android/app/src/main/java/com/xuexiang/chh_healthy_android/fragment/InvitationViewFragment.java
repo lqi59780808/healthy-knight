@@ -1,6 +1,7 @@
 package com.xuexiang.chh_healthy_android.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.InputType;
@@ -38,6 +39,8 @@ import com.xuexiang.chh_healthy_android.core.http.callback.TipCallBack;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.CollectDTO;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.GoodDTO;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.InvitationDTO;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.InvitationPictureDTO;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.ReplyDTO;
@@ -101,6 +104,14 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.btn_reply)
     SuperButton btnReply;
+    @BindView(R.id.invitation_image_collect)
+    RadiusImageView imageCollcet;
+    @BindView(R.id.invitation_tv_collect)
+    TextView tvCollect;
+    @BindView(R.id.invitation_image_good)
+    RadiusImageView imageGood;
+    @BindView(R.id.invitation_tv_good)
+    TextView tvGood;
 
     private int pageNum;
     private int pageMax;
@@ -121,8 +132,6 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
     private SingleDelegateAdapter headAdapter;
     private SingleDelegateAdapter headBAdapter;
     private SingleDelegateAdapter noCommentAdapter;
-//    private SoftKeyBoardListener softKeyBoardListener;
-//    private Rect mChangeImageBackgroundRect = null;
 
     @Override
     protected int getLayoutId() {
@@ -147,41 +156,66 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
         titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_back));
         titleBar.setActionTextColor(getResources().getColor(R.color.white));
         return titleBar;
-//        return null;
     }
 
     @Override
     protected void initViews() {
         llReply.setVisibility(View.GONE);
         llEdit.setVisibility(View.GONE);
-        etReply.setOnFocusChangeListener(this);
-//        etReply.setOnKeyBoardHideListener(new SoftKeyEditText.OnKeyBoardHideListener() {
-//            @Override
-//            public void onKeyHide(int keyCode, KeyEvent event) {
-//                etReply.clearFocus();
-//            }
-//        });
-        clickReply.setOnClickListener(this);
         //初始化数据
         initRequest(true);
+    }
+
+    @Override
+    public void initListeners() {
+        recyclerViewImages.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (etReply.isFocused()) {
+                    etReply.clearFocus();
+                } else {
+                    llGood.setVisibility(View.VISIBLE);
+                    llCollect.setVisibility(View.VISIBLE);
+                    llComment.setVisibility(View.VISIBLE);
+                    llEdit.setVisibility(View.GONE);
+                    llReply.setVisibility(View.GONE);
+                }
+                return false;
+            }
+        });
+        btnReply.setOnClickListener(this);
+        etReply.setOnFocusChangeListener(this);
+        llComment.setOnClickListener(this);
+        llGood.setOnClickListener(this);
+        llCollect.setOnClickListener(this);
+        //下拉刷新
+        refreshLayout.setOnRefreshListener(refreshLayout -> {
+            refreshLayout.getLayout().postDelayed(() -> {
+                pageNum = 1;
+                pageMax = 10;
+                initRequest(false);
+            }, 1);
+        });
+        //上拉加载
+        refreshLayout.setOnLoadMoreListener(refreshLayout -> {
+            refreshLayout.getLayout().postDelayed(() -> {
+                pageNum ++;
+                pageMax = 10;
+                loadMoreReply();
+            }, 1);
+        });
     }
 
     @Override
     public void onFocusChange(View view, boolean b) {
         if (view.getId() == R.id.et_reply) {
             if (b) {
-//                if (etReply != null) {
-//                    etReply.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-//                }
                 llGood.setVisibility(View.GONE);
                 llCollect.setVisibility(View.GONE);
                 llComment.setVisibility(View.GONE);
                 llReply.setVisibility(View.VISIBLE);
                 llEdit.setVisibility(View.VISIBLE);
             } else if (!b && !KeyboardUtils.isSoftInputShow(getActivity())){
-//                if (etReply != null) {
-//                    etReply.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
-//                }
                 llGood.setVisibility(View.VISIBLE);
                 llCollect.setVisibility(View.VISIBLE);
                 llComment.setVisibility(View.VISIBLE);
@@ -195,14 +229,6 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
     public void onDestroyView() {
         etReply.setOnFocusChangeListener(null);
         recyclerViewImages.setOnTouchListener(null);
-//        etReply.setOnKeyBoardHideListener(null);
-//        getActivity().getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(null);
-//        softKeyBoardListener.listener = new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//
-//            }
-//        };
         super.onDestroyView();
     }
 
@@ -210,7 +236,7 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
     @Override
     @SingleClick
     public void onClick(View view) {
-        if (view.getId() == R.id.click_reply) {
+        if (view.getId() == R.id.ll_comment) {
             etReply.setHint("回复楼主");
             isReplyMaster = true;
             etReply.setFocusable(true);
@@ -246,64 +272,148 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
                             }
                         }){});
             }
+        } else if (view.getId() == R.id.ll_good) {
+            if (invitation.getGoodInfo() == null) {
+                doGood();
+            } else {
+                undoGood();
+            }
+
+        } else if (view.getId() == R.id.ll_collect) {
+            if (invitation.getCollectInfo() == null) {
+                doCollect();
+            } else {
+                undoCollect();
+            }
+
         }
     }
 
     @Override
-    public void initListeners() {
-        recyclerViewImages.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (etReply.isFocused()) {
-                    etReply.clearFocus();
-                } else {
-                    llGood.setVisibility(View.VISIBLE);
-                    llCollect.setVisibility(View.VISIBLE);
-                    llComment.setVisibility(View.VISIBLE);
-                    llEdit.setVisibility(View.GONE);
-                    llReply.setVisibility(View.GONE);
-                }
-                return false;
+    public void onFragmentResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100) {
+            if (resultCode == 101) {
+                refreshLayout.autoRefresh();
             }
-        });
-//        setSoftKeyBoardListener();
-//        llBottom.setOnTouchListener(this);
-//        llHead.setOnTouchListener(this);
-        btnReply.setOnClickListener(this);
-        //下拉刷新
-        refreshLayout.setOnRefreshListener(refreshLayout -> {
-            refreshLayout.getLayout().postDelayed(() -> {
-                pageNum = 1;
-                pageMax = 10;
-                initRequest(false);
-            }, 1);
-        });
-        //上拉加载
-        refreshLayout.setOnLoadMoreListener(refreshLayout -> {
-            refreshLayout.getLayout().postDelayed(() -> {
-                pageNum ++;
-                pageMax = 10;
-                loadMoreReply();
-            }, 1);
-        });
+        }
+        super.onFragmentResult(requestCode, resultCode, data);
     }
 
-//    /**
-//     * 添加软键盘的监听
-//     */
-//    private void setSoftKeyBoardListener(){
-//        softKeyBoardListener = new SoftKeyBoardListener(getActivity());
-//        softKeyBoardListener.setOnSoftKeyBoardChangeListener(new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
-//            @Override
-//            public void keyBoardShow(int height) {
-//            }
-//
-//            @Override
-//            public void keyBoardHide(int height) {
-//                etReply.clearFocus();
-//            }
-//        });
-//    }
+    private void doGood() {
+        GoodDTO goodDTO = new GoodDTO();
+        goodDTO.setInvitationId(invitationId);
+        goodDTO.setCreatedBy(TokenUtils.getUserInfo().getId());
+        CommonRequest<GoodDTO> commonRequest = new CommonRequest<>();
+        commonRequest.setBody(goodDTO);
+        String body = JsonUtil.toJson(commonRequest);
+        XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/good/save")
+                .upJson(body)
+                .syncRequest(false)
+                .onMainThread(true)
+                .execute(new CallBackProxy<CommonResponse<GoodDTO>, GoodDTO>(new TipCallBack<GoodDTO>() {
+                    @Override
+                    public void onSuccess(GoodDTO response) throws Throwable {
+                        invitation.setGoodInfo(response);
+                        invitation.setGood(invitation.getGood() + 1);
+                        headBAdapter.notifyDataSetChanged();
+                        resetGoodAndCollect();
+                    }
+                    @Override
+                    public void onError(ApiException e) {
+                        super.onError(e);
+                    }
+                }){});
+    }
+
+    private void doCollect() {
+        CollectDTO dto = new CollectDTO();
+        dto.setInvitationId(invitationId);
+        dto.setCreatedBy(TokenUtils.getUserInfo().getId());
+        CommonRequest<CollectDTO> commonRequest = new CommonRequest<>();
+        commonRequest.setBody(dto);
+        String body = JsonUtil.toJson(commonRequest);
+        XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/collect/save")
+                .upJson(body)
+                .syncRequest(false)
+                .onMainThread(true)
+                .execute(new CallBackProxy<CommonResponse<CollectDTO>, CollectDTO>(new TipCallBack<CollectDTO>() {
+                    @Override
+                    public void onSuccess(CollectDTO response) throws Throwable {
+                        invitation.setCollectInfo(response);
+                        resetGoodAndCollect();
+                    }
+                    @Override
+                    public void onError(ApiException e) {
+                        super.onError(e);
+                    }
+                }){});
+    }
+
+    private void undoCollect() {
+        CommonRequest<CollectDTO> commonRequest = new CommonRequest<>();
+        commonRequest.setBody(invitation.getCollectInfo());
+        String body = JsonUtil.toJson(commonRequest);
+        XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/collect/delete")
+                .upJson(body)
+                .syncRequest(false)
+                .onMainThread(true)
+                .execute(new CallBackProxy<CommonResponse<Integer>, Integer>(new TipCallBack<Integer>() {
+                    @Override
+                    public void onSuccess(Integer response) throws Throwable {
+                        if (response == 1) {
+                            invitation.setCollectInfo(null);
+                            resetGoodAndCollect();
+                        }
+                    }
+                    @Override
+                    public void onError(ApiException e) {
+                        super.onError(e);
+                    }
+                }){});
+    }
+
+    private void undoGood() {
+        CommonRequest<GoodDTO> commonRequest = new CommonRequest<>();
+        commonRequest.setBody(invitation.getGoodInfo());
+        String body = JsonUtil.toJson(commonRequest);
+        XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/good/delete")
+                .upJson(body)
+                .syncRequest(false)
+                .onMainThread(true)
+                .execute(new CallBackProxy<CommonResponse<Integer>, Integer>(new TipCallBack<Integer>() {
+                    @Override
+                    public void onSuccess(Integer response) throws Throwable {
+                        if (response == 1) {
+                            invitation.setGoodInfo(null);
+                            invitation.setGood(invitation.getGood() - 1);
+                            headBAdapter.notifyDataSetChanged();
+                            resetGoodAndCollect();
+                        }
+                    }
+                    @Override
+                    public void onError(ApiException e) {
+                        super.onError(e);
+                    }
+                }){});
+    }
+
+    private void resetGoodAndCollect() {
+        if (invitation.getGoodInfo() != null) {
+            tvGood.setTextColor(getResources().getColor(R.color.color_pink));
+            imageGood.setImageDrawable(getResources().getDrawable(R.drawable.ic_good_pink));
+        } else {
+            tvGood.setTextColor(getResources().getColor(R.color.xui_config_color_gray_4));
+            imageGood.setImageDrawable(getResources().getDrawable(R.drawable.ic_good));
+        }
+        if (invitation.getCollectInfo() != null) {
+            tvCollect.setTextColor(getResources().getColor(R.color.color_pink));
+            imageCollcet.setImageDrawable(getResources().getDrawable(R.drawable.ic_collect_pink));
+        } else {
+            tvCollect.setTextColor(getResources().getColor(R.color.xui_config_color_gray_4));
+            imageCollcet.setImageDrawable(getResources().getDrawable(R.drawable.ic_collect));
+        }
+
+    }
 
     public void initRecycleView() {
         ipList = invitation.getPictureList();
@@ -358,6 +468,7 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
             public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
                 holder.text(R.id.headb_comment,String.valueOf(invitation.getComment()));
                 holder.text(R.id.headb_praise,String.valueOf(invitation.getGood()));
+                holder.text(R.id.headb_date,String.valueOf(invitation.getCreatedTime()));
             }
         };
 
@@ -395,6 +506,7 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
                 }
                 holder.text(R.id.invitation_nickname,model.getUser().getNickname());
                 holder.text(R.id.invitation_content,model.getContent());
+                holder.text(R.id.iv_date,model.getCreatedTime());
                 holder.click(R.id.invitation_view, v -> {
                     etReply.setHint("回复" + model.getUser().getNickname());
                     replyId = model.getId();
@@ -469,24 +581,6 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
         replyAdapter.refresh(invitation.getReplyList());
     }
 
-//    @Override
-//    public boolean onTouch(View view, MotionEvent motionEvent) {
-//        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//            View v = llBottom;
-//            if (view.getId() == R.id.ll_bottom) {
-//                return true;
-//            } else if (view.getId() == R.id.ll_head) {
-//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                if (imm != null) {
-//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//                    etReply.clearFocus();
-//                }
-//                return true;
-//            }
-//        }
-//        return true;
-//    }
-
     public String toReplyString (ReplyDTO reply) {
         UserDTO user = reply.getUser();
         UserDTO replyUser = reply.getReplyUser();
@@ -512,8 +606,11 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
     }
 
     public void initRequest(boolean flag) {
-        CommonRequest<Long> commonRequest = new CommonRequest<>();
-        commonRequest.setBody(invitationId);
+        InvitationQuery query = new InvitationQuery();
+        query.setRequestUserId(TokenUtils.getUserInfo().getId());
+        query.setRequestInvitationId(invitationId);
+        CommonRequest<InvitationQuery> commonRequest = new CommonRequest<>();
+        commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
         XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/query/id")
                 .upJson(body)
@@ -525,6 +622,14 @@ public class InvitationViewFragment extends BaseFragment implements View.OnFocus
                         master = response.getUser();
                         replyId = master.getId();
                         invitation = response;
+                        if (invitation.getGoodInfo() != null) {
+                            tvGood.setTextColor(getResources().getColor(R.color.color_pink));
+                            imageGood.setImageDrawable(getResources().getDrawable(R.drawable.ic_good_pink));
+                        }
+                        if (invitation.getCollectInfo() != null) {
+                            tvCollect.setTextColor(getResources().getColor(R.color.color_pink));
+                            imageCollcet.setImageDrawable(getResources().getDrawable(R.drawable.ic_collect_pink));
+                        }
                         //查询回复
                         ReplyQuery query = new ReplyQuery();
                         query.setPageNum(pageNum);

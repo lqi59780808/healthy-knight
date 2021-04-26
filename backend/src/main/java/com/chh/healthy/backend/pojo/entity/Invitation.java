@@ -41,6 +41,12 @@ public class Invitation extends BaseEntity {
     @Transient
     private User user;
 
+    @Transient
+    private Good goodInfo;
+
+    @Transient
+    private Collect collectInfo;
+
     public Integer getComment() {
         return comment;
     }

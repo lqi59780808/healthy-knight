@@ -9,6 +9,8 @@ import com.boss.xtrain.core.context.BaseContextHolder;
 import com.boss.xtrain.util.BeanUtil;
 import com.chh.healthy.backend.api.InvitationApi;
 import com.chh.healthy.backend.dao.mapper.InvitationMapper;
+import com.chh.healthy.backend.pojo.dto.CollectDTO;
+import com.chh.healthy.backend.pojo.dto.GoodDTO;
 import com.chh.healthy.backend.pojo.dto.InvitationDTO;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
 import com.chh.healthy.backend.pojo.entity.Invitation;
@@ -55,8 +57,30 @@ import java.util.List;
     }
 
     @Override
-    public CommonResponse<InvitationDTO> queryInvitationById(@RequestBody CommonRequest<Long> request) {
+    public CommonResponse<InvitationDTO> queryInvitationById(@RequestBody CommonRequest<InvitationQuery> request) {
         return invitationService.doQueryInvitationById(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<GoodDTO> saveGood(@RequestBody CommonRequest<GoodDTO> request) {
+        BaseContextHolder.setUserId(request.getBody().getCreatedBy());
+        return invitationService.doSaveGood(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<CollectDTO> saveCollect(@RequestBody CommonRequest<CollectDTO> request) {
+        BaseContextHolder.setUserId(request.getBody().getCreatedBy());
+        return invitationService.doSaveCollect(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<Integer> deleteGood(@RequestBody CommonRequest<GoodDTO> request) {
+        return invitationService.doDeleteGood(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<Integer> deleteCollect(@RequestBody CommonRequest<CollectDTO> request) {
+        return invitationService.doDeleteCollect(request.getBody());
     }
 
 

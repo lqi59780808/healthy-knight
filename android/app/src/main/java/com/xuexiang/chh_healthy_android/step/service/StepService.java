@@ -21,11 +21,13 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.xuexiang.chh_healthy_android.activity.PlanActivity;
 import com.xuexiang.chh_healthy_android.activity.StepActivity;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.PlanDTO;
 import com.xuexiang.chh_healthy_android.core.http.pojo.query.StepQuery;
 import com.xuexiang.chh_healthy_android.step.UpdateUiCallBack;
 import com.xuexiang.chh_healthy_android.step.accelerometer.StepCount;
@@ -301,6 +303,7 @@ public class StepService extends Service implements SensorEventListener {
         String time = MMKVUtils.getString("achieveTime", "21:00");
         String plan = MMKVUtils.getString("planWalk_QTY", "7000");
         String remind = MMKVUtils.getString("remind", "1");
+        String now = new SimpleDateFormat("HH:mm").format(new Date());
         Logger.d("time=" + time + "\n" +
                 "new SimpleDateFormat(\"HH: mm\").format(new Date()))=" + new SimpleDateFormat("HH:mm").format(new Date()));
         if (("1".equals(remind)) &&
@@ -309,7 +312,17 @@ public class StepService extends Service implements SensorEventListener {
                 ) {
             remindNotify();
         }
-
+        String myPlanString = MMKVUtils.getString("plan" + TokenUtils.getUserInfo().getId(),"0");
+        if (!"0".equals(myPlanString)) {
+            PlanDTO myPlan = JsonUtil.fromJson(myPlanString,PlanDTO.class);
+            if (myPlan.getStatus() == 1 && myPlan.getPlanList() != null && myPlan.getPlanList().size() != 0) {
+                for (PlanDTO p : myPlan.getPlanList()) {
+                    if (p.getStatus() == 1 && p.getTime().equals(now)) {
+                        remindPlanNotify(p);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -365,6 +378,8 @@ public class StepService extends Service implements SensorEventListener {
      */
     int notify_remind_id = 200;
 
+    int notify_plan_id = 300;
+
     /**
      * 提醒锻炼通知栏
      */
@@ -390,6 +405,29 @@ public class StepService extends Service implements SensorEventListener {
                 .setSmallIcon(R.mipmap.logo);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationManager.notify(notify_remind_id, mBuilder.build());
+    }
+
+    private void remindPlanNotify(PlanDTO p) {
+
+        //设置点击跳转
+        Intent hangIntent = new Intent(this, PlanActivity.class);
+        PendingIntent hangPendingIntent = PendingIntent.getActivity(this, 0, hangIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setContentTitle("计划小助手")
+                .setContentText( p.getTime() + "," +  p.getName() + "的时间到了！")
+                .setContentIntent(hangPendingIntent)
+                .setChannelId(CHANNEL_ONE_ID)
+                .setTicker("计划小助手提醒您预定计划时间到了！")//通知首次出现在通知栏，带上升动画效果的
+                .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示
+                .setPriority(Notification.PRIORITY_DEFAULT)//设置该通知优先级
+                .setAutoCancel(true)//设置这个标志当用户单击面板就可以让通知将自动取消
+                .setOngoing(false)//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：
+                .setSmallIcon(R.mipmap.ic_launcher);
+                //Notification.DEFAULT_ALL  Notification.DEFAULT_SOUND 添加声音 // requires VIBRATE permission
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.notify(notify_plan_id++, mBuilder.build());
     }
 
     /**

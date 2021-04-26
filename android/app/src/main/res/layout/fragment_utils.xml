@@ -17,7 +17,7 @@
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:id="@+id/st_step"
                     app:sLeftViewWidth="110dp"
                     app:sLeftViewGravity="left_center"
@@ -32,33 +32,36 @@
                     app:sLeftTextString="步数小助手" />
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    style="@style/InfoItem.Account"
-                    app:sLeftTextString="通知" />
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:id="@+id/st_bmi"
+                    app:sLeftViewWidth="110dp"
+                    app:sLeftViewGravity="left_center"
+                    app:sCenterViewGravity="left_center"
+                    app:sCenterViewMarginLeft="25dp"
+                    app:sRightTextSize="20sp"
+                    app:sRightViewMarginRight="10dp"
+                    app:sRightIconRes="@drawable/icon_arrow_right_grey"
+                    app:sLeftIconRes="@drawable/ic_bmi_logo2"
+                    app:sLeftIconWidth="70dp"
+                    app:sLeftIconHeight="70dp"
+                    app:sLeftTextString="BMI小助手" />
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    style="@style/InfoItem.Account"
-                    app:sDividerLineType="none"
-                    app:sLeftTextString="收藏" />
-
-
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    android:id="@+id/step"
-                    style="@style/InfoItem.Account"
-                    android:layout_marginTop="20dp"
-                    app:sDividerLineType="none"
-                    app:sLeftTextString="意见反馈" />
-
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    android:id="@+id/menu_settings"
-                    style="@style/InfoItem.Account"
-                    android:layout_marginTop="20dp"
-                    app:sLeftTextString="设置" />
-
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    android:id="@+id/menu_about"
-                    style="@style/InfoItem.Account"
-                    app:sDividerLineType="none"
-                    app:sLeftTextString="关于" />
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:id="@+id/st_plan"
+                    app:sLeftViewWidth="110dp"
+                    app:sLeftViewGravity="left_center"
+                    app:sCenterViewGravity="left_center"
+                    app:sCenterViewMarginLeft="25dp"
+                    app:sRightTextSize="20sp"
+                    app:sRightViewMarginRight="10dp"
+                    app:sRightIconRes="@drawable/icon_arrow_right_grey"
+                    app:sLeftIconRes="@drawable/ic_plan_logo2"
+                    app:sLeftIconWidth="70dp"
+                    app:sLeftIconHeight="70dp"
+                    app:sLeftTextString="计划小助手" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

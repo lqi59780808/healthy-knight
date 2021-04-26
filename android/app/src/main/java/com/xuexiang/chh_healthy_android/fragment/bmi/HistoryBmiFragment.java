@@ -15,6 +15,8 @@ import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.callback.TipCallBack;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.BMIDTO;
+import com.xuexiang.chh_healthy_android.core.http.pojo.query.BMIQuery;
 import com.xuexiang.chh_healthy_android.core.http.pojo.query.StepQuery;
 import com.xuexiang.chh_healthy_android.step.bean.StepData;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
@@ -38,11 +40,11 @@ public class HistoryBmiFragment extends BaseFragment {
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
 
-    private BroccoliSimpleDelegateAdapter<StepData> stepAdapter;
+    private BroccoliSimpleDelegateAdapter<BMIDTO> bmiAdapter;
     private DelegateAdapter delegateAdapter;
     private int pageNum;
     private int pageMax;
-    private List<StepData> stepList;
+    private List<BMIDTO> bmiList;
 
 
 
@@ -57,28 +59,29 @@ public class HistoryBmiFragment extends BaseFragment {
     protected TitleBar initTitle() {
         TitleBar titleBar = super.initTitle();
         titleBar.setBackgroundColor(getResources().getColor(R.color.colorTitleBar));
-        titleBar.setTitle("历史步数");
+        titleBar.setTitle("历史BMI");
         titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_back));
-        titleBar.setActionTextColor(getResources().getColor(R.color.white));
         return titleBar;
 //        return null;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_history_step;
+        return R.layout.fragment_history_bmi;
     }
 
     @Override
     protected void initViews() {
-        stepAdapter = new BroccoliSimpleDelegateAdapter<StepData>(R.layout.fragment_step_history_body,new LinearLayoutHelper()) {
+        bmiAdapter = new BroccoliSimpleDelegateAdapter<BMIDTO>(R.layout.fragment_bmi_history_body,new LinearLayoutHelper()) {
             @Override
-            protected void onBindData(RecyclerViewHolder holder, StepData model, int position) {
+            protected void onBindData(RecyclerViewHolder holder, BMIDTO model, int position) {
                 if (model.getUser().getIcon() != null) {
                     holder.image(R.id.invitation_avatar,FinalEnum.frontUrl + model.getUser().getIcon());
                 }
                 holder.text(R.id.nickname,model.getUser().getNickname());
-                holder.text(R.id.tv_step,model.getStep());
+                holder.text(R.id.tv_bmi,model.getBmi() + " " + judgeType(Float.parseFloat(model.getBmi())));
+                holder.text(R.id.tv_height,model.getHeight() + "cm");
+                holder.text(R.id.tv_weight,model.getWeight() + "kg");
                 holder.text(R.id.tv_date,model.getToday());
             }
 
@@ -86,15 +89,15 @@ public class HistoryBmiFragment extends BaseFragment {
             protected void onBindBroccoli(RecyclerViewHolder holder, Broccoli broccoli) {
             }
         };
+
         VirtualLayoutManager virtualLayoutManager1 = new VirtualLayoutManager(getContext());
         recyclerViewImages.setLayoutManager(virtualLayoutManager1);
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
         recyclerViewImages.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0, 10);
         delegateAdapter = new DelegateAdapter(virtualLayoutManager1);
-        delegateAdapter.addAdapter(stepAdapter);
+        delegateAdapter.addAdapter(bmiAdapter);
         recyclerViewImages.setAdapter(delegateAdapter);
-
         initRequest();
     }
 
@@ -119,44 +122,57 @@ public class HistoryBmiFragment extends BaseFragment {
     }
 
     public void initRequest() {
-        StepQuery query = new StepQuery();
+        BMIQuery query = new BMIQuery();
         query.setCreatedBy(TokenUtils.getUserInfo().getId());
         query.setPageNum(pageNum);
         query.setPageSize(pageMax);
-        CommonRequest<StepQuery> commonRequest = new CommonRequest<>();
+        CommonRequest<BMIQuery> commonRequest = new CommonRequest<>();
         commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
-        XHttp.post(FinalEnum.frontUrl + "/healthy/step/query")
+        XHttp.post(FinalEnum.frontUrl + "/healthy/bmi/query")
                 .upJson(body)
                 .syncRequest(false)
                 .onMainThread(true)
-                .execute(new CallBackProxy<CommonResponse<List<StepData>>, List<StepData>>(new TipCallBack<List<StepData>>() {
+                .execute(new CallBackProxy<CommonResponse<List<BMIDTO>>, List<BMIDTO>>(new TipCallBack<List<BMIDTO>>() {
                     @Override
-                    public void onSuccess(List<StepData> response) throws Throwable {
-                        stepList = response;
-                        stepAdapter.refresh(stepList);
+                    public void onSuccess(List<BMIDTO> response) throws Throwable {
+                        bmiList = response;
+                        bmiAdapter.refresh(bmiList);
                         refreshLayout.finishRefresh();
                     }
                 }){});
     }
 
+    private String judgeType(Float bmi) {
+        if (bmi <= 18.4) {
+            return "偏瘦";
+        } else if (bmi > 18.4 && bmi <= 23.9 ) {
+            return "正常";
+        } else if (bmi > 23.9 && bmi <= 27.9) {
+            return "过重";
+        } else if (bmi >27.9) {
+            return "肥胖";
+        }
+        return "异常数值";
+    }
+
     public void LoadMore() {
-        StepQuery query = new StepQuery();
+        BMIQuery query = new BMIQuery();
         query.setCreatedBy(TokenUtils.getUserInfo().getId());
         query.setPageNum(pageNum);
         query.setPageSize(pageMax);
-        CommonRequest<StepQuery> commonRequest = new CommonRequest<>();
+        CommonRequest<BMIQuery> commonRequest = new CommonRequest<>();
         commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
-        XHttp.post(FinalEnum.frontUrl + "/healthy/step/query")
+        XHttp.post(FinalEnum.frontUrl + "/healthy/bmi/query")
                 .upJson(body)
                 .syncRequest(false)
                 .onMainThread(true)
-                .execute(new CallBackProxy<CommonResponse<List<StepData>>, List<StepData>>(new TipCallBack<List<StepData>>() {
+                .execute(new CallBackProxy<CommonResponse<List<BMIDTO>>, List<BMIDTO>>(new TipCallBack<List<BMIDTO>>() {
                     @Override
-                    public void onSuccess(List<StepData> response) throws Throwable {
-                        stepList = response;
-                        stepAdapter.loadMore(stepList);
+                    public void onSuccess(List<BMIDTO> response) throws Throwable {
+                        bmiList = response;
+                        bmiAdapter.loadMore(bmiList);
                         refreshLayout.finishLoadMore();
                     }
                 }){});
