@@ -24,13 +24,13 @@
 
         <item
             android:id="@+id/nav_news"
-            android:icon="@drawable/ic_menu_news"
-            android:title="@string/menu_news" />
+            android:icon="@drawable/ic_group"
+            android:title="社区" />
 
         <item
             android:id="@+id/nav_trending"
-            android:icon="@drawable/ic_menu_trending"
-            android:title="@string/menu_trending" />
+            android:icon="@drawable/ic_util"
+            android:title="工具" />
 
         <item
             android:id="@+id/nav_profile"
@@ -50,18 +50,19 @@
             android:icon="@drawable/ic_menu_search"
             android:title="@string/menu_search" />
 
-        <item
-            android:id="@+id/nav_notifications"
-            android:checkable="false"
-            android:icon="@drawable/ic_menu_notifications"
-            android:title="@string/menu_notifications" />
 
         <item
-            android:id="@+id/nav_starred"
+            android:id="@+id/nav_my_invitation"
+            android:checkable="false"
+            android:icon="@drawable/ic_menu_person"
+            android:title="我的帖子" />
+
+        <item
+            android:id="@+id/nav_collect_invitation"
             android:checkable="false"
             android:icon="@drawable/ic_menu_star"
-            android:title="@string/menu_starred" />
-    </group>
+            android:title="收藏帖子" />
+   </group>
 
     <group
         android:id="@+id/setting"
@@ -71,11 +72,6 @@
             android:checkable="false"
             android:icon="@drawable/ic_menu_settings"
             android:title="@string/menu_settings" />
-        <item
-            android:id="@+id/nav_about"
-            android:checkable="false"
-            android:icon="@drawable/ic_menu_about"
-            android:title="@string/menu_about" />
     </group>
 
 

@@ -33,6 +33,26 @@ public class InvitationQuery extends BaseQuery {
 
     private UserDTO user;
 
+    private Long createdBy;
+
+    private Long collectBy;
+
+    public Long getCollectBy() {
+        return collectBy;
+    }
+
+    public void setCollectBy(Long collectBy) {
+        this.collectBy = collectBy;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public Long getRequestUserId() {
         return requestUserId;
     }

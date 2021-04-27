@@ -19,9 +19,9 @@
 <resources>
 
     <string-array name="home_titles">
-        <item>@string/menu_news</item>
-        <item>@string/menu_trending</item>
-        <item>@string/menu_profile</item>
+        <item>社区</item>
+        <item>工具</item>
+        <item>我的</item>
     </string-array>
 
     <string-array name="adBlockUrl">
@@ -79,5 +79,48 @@
         <item>@color/app_color_theme_7</item>
         <item>@color/app_color_theme_8</item>
     </array>
+
+    <string-array name="query_suggestions">
+        <item>A very long suggestion that would span multiple lines.</item>
+        <item>Android</item>
+        <item>iOS</item>
+        <item>SCALA</item>
+        <item>Ruby</item>
+        <item>JavaScript</item>
+        <item>C#</item>
+        <item>Python</item>
+        <item>C</item>
+        <item>C++</item>
+        <item>PHP</item>
+        <item>Go</item>
+        <item>Perl</item>
+        <item>Bash</item>
+        <item>Lua</item>
+        <item>R</item>
+        <item>TCL</item>
+        <item>Haskell</item>
+        <item>Objective C</item>
+        <item>Swift</item>
+        <item>Kotlin</item>
+        <item>jQuery</item>
+        <item>Development</item>
+        <item>Web</item>
+        <item>Ajax</item>
+        <item>Test</item>
+        <item>Testing</item>
+        <item>CookBook</item>
+        <item>Beagle</item>
+        <item>VMware</item>
+        <item>Less.js</item>
+        <item>IDE</item>
+        <item>Arduino</item>
+        <item>Xamarin</item>
+        <item>UI</item>
+        <item>Microsoft</item>
+        <item>Application</item>
+        <item>JUnit</item>
+        <item>SQL</item>
+        <item>Beagle</item>
+    </string-array>
 
 </resources>

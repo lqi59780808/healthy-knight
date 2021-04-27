@@ -29,6 +29,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.activity.MyInvitationActivity;
 import com.xuexiang.chh_healthy_android.activity.SettingActivity;
 import com.xuexiang.chh_healthy_android.activity.StepActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
@@ -176,6 +177,12 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                         .previewImage(true)
                         .selectionMedia(mSelectList)
                         .forResult(PictureConfig.CHOOSE_REQUEST);
+                break;
+            case R.id.st_collect:
+                ActivityUtils.startActivityWithBundle(MyInvitationActivity.class,"type","collect");
+                break;
+            case R.id.st_my:
+                ActivityUtils.startActivityWithBundle(MyInvitationActivity.class,"type","my");
                 break;
             default:
                 break;

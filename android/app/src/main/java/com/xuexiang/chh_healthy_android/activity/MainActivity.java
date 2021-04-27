@@ -50,6 +50,7 @@ import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;
+import com.xuexiang.chh_healthy_android.fragment.SearchViewFragment;
 import com.xuexiang.chh_healthy_android.fragment.news.NewsFragment;
 import com.xuexiang.chh_healthy_android.fragment.profile.ProfileFragment;
 import com.xuexiang.chh_healthy_android.fragment.utils.UtilsFragment;
@@ -100,10 +101,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @BindView(R.id.toolbar_avatar)
     RadiusImageView toolbarAvatar;
 
-    StepActivity stepActivity;
-
-    SharedPreferencesUtils sp;
-
     private boolean isBind = false;
 
     private String[] mTitles;
@@ -115,9 +112,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sp = new SharedPreferencesUtils(this);
-        //获取用户设置的计划锻炼步数，没有设置过的话默认7000
-        String planWalk_QTY = (String) sp.getParam("planWalk_QTY", "7000");
         super.onCreate(savedInstanceState);
         initViews();
         setupService();
@@ -236,10 +230,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_settings:
-                        ActivityUtils.startActivity(SettingActivity.class);
+                        ActivityUtils.startActivityWithBundle(SettingActivity.class,"type","SettingsFragment");
                         break;
-                    case R.id.nav_about:
-                        openNewPage(AboutFragment.class);
+                    case R.id.nav_my_invitation:
+                        ActivityUtils.startActivityWithBundle(MyInvitationActivity.class,"type","my");
+                        break;
+                    case R.id.nav_collect_invitation:
+                        ActivityUtils.startActivityWithBundle(MyInvitationActivity.class,"type","collect");
+                        break;
+                    case R.id.nav_search:
+                        ActivityUtils.startActivity(SearchActivity.class);
                         break;
                     default:
                         XToastUtils.toast("点击了:" + menuItem.getTitle());
@@ -275,6 +275,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (item.getItemId()) {
             case R.id.action_publish:
                 ActivityUtils.startActivity(PublishActivity.class);
+                break;
+            case R.id.action_search:
+                ActivityUtils.startActivity(SearchActivity.class);
                 break;
             default:
                 break;
@@ -361,22 +364,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void initStatusBarStyle() {
-        Window window = this.getWindow();
-        //取消状态栏透明
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //添加Flag把状态栏设为可绘制模式
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        //设置状态栏颜色
-        window.setStatusBarColor(getResources().getColor(R.color.colorTitleBar));
-        //设置系统状态栏处于可见状态
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-        //让view不根据系统窗口来调整自己的布局
-        ViewGroup mContentView = (ViewGroup) window.findViewById(Window.ID_ANDROID_CONTENT);
-        View mChildView = mContentView.getChildAt(0);
-        if (mChildView != null) {
-            ViewCompat.setFitsSystemWindows(mChildView, false);
-            ViewCompat.requestApplyInsets(mChildView);
-        }
+        Utils.changeStatusBar(getResources().getColor(R.color.colorTitleBar),this);
     }
 
     @Override

@@ -108,7 +108,12 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
     @Override
     public CommonResponse<CommonPage<InvitationDTO>> doQueryInvitation(InvitationQuery request) {
         try {
-            List<Invitation> response = dao.queryInvitation(request);
+            List<Invitation> response;
+            if (request.getCollectBy() != null) {
+                response = dao.queryInvitationCollect(request);
+            } else {
+                response = dao.queryInvitation(request);
+            }
             BaseContextHolder.endPage(response);
             List<InvitationDTO> dtoList = new ArrayList<>();
             for (Invitation invitation : response) {
