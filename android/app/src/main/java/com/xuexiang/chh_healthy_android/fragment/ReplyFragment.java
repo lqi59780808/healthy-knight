@@ -248,6 +248,7 @@ public class ReplyFragment extends BaseFragment implements  View.OnClickListener
                 }
                 holder.text(R.id.invitation_nickname,model.getUser().getNickname());
                 holder.text(R.id.invitation_content,toReplyString(model));
+                holder.text(R.id.iv_date,model.getCreatedTime());
                 holder.click(R.id.invitation_view, v -> {
                     etReply.setHint("回复" + model.getUser().getNickname());
                     replyId = reply.getId();
