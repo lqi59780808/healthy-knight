@@ -241,6 +241,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     case R.id.nav_search:
                         ActivityUtils.startActivity(SearchActivity.class);
                         break;
+                    case R.id.nav_my_setting:
+                        ActivityUtils.startActivityWithBundle(SettingActivity.class,"type","UserInfoFragment");
+                        break;
                     default:
                         XToastUtils.toast("点击了:" + menuItem.getTitle());
                         break;
