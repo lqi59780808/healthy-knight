@@ -2,7 +2,11 @@ package com.chh.healthy.backend.service;
 
 import com.boss.xtrain.core.common.api.CommonResponse;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
+import com.chh.healthy.backend.pojo.dto.adminDTO;
+import com.chh.healthy.backend.pojo.query.UserQuery;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface UserService {
     /**
@@ -42,4 +46,8 @@ public interface UserService {
     CommonResponse<UserDTO> doUpdateIcon(long id,long version, MultipartFile multipartFile);
 
     CommonResponse<UserDTO> doUpdate(UserDTO request);
+
+    CommonResponse<adminDTO> doCount();
+
+    CommonResponse<List<UserDTO>> doQueryUser(UserQuery query);
 }

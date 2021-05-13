@@ -69,6 +69,12 @@
                     android:layout_marginTop="20dp"
                     app:sLeftTextString="设置" />
 
+                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/menu_admin"
+                    style="@style/InfoItem.Account"
+                    android:layout_marginTop="20dp"
+                    app:sLeftTextString="管理员管理" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>

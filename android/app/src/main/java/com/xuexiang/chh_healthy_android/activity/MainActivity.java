@@ -404,7 +404,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         if (isBind) {
+            Intent intent = new Intent(this, StepService.class);
             this.unbindService(conn);
+            this.stopService(intent);
         }
         super.onDestroy();
     }

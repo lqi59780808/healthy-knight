@@ -1,6 +1,9 @@
 package com.chh.healthy.backend.service.impl;
 
+import cn.hutool.core.convert.Convert;
+import com.alibaba.fastjson.JSON;
 import com.boss.xtrain.core.annotation.stuffer.IdGenerator;
+import com.boss.xtrain.core.common.api.CommonPage;
 import com.boss.xtrain.core.common.api.CommonRequest;
 import com.boss.xtrain.core.common.api.CommonResponse;
 import com.boss.xtrain.core.common.api.CommonResponseUtils;
@@ -11,7 +14,12 @@ import com.boss.xtrain.util.BeanUtil;
 import com.chh.healthy.backend.dao.impl.UserDAO;
 import com.chh.healthy.backend.dao.mapper.UserMapper;
 import com.chh.healthy.backend.pojo.code.ErrorCode;
+import com.chh.healthy.backend.pojo.dto.InvitationDTO;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
+import com.chh.healthy.backend.pojo.dto.adminDTO;
+import com.chh.healthy.backend.pojo.entity.Good;
+import com.chh.healthy.backend.pojo.entity.Invitation;
+import com.chh.healthy.backend.pojo.entity.Reply;
 import com.chh.healthy.backend.pojo.entity.User;
 import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.service.UserService;
@@ -22,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -134,6 +143,9 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
     @Transactional(rollbackFor = Exception.class)
     public CommonResponse<UserDTO> doUpdate(UserDTO request) {
         try {
+            if (request.getPassword()!= null) {
+                request.setPassword(DigestUtils.md5DigestAsHex(request.getPassword().getBytes()));
+            }
             User user = userDAO.updateAndReturn(BeanUtil.copy(request,User.class));
             return CommonResponseUtils.success(BeanUtil.copy(user,UserDTO.class));
         } catch (Exception e) {
@@ -141,6 +153,38 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
         }
 
     }
+
+    @Override
+    public CommonResponse<adminDTO> doCount() {
+        try {
+            adminDTO adminDTO = new adminDTO();
+            adminDTO.setSum(userDAO.countUser() - 1);
+            adminDTO.setFemale(userDAO.countFemale());
+            adminDTO.setMale(userDAO.countMale());
+            adminDTO.setInvitation(userDAO.countInvitation());
+            adminDTO.setReply(userDAO.countReply());
+            return CommonResponseUtils.success(adminDTO);
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.QUERY_EXCEPTION,e);
+        }
+    }
+
+    @Override
+    public CommonResponse<List<UserDTO>> doQueryUser(UserQuery query) {
+        try {
+            List<User> response = userDAO.queryUserList(query);
+            BaseContextHolder.endPage(response);
+            List<UserDTO> dtoList = new ArrayList<>();
+            for (User entity : response) {
+                String json = JSON.toJSONString(entity);
+                dtoList.add(JSON.parseObject(json, UserDTO.class));
+            }
+            return CommonResponseUtils.success(dtoList);
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.QUERY_INVITATION_EXCEPTION,e);
+        }
+    }
+
 
     public Boolean checkRegister(UserDTO userDTO) {
         String username = userDTO.getUsername();

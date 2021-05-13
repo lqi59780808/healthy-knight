@@ -300,6 +300,7 @@ public class StepService extends Service implements SensorEventListener {
      * 监听时间变化提醒用户锻炼
      */
     private void isCall() {
+        if (TokenUtils.getUserInfo() == null) return;
         String time = MMKVUtils.getString("achieveTime", "21:00");
         String plan = MMKVUtils.getString("planWalk_QTY", "7000");
         String remind = MMKVUtils.getString("remind", "1");
@@ -627,6 +628,7 @@ public class StepService extends Service implements SensorEventListener {
      * 保存记步数据
      */
     private void save() {
+        if (TokenUtils.getUserInfo() == null) return;
         int tempStep = CURRENT_STEP;
         StepQuery query = new StepQuery();
         query.setToday(CURRENT_DATE);

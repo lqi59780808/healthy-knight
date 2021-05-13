@@ -48,6 +48,7 @@ public class StepServiceImpl implements StepService {
     @Transactional(rollbackFor = Exception.class)
     public CommonResponse<StepDTO> doUpdate(StepDTO request) {
         try {
+            BaseContextHolder.setUserId(request.getCreatedBy());
             Step res = myDao.updateAndReturn(BeanUtil.copy(request,Step.class));
             return CommonResponseUtils.success(BeanUtil.copy(res,StepDTO.class));
         } catch (Exception e) {

@@ -1,13 +1,17 @@
 package com.chh.healthy.backend.controller;
 
+import com.boss.xtrain.core.common.api.CommonPage;
 import com.boss.xtrain.core.common.api.CommonRequest;
 import com.boss.xtrain.core.common.api.CommonResponse;
 import com.boss.xtrain.core.common.controller.BaseCRUDController;
 import com.boss.xtrain.core.context.BaseContextHolder;
 import com.chh.healthy.backend.api.UserApi;
 import com.chh.healthy.backend.dao.mapper.UserMapper;
+import com.chh.healthy.backend.pojo.dto.InvitationDTO;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
+import com.chh.healthy.backend.pojo.dto.adminDTO;
 import com.chh.healthy.backend.pojo.entity.User;
+import com.chh.healthy.backend.pojo.query.InvitationQuery;
 import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.pojo.vo.UserVO;
 import com.chh.healthy.backend.service.UserService;
@@ -55,5 +59,17 @@ public class UserController extends BaseCRUDController<UserDTO, User, UserQuery,
     public CommonResponse<UserDTO> update2(@RequestBody CommonRequest<UserDTO> request) {
         BaseContextHolder.setUserId(request.getBody().getId());
         return userService.doUpdate(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<adminDTO> count() {
+        return userService.doCount();
+    }
+
+    @Override
+    public CommonResponse<List<UserDTO>> queryUser(@RequestBody CommonRequest<UserQuery> request) {
+        UserQuery query = request.getBody();
+        this.doBeforePagination(query.getPageNum(),query.getPageSize());
+        return userService.doQueryUser(request.getBody());
     }
 }

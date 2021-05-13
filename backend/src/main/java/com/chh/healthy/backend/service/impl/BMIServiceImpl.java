@@ -48,6 +48,7 @@ public class BMIServiceImpl implements BMIService {
     @Transactional(rollbackFor = Exception.class)
     public CommonResponse<BMIDTO> doUpdate(BMIDTO request) {
         try {
+            BaseContextHolder.setUserId(request.getCreatedBy());
             BMI res = myDao.updateAndReturn(BeanUtil.copy(request,BMI.class));
             return CommonResponseUtils.success(BeanUtil.copy(res,BMIDTO.class));
         } catch (Exception e) {

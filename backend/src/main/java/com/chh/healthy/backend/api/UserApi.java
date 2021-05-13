@@ -4,13 +4,17 @@ import com.boss.xtrain.core.common.api.CommonCRUDApi;
 import com.boss.xtrain.core.common.api.CommonRequest;
 import com.boss.xtrain.core.common.api.CommonResponse;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
+import com.chh.healthy.backend.pojo.dto.adminDTO;
 import com.chh.healthy.backend.pojo.query.UserQuery;
 import com.chh.healthy.backend.pojo.vo.UserVO;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequestMapping("/healthy/user")
 public interface UserApi extends CommonCRUDApi<UserDTO,UserQuery,UserVO> {
@@ -60,4 +64,10 @@ public interface UserApi extends CommonCRUDApi<UserDTO,UserQuery,UserVO> {
 
     @PostMapping("/update2")
     CommonResponse<UserDTO> update2(@RequestBody CommonRequest<UserDTO> request);
+
+    @GetMapping("/count")
+    CommonResponse<adminDTO> count();
+
+    @PostMapping("/query")
+    CommonResponse<List<UserDTO>> queryUser(CommonRequest<UserQuery> request);
 }

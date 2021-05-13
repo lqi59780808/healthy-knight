@@ -20,6 +20,7 @@ package com.xuexiang.chh_healthy_android.fragment.profile;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +30,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.activity.AdminActivity;
 import com.xuexiang.chh_healthy_android.activity.MyInvitationActivity;
 import com.xuexiang.chh_healthy_android.activity.SettingActivity;
 import com.xuexiang.chh_healthy_android.activity.StepActivity;
@@ -71,6 +73,12 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     SuperTextView stAccount;
     @BindView(R.id.icon_set)
     SuperTextView iconSet;
+    @BindView(R.id.st_collect)
+    SuperTextView stCollect;
+    @BindView(R.id.st_my)
+    SuperTextView stMy;
+    @BindView(R.id.menu_admin)
+    SuperTextView admin;
     private List<LocalMedia> mSelectList = new ArrayList<>();
     /**
      * @return 返回为 null意为不需要导航栏
@@ -96,6 +104,9 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     @Override
     protected void initViews() {
         if (TokenUtils.getUserInfo().getIcon() != null) {
+            if (TokenUtils.getUserInfo().getId() != 0) {
+                admin.setVisibility(View.GONE);
+            }
             Glide.with(ProfileFragment.this).load(FinalEnum.frontUrl + TokenUtils.getUserInfo().getIcon()).into(rivHeadPic);
         }
 }
@@ -105,6 +116,9 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
         menuSettings.setOnSuperTextViewClickListener(this);
         stAccount.setOnSuperTextViewClickListener(this);
         iconSet.setOnSuperTextViewClickListener(this);
+        stCollect.setOnSuperTextViewClickListener(this);
+        stMy.setOnSuperTextViewClickListener(this);
+        admin.setOnSuperTextViewClickListener(this);
     }
 
     @Override
@@ -183,6 +197,9 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                 break;
             case R.id.st_my:
                 ActivityUtils.startActivityWithBundle(MyInvitationActivity.class,"type","my");
+                break;
+            case R.id.menu_admin:
+                ActivityUtils.startActivity(AdminActivity.class);
                 break;
             default:
                 break;

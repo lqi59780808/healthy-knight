@@ -189,16 +189,19 @@ public class StepArcView extends View {
      * 所走的步数进度
      *
      * @param totalStepNum  设置的步数
-     * @param currentCounts 所走步数
+     * @param cCounts 所走步数
      */
-    public void setCurrentCount(int totalStepNum, int currentCounts) {
+    public void setCurrentCount(int totalStepNum, int cCounts) {
+        int currentCounts = 0;
         /**如果当前走的步数超过总步数则圆弧还是270度，不能成为园*/
-        if (currentCounts > totalStepNum) {
+        if (cCounts > totalStepNum) {
             currentCounts = totalStepNum;
+        } else  {
+            currentCounts = cCounts;
         }
 
         /**上次所走步数占用总共步数的百分比*/
-        float scalePrevious = (float) Integer.valueOf(stepNumber) / totalStepNum;
+        float scalePrevious = (float) Integer.valueOf(currentCounts) / totalStepNum;
         /**换算成弧度最后要到达的角度的长度-->弧长*/
         float previousAngleLength = scalePrevious * angleLength;
 
@@ -209,8 +212,8 @@ public class StepArcView extends View {
         /**开始执行动画*/
         setAnimation(previousAngleLength, currentAngleLength, animationLength);
 
-        stepNumber = String.valueOf(currentCounts);
-        setTextSize(currentCounts);
+        stepNumber = String.valueOf(cCounts);
+        setTextSize(cCounts);
     }
 
     /**

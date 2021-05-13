@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chh.healthy.backend.dao.UserMapper">
+<mapper namespace="com.chh.healthy.backend.dao.mapper.UserMapper">
   <resultMap id="BaseResultMap" type="com.chh.healthy.backend.pojo.entity.User">
     <!--
       WARNING - @mbg.generated
@@ -19,4 +19,19 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
   </resultMap>
+  <select id="queryUserList" resultMap="BaseResultMap">
+    SELECT
+    t1.*
+    FROM
+    h_user AS t1
+    <where>
+      <if test="query.username != null">
+        AND t1.username LIKE concat("%",#{query.username},"%")
+      </if>
+        AND t1.status != 1
+    </where>
+    ORDER BY
+    t1.created_time DESC,
+    t1.id DESC
+  </select>
 </mapper>
