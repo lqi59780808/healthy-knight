@@ -21,6 +21,7 @@ import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
+import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.net.JsonUtil;
 
 import butterknife.BindView;
@@ -66,9 +67,9 @@ public class AdminUserUpdateFragment extends BaseFragment implements RadioGroup.
 
     @Override
     protected void initViews() {
+        rgSex.setOnCheckedChangeListener(this);
         if (userInfo != null) {
             sex = (int)userInfo.getSex();
-            rgSex.setOnCheckedChangeListener(this);
             //男
             if (sex == 0) {
                 RadioButton rb = rgSex.findViewById(R.id.rb_male);
@@ -83,8 +84,12 @@ public class AdminUserUpdateFragment extends BaseFragment implements RadioGroup.
             etUsername.setText(userInfo.getUsername());
             etUsername.setFocusable(false);
             etEmail.setText(userInfo.getEmail());
+            etNickname.setText(userInfo.getNickname());
         } else {
             userInfo = new UserDTO();
+            sex = 0;
+            RadioButton rb = rgSex.findViewById(R.id.rb_male);
+            rb.setChecked(true);
         }
     }
 
@@ -103,6 +108,20 @@ public class AdminUserUpdateFragment extends BaseFragment implements RadioGroup.
             @Override
             public void performAction(View view) {
                 String url = "";
+                if ( !(etUsername.validate() && etEmail.validate())) {
+                    XToastUtils.error("格式错误");
+                    return;
+                }
+                if (etPassword.getEditValue() != null && !"".equals(etPassword.getEditValue())) {
+                    if (!etPassword.validate()) {
+                        XToastUtils.error("格式错误");
+                        return;
+                    }
+                }
+                if ( StringUtils.isEmpty(etNickname.getEditValue()) || etNickname.getEditValue().length()>10) {
+                    XToastUtils.error("昵称不能为空或大于十个字符");
+                    return;
+                }
                 userInfo.setUsername(etUsername.getEditValue());
                 userInfo.setSex(sex.byteValue());
                 userInfo.setNickname(etNickname.getEditValue());
@@ -134,6 +153,7 @@ public class AdminUserUpdateFragment extends BaseFragment implements RadioGroup.
                                     Bundle bundle = new Bundle();
                                     bundle.putString("model",JsonUtil.toJson(response));
                                     bundle.putInt("position",position);
+                                    intent.putExtras(bundle);
                                     setFragmentResult(RESULT_UPDATE,intent);
                                     popToBack();
                                 } else {
@@ -141,6 +161,7 @@ public class AdminUserUpdateFragment extends BaseFragment implements RadioGroup.
                                     Intent intent = new Intent();
                                     Bundle bundle = new Bundle();
                                     bundle.putString("model",JsonUtil.toJson(response));
+                                    intent.putExtras(bundle);
                                     setFragmentResult(RESULT_ADD,intent);
                                     popToBack();
                                 }

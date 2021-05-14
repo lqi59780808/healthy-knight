@@ -68,11 +68,32 @@
             <if test="query.createdBy != null">
                 AND t1.created_by = #{query.createdBy}
             </if>
+            AND t1.status != 2
         </where>
         ORDER BY
-        t1.updated_time DESC,
+        t1.created_time DESC,
         t1.id DESC
   </select>
+    <select id="queryByAdmin" resultMap="BaseResultMap">
+        SELECT
+        t1.*
+        FROM
+        h_invitation AS t1
+        <where>
+            <if test="query.title != null">
+                AND t1.title LIKE concat("%",#{query.title},"%")
+            </if>
+            <if test="query.queryId != null">
+                AND t1.id = #{query.queryId}
+            </if>
+            <if test="query.createdBy != null">
+                AND t1.created_by = #{query.createdBy}
+            </if>
+        </where>
+        ORDER BY
+        t1.created_time DESC,
+        t1.id DESC
+    </select>
 
     <select id="queryInvitationCollect" resultMap="BaseResultMap">
         SELECT

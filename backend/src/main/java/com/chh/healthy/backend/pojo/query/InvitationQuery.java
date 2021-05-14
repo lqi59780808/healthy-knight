@@ -4,12 +4,16 @@ import com.boss.xtrain.core.common.pojo.entity.BaseEntity;
 import com.boss.xtrain.core.common.pojo.vo.BaseQuery;
 import com.chh.healthy.backend.pojo.dto.UserDTO;
 import com.chh.healthy.backend.pojo.entity.User;
+import lombok.Data;
 
 import javax.persistence.Table;
 
+@Data
 public class InvitationQuery extends BaseQuery {
 
     private String title;
+
+    private Long queryId;
 
     /**
      * 点赞数

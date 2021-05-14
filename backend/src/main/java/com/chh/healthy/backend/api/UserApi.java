@@ -38,7 +38,7 @@ public interface UserApi extends CommonCRUDApi<UserDTO,UserQuery,UserVO> {
      * @see
      * @since
      */
-    CommonResponse<Integer> register(CommonRequest<UserDTO> request);
+    CommonResponse<UserDTO> register(CommonRequest<UserDTO> request);
 
     @PostMapping("/init")
     @ApiOperation(value = "用户初始化")
@@ -70,4 +70,7 @@ public interface UserApi extends CommonCRUDApi<UserDTO,UserQuery,UserVO> {
 
     @PostMapping("/query")
     CommonResponse<List<UserDTO>> queryUser(CommonRequest<UserQuery> request);
+
+    @PostMapping("/id")
+    CommonResponse<UserDTO> queryById(CommonRequest<Long> id);
 }

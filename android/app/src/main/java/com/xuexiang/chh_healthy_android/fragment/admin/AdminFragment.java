@@ -69,6 +69,8 @@ import butterknife.BindView;
 public class AdminFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
     @BindView(R.id.st_user)
     SuperTextView stUser;
+    @BindView(R.id.st_invitation)
+    SuperTextView stInvitation;
     @BindView(R.id.tv_sum)
     TextView tvSum;
     @BindView(R.id.tv_male)
@@ -114,6 +116,7 @@ public class AdminFragment extends BaseFragment implements SuperTextView.OnSuper
     @Override
     protected void initListeners() {
         stUser.setOnSuperTextViewClickListener(this);
+        stInvitation.setOnSuperTextViewClickListener(this);
     }
     @SingleClick
     @Override
@@ -121,6 +124,13 @@ public class AdminFragment extends BaseFragment implements SuperTextView.OnSuper
         switch(view.getId()) {
             case R.id.st_user:
                 PageOption.to(AdminUserFragment.class)
+                        .setRequestCode(100)
+                        .setAddToBackStack(true)
+                        .setAnim(CoreAnim.slide)
+                        .open(this);
+                break;
+            case R.id.st_invitation:
+                PageOption.to(AdminInvitationFragment.class)
                         .setRequestCode(100)
                         .setAddToBackStack(true)
                         .setAnim(CoreAnim.slide)

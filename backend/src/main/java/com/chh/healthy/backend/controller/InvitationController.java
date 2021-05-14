@@ -83,5 +83,16 @@ import java.util.List;
         return invitationService.doDeleteCollect(request.getBody());
     }
 
+    @Override
+    public CommonResponse<InvitationDTO> updateStatus(@RequestBody CommonRequest<InvitationDTO> request) {
+        return invitationService.doUpdate(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<List<InvitationDTO>> queryByAdmin(@RequestBody CommonRequest<InvitationQuery> request) {
+        this.doBeforePagination(request.getBody().getPageNum(),request.getBody().getPageSize());
+        return invitationService.doQueryByAdmin(request.getBody());
+    }
+
 
 }

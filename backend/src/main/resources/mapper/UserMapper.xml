@@ -21,7 +21,18 @@
   </resultMap>
   <select id="queryUserList" resultMap="BaseResultMap">
     SELECT
-    t1.*
+    t1.id,
+    t1.username,
+    t1.nickname,
+    t1.sex,
+    t1.status,
+    t1.created_by,
+    t1.created_time,
+    t1.updated_by,
+    t1.updated_time,
+    t1.version,
+    t1.email,
+    t1.icon
     FROM
     h_user AS t1
     <where>

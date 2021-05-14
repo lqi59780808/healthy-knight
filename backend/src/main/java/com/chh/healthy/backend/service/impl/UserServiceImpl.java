@@ -11,6 +11,7 @@ import com.boss.xtrain.core.common.exception.ServiceException;
 import com.boss.xtrain.core.common.service.BaseCURDService;
 import com.boss.xtrain.core.context.BaseContextHolder;
 import com.boss.xtrain.util.BeanUtil;
+import com.boss.xtrain.util.StringUtil;
 import com.chh.healthy.backend.dao.impl.UserDAO;
 import com.chh.healthy.backend.dao.mapper.UserMapper;
 import com.chh.healthy.backend.pojo.code.ErrorCode;
@@ -83,16 +84,16 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public CommonResponse<Integer> doRegister(UserDTO userDTO) {
+    public CommonResponse<UserDTO> doRegister(UserDTO userDTO) {
         try {
             if (Boolean.TRUE.equals(checkRegister(userDTO))) {
                 User user = BeanUtil.copy(userDTO,User.class);
                 //md5加密
                 String md5Password = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
                 user.setPassword(md5Password);
-                int result = myDao.save(user);
-                if (result == 1) {
-                    return CommonResponseUtils.success(result);
+                User result = userDAO.saveAndReturn(user);
+                if (result != null) {
+                    return CommonResponseUtils.success(BeanUtil.copy(result,UserDTO.class));
                 } else {
                     throw new ServiceException(ErrorCode.REGISTER_REPEAT_EXCEPTION,new IllegalArgumentException());
                 }
@@ -143,7 +144,7 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
     @Transactional(rollbackFor = Exception.class)
     public CommonResponse<UserDTO> doUpdate(UserDTO request) {
         try {
-            if (request.getPassword()!= null) {
+            if (StringUtil.isNotEmpty(request.getPassword())) {
                 request.setPassword(DigestUtils.md5DigestAsHex(request.getPassword().getBytes()));
             }
             User user = userDAO.updateAndReturn(BeanUtil.copy(request,User.class));
@@ -152,6 +153,20 @@ public class UserServiceImpl extends BaseCURDService<UserDTO, User, UserQuery, U
             throw new ServiceException(ErrorCode.UPDATE_EXCEPTION,e);
         }
 
+    }
+
+    @Override
+    public CommonResponse<UserDTO> doQueryById(Long id) {
+        try {
+            User user = userDAO.queryById(id);
+            if (user == null) {
+                user = new User();
+            }
+            user.setPassword(null);
+            return CommonResponseUtils.success(BeanUtil.copy(user,UserDTO.class));
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.QUERY_EXCEPTION,e);
+        }
     }
 
     @Override

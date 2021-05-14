@@ -202,4 +202,33 @@ public class InvitationServiceImpl extends BaseCURDService<InvitationDTO, Invita
             throw new ServiceException(ErrorCode.FAIL,e);
         }
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResponse<InvitationDTO> doUpdate(InvitationDTO request) {
+        try {
+            Invitation res = dao.updateAndReturn(BeanUtil.copy(request,Invitation.class));
+            request.setStatus(res.getStatus());
+            request.setVersion(request.getVersion()+1);
+            return CommonResponseUtils.success(request);
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.UPDATE_EXCEPTION,e);
+        }
+    }
+
+    @Override
+    public CommonResponse<List<InvitationDTO>> doQueryByAdmin(InvitationQuery request) {
+        try {
+            List<Invitation> response = dao.queryByAdmin(request);
+            BaseContextHolder.endPage(response);
+            List<InvitationDTO> dtoList = new ArrayList<>();
+            for (Invitation entity : response) {
+                String json = JSON.toJSONString(entity);
+                dtoList.add(JSON.parseObject(json, InvitationDTO.class));
+            }
+            return CommonResponseUtils.success(dtoList);
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.QUERY_INVITATION_EXCEPTION,e);
+        }
+    }
 }

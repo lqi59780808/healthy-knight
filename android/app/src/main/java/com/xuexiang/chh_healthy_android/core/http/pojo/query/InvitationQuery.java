@@ -12,6 +12,8 @@ public class InvitationQuery extends BaseQuery {
      */
     private Integer good;
 
+    private Long queryId;
+
     /**
      * 收藏数
      */
@@ -32,6 +34,14 @@ public class InvitationQuery extends BaseQuery {
     private Long createdBy;
 
     private Long collectBy;
+
+    public Long getQueryId() {
+        return queryId;
+    }
+
+    public void setQueryId(Long queryId) {
+        this.queryId = queryId;
+    }
 
     public Long getCollectBy() {
         return collectBy;

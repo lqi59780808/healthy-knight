@@ -153,11 +153,13 @@ public class LoginFragment extends BaseFragment {
                     .setAddToBackStack(true)
                     .setAnim(CoreAnim.zoom)
                     .open(this);
-        } else {
+        } else if (userDTO.getStatus().intValue() == 2){
             if (TokenUtils.handleLoginSuccess(userDTO.getUsername())) {
                 TokenUtils.putUserInfo(userDTO);
                 ActivityUtils.startActivity(MainActivity.class);
             }
+        } else if (userDTO.getStatus().intValue() == 3) {
+            XToastUtils.error("该账号已经被封禁，无法登陆");
         }
     }
 }

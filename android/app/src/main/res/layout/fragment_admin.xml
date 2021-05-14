@@ -74,6 +74,10 @@
                     style="@style/InfoItem.Account"
                     android:layout_marginTop="10dp"
                     app:sLeftTextString="用户管理" />
+                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/st_invitation"
+                    style="@style/InfoItem.Account"
+                    app:sLeftTextString="帖子管理" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

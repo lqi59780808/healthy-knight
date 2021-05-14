@@ -21,12 +21,23 @@ import android.content.Intent;
 import android.view.KeyEvent;
 
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.core.FinalEnum;
+import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCallBack;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
+import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.utils.SettingUtils;
 import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.Utils;
+import com.xuexiang.chh_healthy_android.utils.XToastUtils;
+import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.callback.CallBackProxy;
+import com.xuexiang.xhttp2.callback.SimpleCallBack;
+import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xui.utils.KeyboardUtils;
 import com.xuexiang.xui.widget.activity.BaseSplashActivity;
 import com.xuexiang.xutil.app.ActivityUtils;
+import com.xuexiang.xutil.net.JsonUtil;
 
 import me.jessyan.autosize.internal.CancelAdapt;
 
@@ -71,7 +82,32 @@ public class SplashActivity extends BaseSplashActivity implements CancelAdapt {
 
     private void loginOrGoMainPage() {
         if (TokenUtils.hasToken()) {
-            ActivityUtils.startActivity(MainActivity.class);
+            CommonRequest<Long> commonRequest = new CommonRequest<>();
+            commonRequest.setBody(TokenUtils.getUserInfo().getId());
+            String body = JsonUtil.toJson(commonRequest);
+            XHttp.post(FinalEnum.frontUrl + "/healthy/user/id")
+                    .upJson(body)
+                    .syncRequest(false)
+                    .onMainThread(true)
+                    .timeOut(5000)
+                    .execute(new CallBackProxy<CommonResponse<UserDTO>, UserDTO>(new SimpleCallBack<UserDTO>() {
+                        @Override
+                        public void onSuccess(UserDTO response) throws Throwable {
+                            if (response.getStatus() == 3) {
+                                XToastUtils.error("该账号目前处于封禁状态");
+                                TokenUtils.clearToken();
+                                ActivityUtils.startActivity(LoginActivity.class);
+                            } else {
+                                TokenUtils.putUserInfo(response);
+                                ActivityUtils.startActivity(MainActivity.class);
+                            }
+                        }
+
+                        @Override
+                        public void onError(ApiException e) {
+                            ActivityUtils.startActivity(MainActivity.class);
+                        }
+                    }){});
         } else {
             ActivityUtils.startActivity(LoginActivity.class);
         }

@@ -112,4 +112,10 @@ public interface InvitationApi extends CommonCRUDApi<InvitationDTO, InvitationQu
      */
     CommonResponse<Integer> deleteCollect(CommonRequest<CollectDTO> request);
 
+    @PostMapping("/update")
+    CommonResponse<InvitationDTO> updateStatus(CommonRequest<InvitationDTO> request);
+
+    @PostMapping("/admin")
+    CommonResponse<List<InvitationDTO>> queryByAdmin(CommonRequest<InvitationQuery> request);
+
 }

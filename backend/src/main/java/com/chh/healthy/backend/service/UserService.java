@@ -25,7 +25,7 @@ public interface UserService {
      * @see
      * @since
      */
-    CommonResponse<Integer> doRegister(UserDTO userDTO);
+    CommonResponse<UserDTO> doRegister(UserDTO userDTO);
 
     /**
      * @param: [userDTO]
@@ -46,6 +46,8 @@ public interface UserService {
     CommonResponse<UserDTO> doUpdateIcon(long id,long version, MultipartFile multipartFile);
 
     CommonResponse<UserDTO> doUpdate(UserDTO request);
+
+    CommonResponse<UserDTO> doQueryById(Long id);
 
     CommonResponse<adminDTO> doCount();
 

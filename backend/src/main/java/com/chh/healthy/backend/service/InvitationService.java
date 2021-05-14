@@ -13,6 +13,8 @@ import com.chh.healthy.backend.pojo.query.InvitationQuery;
 import com.chh.healthy.backend.pojo.vo.InvitationVO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface InvitationService {
     /**
      * @param: [request]
@@ -76,4 +78,8 @@ public interface InvitationService {
      * @since
      */
     CommonResponse<Integer> doDeleteCollect(CollectDTO request);
+
+    CommonResponse<InvitationDTO> doUpdate(InvitationDTO request);
+
+    CommonResponse<List<InvitationDTO>> doQueryByAdmin(InvitationQuery request);
 }

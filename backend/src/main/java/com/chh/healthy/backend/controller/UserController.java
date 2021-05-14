@@ -39,7 +39,7 @@ public class UserController extends BaseCRUDController<UserDTO, User, UserQuery,
     }
 
     @Override
-    public CommonResponse<Integer> register(@RequestBody CommonRequest<UserDTO> request) {
+    public CommonResponse<UserDTO> register(@RequestBody CommonRequest<UserDTO> request) {
         return userService.doRegister(request.getBody());
     }
 
@@ -71,5 +71,10 @@ public class UserController extends BaseCRUDController<UserDTO, User, UserQuery,
         UserQuery query = request.getBody();
         this.doBeforePagination(query.getPageNum(),query.getPageSize());
         return userService.doQueryUser(request.getBody());
+    }
+
+    @Override
+    public CommonResponse<UserDTO> queryById(@RequestBody CommonRequest<Long> id) {
+        return userService.doQueryById(id.getBody());
     }
 }

@@ -35,7 +35,10 @@ public class UserDAO extends AbstractBaseDao<User, UserMapper, UserQuery> {
 
     @EntityFieldStuffer(methodType = MethodTypeEnum.ADD)
     public User saveAndReturn(User entity) {
-        myMapper.insert(entity);
+        int i = myMapper.insert(entity);
+        if (i == 0) {
+            return null;
+        }
         return entity;
     }
 
@@ -53,6 +56,10 @@ public class UserDAO extends AbstractBaseDao<User, UserMapper, UserQuery> {
 
     public User queryByUsername(User user) {
         return myMapper.selectOne(user);
+    }
+
+    public User queryById(Long id) {
+        return myMapper.selectByPrimaryKey(id);
     }
 
     public Integer countUser() {

@@ -19,9 +19,8 @@ package com.xuexiang.chh_healthy_android.fragment.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +29,7 @@ import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.xuexiang.chh_healthy_android.R;
+import com.xuexiang.chh_healthy_android.activity.InvitationViewActivity;
 import com.xuexiang.chh_healthy_android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
 import com.xuexiang.chh_healthy_android.adapter.base.delegate.SimpleDelegateAdapter;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
@@ -39,13 +39,9 @@ import com.xuexiang.chh_healthy_android.core.http.callback.TipProgressLoadingCal
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
 import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.InvitationDTO;
-import com.xuexiang.chh_healthy_android.core.http.pojo.dto.PlanDTO;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.core.http.pojo.query.InvitationQuery;
 import com.xuexiang.chh_healthy_android.core.http.pojo.query.UserQuery;
-import com.xuexiang.chh_healthy_android.fragment.UserSettingFragment;
-import com.xuexiang.chh_healthy_android.utils.MMKVUtils;
-import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.callback.CallBackProxy;
@@ -55,9 +51,9 @@ import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
-import com.xuexiang.xui.widget.button.SwitchIconView;
 import com.xuexiang.xui.widget.searchview.MaterialSearchView;
 import com.xuexiang.xui.widget.textview.supertextview.SuperButton;
+import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.net.JsonUtil;
 
@@ -69,7 +65,7 @@ import me.samlss.broccoli.Broccoli;
 
 
 @Page(anim = CoreAnim.none)
-public class AdminUserFragment extends BaseFragment {
+public class AdminInvitationFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -78,16 +74,15 @@ public class AdminUserFragment extends BaseFragment {
     @BindView(R.id.search_view)
     MaterialSearchView mSearchView;
 
-    UserDTO res;
-
-    List<UserDTO> userList = new ArrayList<>();
+    List<InvitationDTO> invitationList = new ArrayList<>();
 
     int pageMax;
     int pageNow;
 
     String search = null;
+    int flag = 0;
 
-    private SimpleDelegateAdapter<UserDTO> userAdapter;
+    private SimpleDelegateAdapter<InvitationDTO> invitationAdapter;
 
     @Override
     protected TitleBar initTitle() {
@@ -96,30 +91,30 @@ public class AdminUserFragment extends BaseFragment {
         titleBar.setBackgroundColor(getResources().getColor(R.color.colorTitleBar));
         titleBar.setLeftImageDrawable(getResources().getDrawable(R.drawable.ic_back));
         titleBar.setActionTextColor(getResources().getColor(R.color.white));
-        titleBar.addAction(new TitleBar.TextAction("新增") {
+        titleBar.addAction(new TitleBar.TextAction("名称搜索") {
             @Override
             public void performAction(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("type","新增");
-                PageOption.to(AdminUserUpdateFragment.class)
-                        .setBundle(bundle)
-                        .setRequestCode(100)
-                        .setAddToBackStack(true)
-                        .setAnim(CoreAnim.slide)
-                        .open(AdminUserFragment.this);
+                flag = 2;
+                mSearchView.showSearch();
+                mSearchView.setHint("按名称搜索");
+                mSearchView.setInputType(InputType.TYPE_CLASS_TEXT);
             }
         });
-        titleBar.addAction(new TitleBar.TextAction("搜索") {
+        titleBar.addAction(new TitleBar.TextAction("ID搜索") {
             @Override
             public void performAction(View view) {
+                flag = 1;
                 mSearchView.showSearch();
+                mSearchView.setHint("按ID搜索");
+                mSearchView.setInputType(InputType.TYPE_CLASS_NUMBER);
             }
         });
         titleBar.addAction(new TitleBar.TextAction("重置") {
             @Override
             public void performAction(View view) {
                 search = null;
-                initRequest(search);
+                flag = 0;
+                initRequest(search,flag);
             }
         });
         return titleBar;
@@ -156,7 +151,7 @@ public class AdminUserFragment extends BaseFragment {
                 } else {
                     search = query;
                 }
-                initRequest(search);
+                initRequest(search,flag);
                 return false;
             }
 
@@ -185,59 +180,38 @@ public class AdminUserFragment extends BaseFragment {
         viewPool.setMaxRecycledViews(0, 10);
         pageMax = 10;
         pageNow = 1;
-        userAdapter = new BroccoliSimpleDelegateAdapter<UserDTO>(R.layout.fragment_user_body,new LinearLayoutHelper()) {
+        invitationAdapter = new BroccoliSimpleDelegateAdapter<InvitationDTO>(R.layout.fragment_invitation_body,new LinearLayoutHelper()) {
             @Override
-            protected void onBindData(RecyclerViewHolder holder, UserDTO model, int position) {
-                holder.text(R.id.tv_username,model.getUsername());
-                holder.text(R.id.tv_nickname,model.getNickname());
-                int sex = model.getSex().intValue();
-                if (sex == 0) {
-                    holder.text(R.id.tv_sex,"男");
-                } else if (sex == 1) {
-                    holder.text(R.id.tv_sex,"女");
-                } else if (sex == 2) {
-                    holder.text(R.id.tv_sex,"保密");
-                }
+            protected void onBindData(RecyclerViewHolder holder, InvitationDTO model, int position) {
+                holder.text(R.id.tv_username,model.getUser().getUsername());
+                holder.text(R.id.tv_id,model.getId().toString());
+                holder.text(R.id.tv_title,model.getTitle());
                 int status = model.getStatus().intValue();
                 SuperButton delete = holder.findViewById(R.id.btn_delete);
                 delete.setVisibility(View.VISIBLE);
-                if (model.getId() == 0) {
-                    delete.setVisibility(View.GONE);
-                }
-                if (status == 2) {
+                if (status == 1) {
                     holder.text(R.id.tv_status,"正常");
-                    delete.setText("封禁");
-                } else if (status == 3) {
-                    holder.text(R.id.tv_status,"封禁中");
+                    delete.setText("封帖");
+                } else if (status == 2) {
+                    holder.text(R.id.tv_status,"封帖中");
                     delete.setText("解封");
                 }
                 holder.click(R.id.btn_delete,v -> {
-                    if (status == 2) {
-                        model.setStatus((byte) 3);
-                    } else if (status == 3) {
+                    if (status == 1) {
                         model.setStatus((byte) 2);
+                    } else if (status == 2) {
+                        model.setStatus((byte) 1);
                     }
-                    updateUser(model,position);
+                    update(model,position);
                 });
-                holder.click(R.id.btn_update,v -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("type","修改");
-                    bundle.putInt("position",position);
-                    bundle.putString("model",JsonUtil.toJson(model));
-                    PageOption.to(AdminUserUpdateFragment.class)
-                            .setBundle(bundle)
-                            .setRequestCode(100)
-                            .setAddToBackStack(true)
-                            .setAnim(CoreAnim.slide)
-                            .open(AdminUserFragment.this);
-                });
+                holder.click(R.id.invitation_view,v -> ActivityUtils.startActivity(InvitationViewActivity.class,"invitationId",model.getId()));
             }
             @Override
             protected void onBindBroccoli(RecyclerViewHolder holder, Broccoli broccoli) {
             }
         };
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
-        delegateAdapter.addAdapter(userAdapter);
+        delegateAdapter.addAdapter(invitationAdapter);
         recyclerView.setAdapter(delegateAdapter);
         refreshLayout.autoRefresh();
     }
@@ -247,56 +221,40 @@ public class AdminUserFragment extends BaseFragment {
         //下拉刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.getLayout().postDelayed(() -> {
-                initRequest(search);
+                initRequest(search,flag);
             }, 1);
         });
         //上拉加载
         refreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.getLayout().postDelayed(() -> {
-                loadMore(search);
+                loadMore(search,flag);
             }, 1);
         });
     }
 
-    @Override
-    public void onFragmentResult(int requestCode, int resultCode, Intent data) {
-        super.onFragmentResult(requestCode, resultCode, data);
-        if (requestCode == 100) {
-            if (resultCode == 101) {
-                Bundle bundle = data.getExtras();
-                int position = bundle.getInt("position");
-                UserDTO userDTO = JsonUtil.fromJson(bundle.getString("model"),UserDTO.class);
-                userList.set(position,userDTO);
-                userAdapter.refresh(position,userDTO);
-            } else if (resultCode == 102) {
-                Bundle bundle = data.getExtras();
-                UserDTO userDTO = JsonUtil.fromJson(bundle.getString("model"),UserDTO.class);
-                initRequest(null);
-            }
-        }
-    }
-
-    private void initRequest(String username) {
-        UserQuery query = new UserQuery();
+    private void initRequest(String search,int flag) {
+        InvitationQuery query = new InvitationQuery();
         this.pageNow = 1;
         this.pageMax = 10;
         query.setPageNum(this.pageNow);
         query.setPageSize(this.pageMax);
-        if (username != null) {
-            query.setUsername(username);
+        if (search != null && flag == 1) {
+            query.setQueryId(Long.parseLong(search));
+        } else if (search != null && flag == 2) {
+            query.setTitle(search);
         }
-        CommonRequest<UserQuery> commonRequest = new CommonRequest<>();
+        CommonRequest<InvitationQuery> commonRequest = new CommonRequest<>();
         commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
-        XHttp.post(FinalEnum.frontUrl + "/healthy/user/query")
+        XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/admin")
                 .upJson(body)
                 .syncRequest(false)
                 .onMainThread(true)
-                .execute(new CallBackProxy<CommonResponse<List<UserDTO>>, List<UserDTO>>(new TipCallBack<List<UserDTO>>() {
+                .execute(new CallBackProxy<CommonResponse<List<InvitationDTO>>, List<InvitationDTO>>(new TipCallBack<List<InvitationDTO>>() {
                     @Override
-                    public void onSuccess(List<UserDTO> response) throws Throwable {
-                        userList = response;
-                        userAdapter.refresh(userList);
+                    public void onSuccess(List<InvitationDTO> response) throws Throwable {
+                        invitationList = response;
+                        invitationAdapter.refresh(invitationList);
                         refreshLayout.finishRefresh();
                     }
                     @Override
@@ -307,20 +265,20 @@ public class AdminUserFragment extends BaseFragment {
                 }){});
     }
 
-    private void updateUser(UserDTO model,int position) {
-        CommonRequest<UserDTO> commonRequest = new CommonRequest<>();
+    private void update(InvitationDTO model,int position) {
+        CommonRequest<InvitationDTO> commonRequest = new CommonRequest<>();
         commonRequest.setBody(model);
         String body = JsonUtil.toJson(commonRequest);
-        XHttp.post(FinalEnum.frontUrl + "/healthy/user/update2")
+        XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/update")
                 .upJson(body)
                 .syncRequest(false)
                 .onMainThread(true)
-                .execute(new CallBackProxy<CommonResponse<UserDTO>, UserDTO>(new TipProgressLoadingCallBack<UserDTO>(this) {
+                .execute(new CallBackProxy<CommonResponse<InvitationDTO>, InvitationDTO>(new TipProgressLoadingCallBack<InvitationDTO>(this) {
                     @Override
-                    public void onSuccess(UserDTO response) throws Throwable {
+                    public void onSuccess(InvitationDTO response) throws Throwable {
                         XToastUtils.success("操作成功");
-                        userList.set(position,response);
-                        userAdapter.refresh(position,response);
+                        invitationList.set(position,response);
+                        invitationAdapter.refresh(position,response);
                     }
                     @Override
                     public void onError(ApiException e) {
@@ -329,28 +287,30 @@ public class AdminUserFragment extends BaseFragment {
                 }){});
     }
 
-    private void loadMore(String username) {
-        UserQuery query = new UserQuery();
+    private void loadMore(String search,int flag) {
+        InvitationQuery query = new InvitationQuery();
         this.pageNow ++;
         this.pageMax = 10;
-        if (username != null) {
-            query.setUsername(username);
+        if (search != null && flag == 1) {
+            query.setQueryId(Long.parseLong(search));
+        } else if (search != null && flag == 2) {
+            query.setTitle(search);
         }
         query.setPageNum(this.pageNow);
         query.setPageSize(this.pageMax);
-        CommonRequest<UserQuery> commonRequest = new CommonRequest<>();
+        CommonRequest<InvitationQuery> commonRequest = new CommonRequest<>();
         commonRequest.setBody(query);
         String body = JsonUtil.toJson(commonRequest);
-        XHttp.post(FinalEnum.frontUrl + "/healthy/user/query")
+        XHttp.post(FinalEnum.frontUrl + "/healthy/invitation/admin")
                 .upJson(body)
                 .syncRequest(false)
                 .onMainThread(true)
-                .execute(new CallBackProxy<CommonResponse<List<UserDTO>>, List<UserDTO>>(new TipCallBack<List<UserDTO>>() {
+                .execute(new CallBackProxy<CommonResponse<List<InvitationDTO>>, List<InvitationDTO>>(new TipCallBack<List<InvitationDTO>>() {
                     @Override
-                    public void onSuccess(List<UserDTO> response) throws Throwable {
-                        userList = response;
-                        userAdapter.loadMore(userList);
-                        userList = userAdapter.getData();
+                    public void onSuccess(List<InvitationDTO> response) throws Throwable {
+                        invitationList = response;
+                        invitationAdapter.loadMore(invitationList);
+                        invitationList = invitationAdapter.getData();
                         refreshLayout.finishLoadMore();
                     }
                     @Override
