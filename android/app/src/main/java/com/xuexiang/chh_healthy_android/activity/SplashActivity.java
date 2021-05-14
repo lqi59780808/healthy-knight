@@ -82,32 +82,7 @@ public class SplashActivity extends BaseSplashActivity implements CancelAdapt {
 
     private void loginOrGoMainPage() {
         if (TokenUtils.hasToken()) {
-            CommonRequest<Long> commonRequest = new CommonRequest<>();
-            commonRequest.setBody(TokenUtils.getUserInfo().getId());
-            String body = JsonUtil.toJson(commonRequest);
-            XHttp.post(FinalEnum.frontUrl + "/healthy/user/id")
-                    .upJson(body)
-                    .syncRequest(false)
-                    .onMainThread(true)
-                    .timeOut(5000)
-                    .execute(new CallBackProxy<CommonResponse<UserDTO>, UserDTO>(new SimpleCallBack<UserDTO>() {
-                        @Override
-                        public void onSuccess(UserDTO response) throws Throwable {
-                            if (response.getStatus() == 3) {
-                                XToastUtils.error("该账号目前处于封禁状态");
-                                TokenUtils.clearToken();
-                                ActivityUtils.startActivity(LoginActivity.class);
-                            } else {
-                                TokenUtils.putUserInfo(response);
-                                ActivityUtils.startActivity(MainActivity.class);
-                            }
-                        }
-
-                        @Override
-                        public void onError(ApiException e) {
-                            ActivityUtils.startActivity(MainActivity.class);
-                        }
-                    }){});
+            ActivityUtils.startActivity(MainActivity.class);
         } else {
             ActivityUtils.startActivity(LoginActivity.class);
         }

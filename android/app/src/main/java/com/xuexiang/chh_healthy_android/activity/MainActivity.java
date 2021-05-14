@@ -48,6 +48,8 @@ import com.xuexiang.chh_healthy_android.R;
 import com.xuexiang.chh_healthy_android.core.BaseActivity;
 import com.xuexiang.chh_healthy_android.core.BaseFragment;
 import com.xuexiang.chh_healthy_android.core.FinalEnum;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonRequest;
+import com.xuexiang.chh_healthy_android.core.http.entity.CommonResponse;
 import com.xuexiang.chh_healthy_android.core.http.pojo.dto.UserDTO;
 import com.xuexiang.chh_healthy_android.fragment.AboutFragment;
 import com.xuexiang.chh_healthy_android.fragment.SearchViewFragment;
@@ -61,6 +63,10 @@ import com.xuexiang.chh_healthy_android.utils.TokenUtils;
 import com.xuexiang.chh_healthy_android.utils.Utils;
 import com.xuexiang.chh_healthy_android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
+import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.callback.CallBackProxy;
+import com.xuexiang.xhttp2.callback.SimpleCallBack;
+import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
@@ -71,6 +77,7 @@ import com.xuexiang.xutil.app.ServiceUtils;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
+import com.xuexiang.xutil.net.JsonUtil;
 
 import butterknife.BindView;
 
@@ -113,6 +120,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (TokenUtils.hasToken()) {
+            CommonRequest<Long> commonRequest = new CommonRequest<>();
+            commonRequest.setBody(TokenUtils.getUserInfo().getId());
+            String body = JsonUtil.toJson(commonRequest);
+            XHttp.post(FinalEnum.frontUrl + "/healthy/user/id")
+                    .upJson(body)
+                    .syncRequest(true)
+                    .execute(new CallBackProxy<CommonResponse<UserDTO>, UserDTO>(new SimpleCallBack<UserDTO>() {
+                        @Override
+                        public void onSuccess(UserDTO response) throws Throwable {
+                            if (response.getStatus() == 3) {
+                                XToastUtils.error("该账号目前处于封禁状态");
+                                TokenUtils.clearToken();
+                                XUtil.getActivityLifecycleHelper().exit();
+                                ActivityUtils.startActivity(LoginActivity.class);
+                            } else {
+                                TokenUtils.putUserInfo(response);
+                            }
+                        }
+
+                        @Override
+                        public void onError(ApiException e) {
+                        }
+                    }){});
+        }
         initViews();
         setupService();
         initListeners();
@@ -373,6 +405,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onResume() {
         super.onResume();
+        if (TokenUtils.hasToken()) {
+            CommonRequest<Long> commonRequest = new CommonRequest<>();
+            commonRequest.setBody(TokenUtils.getUserInfo().getId());
+            String body = JsonUtil.toJson(commonRequest);
+            XHttp.post(FinalEnum.frontUrl + "/healthy/user/id")
+                    .upJson(body)
+                    .syncRequest(false)
+                    .onMainThread(true)
+                    .execute(new CallBackProxy<CommonResponse<UserDTO>, UserDTO>(new SimpleCallBack<UserDTO>() {
+                        @Override
+                        public void onSuccess(UserDTO response) throws Throwable {
+                            if (response.getStatus() == 3) {
+                                XToastUtils.error("该账号目前处于封禁状态");
+                                TokenUtils.clearToken();
+                                XUtil.getActivityLifecycleHelper().exit();
+                                ActivityUtils.startActivity(LoginActivity.class);
+                            } else {
+                                TokenUtils.putUserInfo(response);
+                            }
+                        }
+
+                        @Override
+                        public void onError(ApiException e) {
+                        }
+                    }){});
+        }
         MyApp myApp = (MyApp) MainActivity.this.getApplication();
         if (myApp.isUserInfoFlag()) {
             UserDTO userInfo = TokenUtils.getUserInfo();
